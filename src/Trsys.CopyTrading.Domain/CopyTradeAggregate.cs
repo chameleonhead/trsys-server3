@@ -1,14 +1,12 @@
 ﻿using EventFlow.Aggregates;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Trsys.CopyTrading.Domain
 {
     public class CopyTradeAggregate : AggregateRoot<CopyTradeAggregate, CopyTradeId>
     {
         public bool IsOpen { get; private set; }
-
+        
         public CopyTradeAggregate(CopyTradeId id) : base(id)
         {
         }
