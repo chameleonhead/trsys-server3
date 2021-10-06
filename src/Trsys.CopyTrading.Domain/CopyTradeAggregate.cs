@@ -11,13 +11,13 @@ namespace Trsys.CopyTrading.Domain
         {
         }
 
-        public void Open(ForexTradeSymbol symbol, OrderType orderType)
+        public void Open(DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType)
         {
             if (!IsNew)
             {
                 throw new InvalidOperationException();
             }
-            Emit(new CopyTradeOpenedEvent(symbol, orderType));
+            Emit(new CopyTradeOpenedEvent(distributionGroupId, symbol, orderType));
         }
 
         public void Apply(CopyTradeOpenedEvent _)

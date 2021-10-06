@@ -20,7 +20,8 @@ namespace Trsys.CopyTrading.Application.Tests
                 .CreateResolver();
             var bus = resolver.Resolve<ICommandBus>();
 
-            var result = await bus.PublishAsync(new PublishOrderOpenCommand(CopyTradeId.New, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            var distributionGroupId = DistributionGroupId.New;
+            var result = await bus.PublishAsync(new PublishOrderOpenCommand(CopyTradeId.New, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
         }
     }

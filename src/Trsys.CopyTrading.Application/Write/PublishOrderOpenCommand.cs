@@ -7,12 +7,14 @@ namespace Trsys.CopyTrading.Application.Write
 {
     public class PublishOrderOpenCommand : Command<CopyTradeAggregate, CopyTradeId>
     {
-        public PublishOrderOpenCommand(CopyTradeId aggregateId, ForexTradeSymbol symbol, OrderType orderType) : base(aggregateId)
+        public PublishOrderOpenCommand(CopyTradeId aggregateId, DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType) : base(aggregateId)
         {
+            DistributionGroupId = distributionGroupId;
             Symbol = symbol;
             OrderType = orderType;
         }
 
+        public DistributionGroupId DistributionGroupId { get; }
         public ForexTradeSymbol Symbol { get; }
         public OrderType OrderType { get; }
     }
@@ -21,7 +23,7 @@ namespace Trsys.CopyTrading.Application.Write
     {
         public override Task ExecuteAsync(CopyTradeAggregate aggregate, PublishOrderOpenCommand command, CancellationToken cancellationToken)
         {
-            aggregate.Open(command.Symbol, command.OrderType);
+            aggregate.Open(command.DistributionGroupId, command.Symbol, command.OrderType);
             return Task.CompletedTask;
         }
     }
