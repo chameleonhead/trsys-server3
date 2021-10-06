@@ -11,12 +11,15 @@ namespace Trsys.CopyTrading.Application
         {
             options
                 .AddCommands(
+                    typeof(AddSubscriberCommand),
                     typeof(PublishOrderOpenCommand)
                 )
                 .AddCommandHandlers(
+                    typeof(AddSubscriberCommandHandler),
                     typeof(PublishOrderOpenCommandHandler)
                 )
                 .AddEvents(
+                    typeof(SubscriptionAddedEvent),
                     typeof(CopyTradeOpenedEvent)
                 );
             return options;
