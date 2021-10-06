@@ -1,5 +1,6 @@
 ﻿using EventFlow;
 using EventFlow.Extensions;
+using Trsys.CopyTrading.Application.Read;
 using Trsys.CopyTrading.Application.Write;
 using Trsys.CopyTrading.Domain;
 
@@ -31,6 +32,8 @@ namespace Trsys.CopyTrading.Application
                 .AddSagas(
                     typeof(TradeDistributionSaga)
                 );
+            options
+                .UseInMemoryReadStoreFor<CopyTradeReadModel>();
             return options;
         }
     }
