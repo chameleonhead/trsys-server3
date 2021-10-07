@@ -32,6 +32,18 @@ namespace Trsys.CopyTrading.Domain
             Emit(new CopyTradeApplicantAddedEvent(accountId));
         }
 
+        public void Close()
+        {
+            if (IsNew)
+            {
+                throw new InvalidOperationException();
+            }
+            if (IsOpen)
+            {
+                Emit(new CopyTradeClosedEvent(TradeApplicants.ToArray()));
+            }
+        }
+
         public void Apply(CopyTradeOpenedEvent _)
         {
             IsOpen = true;
@@ -40,6 +52,11 @@ namespace Trsys.CopyTrading.Domain
         public void Apply(CopyTradeApplicantAddedEvent e)
         {
             TradeApplicants.Add(e.AccountId);
+        }
+
+        public void Apply(CopyTradeClosedEvent _)
+        {
+            IsOpen = false;
         }
     }
 }

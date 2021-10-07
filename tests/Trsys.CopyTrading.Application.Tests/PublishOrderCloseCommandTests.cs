@@ -13,7 +13,7 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Tests
 {
     [TestClass]
-    public class PublishOrderOpenCommandTests
+    public class PublishOrderCloseCommandTests
     {
         [TestMethod]
         public async Task SuccessWithoutSubscriber()
@@ -24,13 +24,15 @@ namespace Trsys.CopyTrading.Application.Tests
             var distributionGroupId = DistributionGroupId.New;
             var result = await commandBus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
+            result = await commandBus.PublishAsync(new PublishOrderCloseCommand(copyTradeId), CancellationToken.None);
+            Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<CopyTradeReadModel>(copyTradeId), CancellationToken.None);
             Assert.AreEqual(distributionGroupId.Value, queryResult.DistributionGroupId);
             Assert.AreEqual("USDJPY", queryResult.Symbol);
             Assert.AreEqual("BUY", queryResult.OrderType);
-            Assert.IsTrue(queryResult.IsOpen);
+            Assert.IsFalse(queryResult.IsOpen);
         }
 
         [TestMethod]
@@ -46,13 +48,15 @@ namespace Trsys.CopyTrading.Application.Tests
             var copyTradeId = CopyTradeId.New;
             result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
+            result = await bus.PublishAsync(new PublishOrderCloseCommand(copyTradeId), CancellationToken.None);
+            Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<CopyTradeReadModel>(copyTradeId), CancellationToken.None);
             Assert.AreEqual(distributionGroupId.Value, queryResult.DistributionGroupId);
             Assert.AreEqual("USDJPY", queryResult.Symbol);
             Assert.AreEqual("BUY", queryResult.OrderType);
-            Assert.IsTrue(queryResult.IsOpen);
+            Assert.IsFalse(queryResult.IsOpen);
         }
 
         [TestMethod]
@@ -73,16 +77,18 @@ namespace Trsys.CopyTrading.Application.Tests
             var copyTradeId = CopyTradeId.New;
             result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
+            result = await bus.PublishAsync(new PublishOrderCloseCommand(copyTradeId), CancellationToken.None);
+            Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<CopyTradeReadModel>(copyTradeId), CancellationToken.None);
             Assert.AreEqual(distributionGroupId.Value, queryResult.DistributionGroupId);
             Assert.AreEqual("USDJPY", queryResult.Symbol);
             Assert.AreEqual("BUY", queryResult.OrderType);
-            Assert.IsTrue(queryResult.IsOpen);
+            Assert.IsFalse(queryResult.IsOpen);
 
             var queryResult2 = await queryProcessor.ProcessAsync(new TradeOrderReadModelAllQuery(), CancellationToken.None);
-            Assert.AreEqual(100, queryResult2.Count);
+            Assert.AreEqual(0, queryResult2.Count);
         }
 
         private static IRootResolver CreateResolver()

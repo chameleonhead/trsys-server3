@@ -17,21 +17,24 @@ namespace Trsys.CopyTrading.Application
                     typeof(PublishOrderOpenCommand),
                     typeof(StartTradeDistributionCommand),
                     typeof(OpenTradeCommand),
-                    typeof(AddCopyTradeApplicantCommand)
+                    typeof(AddCopyTradeApplicantCommand),
+                    typeof(PublishOrderCloseCommand)
                 )
                 .AddCommandHandlers(
                     typeof(AddSubscriberCommandHandler),
                     typeof(PublishOrderOpenCommandHandler),
                     typeof(StartTradeDistributionCommandHandler),
                     typeof(OpenTradeCommandHandler),
-                    typeof(AddCopyTradeApplicantCommandHandler)
+                    typeof(AddCopyTradeApplicantCommandHandler),
+                    typeof(PublishOrderCloseCommandHandler)
                 )
                 .AddEvents(
                     typeof(SubscriptionAddedEvent),
                     typeof(CopyTradeOpenedEvent),
                     typeof(TradeDistributionStartedEvent),
                     typeof(TradeOrderOpenedEvent),
-                    typeof(CopyTradeApplicantAddedEvent)
+                    typeof(CopyTradeApplicantAddedEvent),
+                    typeof(CopyTradeClosedEvent)
                 )
                 .AddSagaLocators(
                     typeof(TradeDistributionSagaLocator)

@@ -6,7 +6,8 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Read
 {
     public class CopyTradeReadModel : IReadModel,
-        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>
+        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,
+        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent>
     {
         public string DistributionGroupId { get; set; }
         public string Symbol { get; set; }
@@ -21,6 +22,11 @@ namespace Trsys.CopyTrading.Application.Read
             OrderType = domainEvent.AggregateEvent.OrderType.Value;
             OpenTimestamp = domainEvent.Timestamp;
             IsOpen = true;
+        }
+
+        public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> domainEvent)
+        {
+            IsOpen = false;
         }
     }
 }
