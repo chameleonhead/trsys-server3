@@ -40,7 +40,7 @@ namespace Trsys.CopyTrading.Domain
             }
             if (IsOpen)
             {
-                Emit(new CopyTradeClosedEvent(TradeApplicants.ToArray()));
+                Emit(new CopyTradeClosedEvent(TradeApplicants.ToArray()), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
             }
         }
 
