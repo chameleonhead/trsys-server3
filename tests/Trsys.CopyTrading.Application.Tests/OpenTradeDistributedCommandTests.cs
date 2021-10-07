@@ -47,7 +47,7 @@ namespace Trsys.CopyTrading.Application.Tests
             var bus = resolver.Resolve<ICommandBus>();
 
             var distributionGroupId = DistributionGroupId.New;
-            var accounts = Enumerable.Range(0, 100).Select(_ => AccountId.New);
+            var accounts = Enumerable.Range(0, 100).Select(_ => AccountId.New).ToArray();
             foreach (var accountId in accounts)
             {
                 result = await bus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId, TradeQuantity.Percentage(98)), CancellationToken.None);
