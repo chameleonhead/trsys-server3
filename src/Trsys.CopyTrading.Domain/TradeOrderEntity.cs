@@ -22,10 +22,16 @@ namespace Trsys.CopyTrading.Domain
         public TradeQuantity Quantity { get; }
 
         public bool IsOpenDistributed { get; private set; }
+        public bool IsCloseDistributed { get; private set; }
 
         public void OpenDistributed()
         {
             IsOpenDistributed = true;
+        }
+
+        public void CloseDistributed()
+        {
+            IsCloseDistributed = true;
         }
     }
 }

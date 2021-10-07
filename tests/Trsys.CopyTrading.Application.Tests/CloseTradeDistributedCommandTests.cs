@@ -13,7 +13,7 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Tests
 {
     [TestClass]
-    public class OpenTradeDistributedCommandTests
+    public class CloseTradeDistributedCommandTests
     {
         [TestMethod]
         public async Task SuccessWithASubscriber()
@@ -29,6 +29,8 @@ namespace Trsys.CopyTrading.Application.Tests
             result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             result = await bus.PublishAsync(new OpenTradeDistributedCommand(accountId, copyTradeId), CancellationToken.None);
+            Assert.IsTrue(result.IsSuccess);
+            result = await bus.PublishAsync(new CloseTradeDistributedCommand(accountId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
@@ -61,6 +63,11 @@ namespace Trsys.CopyTrading.Application.Tests
                 result = await bus.PublishAsync(new OpenTradeDistributedCommand(accountId, copyTradeId), CancellationToken.None);
                 Assert.IsTrue(result.IsSuccess);
             }
+            foreach (var accountId in accounts)
+            {
+                result = await bus.PublishAsync(new CloseTradeDistributedCommand(accountId, copyTradeId), CancellationToken.None);
+                Assert.IsTrue(result.IsSuccess);
+            }
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<CopyTradeReadModel>(copyTradeId), CancellationToken.None);
@@ -71,7 +78,7 @@ namespace Trsys.CopyTrading.Application.Tests
 
             var queryResult2 = await queryProcessor.ProcessAsync(new TradeOrderReadModelAllQuery(), CancellationToken.None);
             Assert.AreEqual(100, queryResult2.Count);
-            Assert.IsTrue(queryResult2.All(e => e.IsOpenDistributed));
+            Assert.IsTrue(queryResult2.All(e => e.IsCloseDistributed));
         }
 
         private static IRootResolver CreateResolver()

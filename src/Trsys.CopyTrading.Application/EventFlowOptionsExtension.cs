@@ -20,7 +20,8 @@ namespace Trsys.CopyTrading.Application
                     typeof(AddCopyTradeApplicantCommand),
                     typeof(OpenTradeDistributedCommand),
                     typeof(PublishOrderCloseCommand),
-                    typeof(CloseTradeCommand)
+                    typeof(CloseTradeCommand),
+                    typeof(CloseTradeDistributedCommand)
                 )
                 .AddCommandHandlers(
                     typeof(AddSubscriberCommandHandler),
@@ -30,7 +31,8 @@ namespace Trsys.CopyTrading.Application
                     typeof(AddCopyTradeApplicantCommandHandler),
                     typeof(OpenTradeDistributedCommandHandler),
                     typeof(PublishOrderCloseCommandHandler),
-                    typeof(CloseTradeCommandHandler)
+                    typeof(CloseTradeCommandHandler),
+                    typeof(CloseTradeDistributedCommandHandler)
                 )
                 .AddEvents(
                     typeof(SubscriptionAddedEvent),
@@ -40,7 +42,9 @@ namespace Trsys.CopyTrading.Application
                     typeof(CopyTradeApplicantAddedEvent),
                     typeof(TradeOrderOpenDistributedEvent),
                     typeof(CopyTradeClosedEvent),
-                    typeof(TradeOrderClosedEvent)
+                    typeof(TradeOrderClosedEvent),
+                    typeof(TradeOrderCloseDistributedEvent),
+                    typeof(TradeOrderInactivatedEvent)
                 )
                 .AddSagaLocators(
                     typeof(TradeDistributionSagaLocator)
