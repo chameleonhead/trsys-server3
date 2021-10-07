@@ -1,5 +1,4 @@
 ﻿using EventFlow.Aggregates;
-using System;
 using System.Collections.Generic;
 
 namespace Trsys.CopyTrading.Domain
@@ -19,7 +18,7 @@ namespace Trsys.CopyTrading.Domain
 
         public void StartDistribution(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType order)
         {
-            Emit(new TradeDistributionStartedEvent(copyTradeId, symbol, order, Subscriptions));
+            Emit(new TradeDistributionStartedEvent(copyTradeId, symbol, order, Subscriptions), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
         public void Apply(SubscriptionAddedEvent e)

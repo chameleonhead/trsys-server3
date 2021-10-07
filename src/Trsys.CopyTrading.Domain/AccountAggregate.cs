@@ -13,7 +13,7 @@ namespace Trsys.CopyTrading.Domain
 
         public void OpenTrade(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType, TradeQuantity quantity)
         {
-            Emit(new TradeOrderOpenedEvent(TradeOrderId.New, copyTradeId, symbol, orderType, quantity));
+            Emit(new TradeOrderOpenedEvent(TradeOrderId.New, copyTradeId, symbol, orderType, quantity), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
         public void Apply(TradeOrderOpenedEvent e)

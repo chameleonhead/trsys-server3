@@ -1,5 +1,6 @@
 ﻿using EventFlow;
 using EventFlow.Extensions;
+using System.Collections.Generic;
 using Trsys.CopyTrading.Application.Read;
 using Trsys.CopyTrading.Application.Write;
 using Trsys.CopyTrading.Domain;
@@ -36,7 +37,10 @@ namespace Trsys.CopyTrading.Application
                     typeof(TradeDistributionSaga)
                 );
             options
-                .UseInMemoryReadStoreFor<CopyTradeReadModel>();
+                .UseInMemoryReadStoreFor<CopyTradeReadModel>()
+                .UseInMemoryReadStoreFor<TradeOrderReadModel, TradeOrderReadModelLocator>()
+                .RegisterServices(sr => sr.RegisterType(typeof(TradeOrderReadModelLocator)))
+                .AddQueryHandler<TradeOrderReadModelAllQueryHandler, TradeOrderReadModelAllQuery, IReadOnlyCollection<TradeOrderReadModel>>();
             return options;
         }
     }

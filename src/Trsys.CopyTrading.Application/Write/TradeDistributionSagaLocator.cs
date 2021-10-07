@@ -9,7 +9,9 @@ namespace Trsys.CopyTrading.Application.Write
     {
         public Task<ISagaId> LocateSagaAsync(IDomainEvent domainEvent, CancellationToken cancellationToken)
         {
-            return Task.FromResult<ISagaId>(TradeDistributionId.New);
+            var tradeId = domainEvent.Metadata["copy-trade-id"];
+            var sagaId = new TradeDistributionSagaId($"tradedistributionsaga-{tradeId}");
+            return Task.FromResult<ISagaId>(sagaId);
         }
     }
 }

@@ -9,11 +9,11 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Write
 {
     public class TradeDistributionSaga :
-        AggregateSaga<TradeDistributionSaga, TradeDistributionId, TradeDistributionSagaLocator>,
+        AggregateSaga<TradeDistributionSaga, TradeDistributionSagaId, TradeDistributionSagaLocator>,
         ISagaIsStartedBy<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,
         ISagaHandles<DistributionGroupAggregate, DistributionGroupId, TradeDistributionStartedEvent>
     {
-        public TradeDistributionSaga(TradeDistributionId id) : base(id)
+        public TradeDistributionSaga(TradeDistributionSagaId id) : base(id)
         {
         }
 
