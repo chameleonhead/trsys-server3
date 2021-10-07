@@ -5,7 +5,8 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Read
 {
     public class TradeOrderReadModel : IReadModel,
-        IAmReadModelFor<AccountAggregate, AccountId, TradeOrderOpenedEvent>
+        IAmReadModelFor<AccountAggregate, AccountId, TradeOrderOpenedEvent>,
+        IAmReadModelFor<AccountAggregate, AccountId, TradeOrderClosedEvent>
     {
         public string AccountId { get; private set; }
         public string CopyTradeId { get; private set; }
@@ -21,6 +22,12 @@ namespace Trsys.CopyTrading.Application.Read
             Symbol = aggregateEvent.Symbol.Value;
             OrderType = aggregateEvent.OrderType.Value;
             IsOpen = true;
+        }
+
+        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, TradeOrderClosedEvent> domainEvent)
+        {
+            IsOpen = false;
+            context.MarkForDeletion();
         }
     }
 }

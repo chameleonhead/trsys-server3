@@ -9,12 +9,14 @@ namespace Trsys.CopyTrading.Application.Read
     {
         public IEnumerable<string> GetReadModelIds(IDomainEvent domainEvent)
         {
-            var ev = domainEvent as IDomainEvent<AccountAggregate, AccountId, TradeOrderOpenedEvent>;
-            if (ev == null)
+            if (domainEvent is IDomainEvent<AccountAggregate, AccountId, TradeOrderOpenedEvent> openEvent)
             {
-                yield break;
+                yield return openEvent.AggregateEvent.TradeOrderId.Value;
             }
-            yield return ev.AggregateEvent.TradeOrderId.Value;
+            if (domainEvent is IDomainEvent<AccountAggregate, AccountId, TradeOrderClosedEvent> closeEvent)
+            {
+                yield return closeEvent.AggregateEvent.TradeOrderId.Value;
+            }
         }
     }
 }
