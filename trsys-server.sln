@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.CopyTrading.Domain", "src\Trsys.CopyTrading.Domain\Trsys.CopyTrading.Domain.csproj", "{6D5B1629-2885-47EE-8629-51F3073B26CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.CopyTrading.Domain", "src\Trsys.CopyTrading.Domain\Trsys.CopyTrading.Domain.csproj", "{6D5B1629-2885-47EE-8629-51F3073B26CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.CopyTrading.Application", "src\Trsys.CopyTrading.Application\Trsys.CopyTrading.Application.csproj", "{15A34754-5DE0-4DDE-AF5A-27986FBAA42E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.CopyTrading.Application", "src\Trsys.CopyTrading.Application\Trsys.CopyTrading.Application.csproj", "{15A34754-5DE0-4DDE-AF5A-27986FBAA42E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.CopyTrading.Application.Tests", "tests\Trsys.CopyTrading.Application.Tests\Trsys.CopyTrading.Application.Tests.csproj", "{51AF1611-CD44-4ED4-A996-A0DDBF1A058C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.CopyTrading.Application.Tests", "tests\Trsys.CopyTrading.Application.Tests\Trsys.CopyTrading.Application.Tests.csproj", "{51AF1611-CD44-4ED4-A996-A0DDBF1A058C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C9DD5F9B-264B-4777-8320-82E30769FEC2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BE62412F-403C-4A84-9398-1F7C297115EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Fronend.Web", "src\Trsys.Fronend.Web\Trsys.Fronend.Web.csproj", "{391C04BA-408C-43C8-8157-BF83A54F04F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,18 @@ Global
 		{51AF1611-CD44-4ED4-A996-A0DDBF1A058C}.Release|x64.Build.0 = Release|Any CPU
 		{51AF1611-CD44-4ED4-A996-A0DDBF1A058C}.Release|x86.ActiveCfg = Release|Any CPU
 		{51AF1611-CD44-4ED4-A996-A0DDBF1A058C}.Release|x86.Build.0 = Release|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Debug|x64.Build.0 = Debug|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Debug|x86.Build.0 = Debug|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Release|x64.ActiveCfg = Release|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Release|x64.Build.0 = Release|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{391C04BA-408C-43C8-8157-BF83A54F04F8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +81,7 @@ Global
 		{6D5B1629-2885-47EE-8629-51F3073B26CA} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 		{15A34754-5DE0-4DDE-AF5A-27986FBAA42E} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 		{51AF1611-CD44-4ED4-A996-A0DDBF1A058C} = {C9DD5F9B-264B-4777-8320-82E30769FEC2}
+		{391C04BA-408C-43C8-8157-BF83A54F04F8} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {080E749E-E248-4B95-B548-61854474AB22}
