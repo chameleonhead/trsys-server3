@@ -1,6 +1,7 @@
 ﻿using EventFlow.Aggregates;
 using EventFlow.Sagas;
 using EventFlow.Sagas.AggregateSagas;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Domain;
@@ -9,7 +10,8 @@ namespace Trsys.CopyTrading.Application.Write
 {
     public class TradeDistributionSaga :
         AggregateSaga<TradeDistributionSaga, TradeDistributionId, TradeDistributionSagaLocator>,
-        ISagaIsStartedBy<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>
+        ISagaIsStartedBy<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,
+        ISagaHandles<DistributionGroupAggregate, DistributionGroupId, TradeDistributionStartedEvent>
     {
         public TradeDistributionSaga(TradeDistributionId id) : base(id)
         {
@@ -23,6 +25,24 @@ namespace Trsys.CopyTrading.Application.Write
                 domainEvent.AggregateIdentity,
                 aggregateEvent.Symbol, 
                 aggregateEvent.OrderType));
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(IDomainEvent<DistributionGroupAggregate, DistributionGroupId, TradeDistributionStartedEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
+        {
+            var aggregateEvent = domainEvent.AggregateEvent;
+            if (aggregateEvent.Subscriptions.Any())
+            {
+                foreach (var s in aggregateEvent.Subscriptions)
+                {
+                    Publish(new OpenTradeCommand(
+                        s.AccountId,
+                        aggregateEvent.CopyTradeId,
+                        aggregateEvent.Symbol,
+                        aggregateEvent.OrderType,
+                        s.Quantity));
+                }
+            }
             return Task.CompletedTask;
         }
     }
