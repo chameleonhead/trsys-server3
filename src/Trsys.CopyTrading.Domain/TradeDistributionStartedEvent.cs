@@ -5,11 +5,11 @@ namespace Trsys.CopyTrading.Domain
 {
     public class TradeDistributionStartedEvent : IAggregateEvent<DistributionGroupAggregate, DistributionGroupId>
     {
-        public TradeDistributionStartedEvent(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType order, List<Subscription> subscriptions)
+        public TradeDistributionStartedEvent(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType, List<Subscription> subscriptions)
         {
             CopyTradeId = copyTradeId;
             Symbol = symbol;
-            OrderType = order;
+            OrderType = orderType;
             Subscriptions = subscriptions;
         }
 

@@ -19,11 +19,13 @@ namespace Trsys.CopyTrading.Application.Write
 
         public Task HandleAsync(IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
         {
+            Emit(new TradeDistributionSagaStartedEvent());
+
             var aggregateEvent = domainEvent.AggregateEvent;
             Publish(new StartTradeDistributionCommand(
-                aggregateEvent.DistributionGroupId, 
+                aggregateEvent.DistributionGroupId,
                 domainEvent.AggregateIdentity,
-                aggregateEvent.Symbol, 
+                aggregateEvent.Symbol,
                 aggregateEvent.OrderType));
             return Task.CompletedTask;
         }
@@ -43,7 +45,20 @@ namespace Trsys.CopyTrading.Application.Write
                         s.Quantity));
                 }
             }
+            else
+            {
+                Emit(new TradeDistributionSagaFinishedEvent());
+            }
             return Task.CompletedTask;
+        }
+
+        public void Apply(TradeDistributionSagaStartedEvent e)
+        {
+        }
+
+        public void Apply(TradeDistributionSagaFinishedEvent e)
+        {
+            Complete();
         }
     }
 }

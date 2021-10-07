@@ -16,9 +16,9 @@ namespace Trsys.CopyTrading.Domain
             Emit(new SubscriptionAddedEvent(SubscriptionId.New, accountId, quantity));
         }
 
-        public void StartDistribution(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType order)
+        public void StartDistribution(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)
         {
-            Emit(new TradeDistributionStartedEvent(copyTradeId, symbol, order, Subscriptions), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            Emit(new TradeDistributionStartedEvent(copyTradeId, symbol, orderType, Subscriptions), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
         public void Apply(SubscriptionAddedEvent e)

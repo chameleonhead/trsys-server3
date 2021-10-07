@@ -35,6 +35,10 @@ namespace Trsys.CopyTrading.Application
                 )
                 .AddSagas(
                     typeof(TradeDistributionSaga)
+                )
+                .AddEvents(
+                    typeof(TradeDistributionSagaStartedEvent),
+                    typeof(TradeDistributionSagaFinishedEvent)
                 );
             options
                 .UseInMemoryReadStoreFor<CopyTradeReadModel>()

@@ -17,10 +17,7 @@ namespace Trsys.CopyTrading.Application.Tests
         [TestMethod]
         public async Task SuccessWithoutSubscriber()
         {
-            using var resolver = EventFlowOptions
-                .New
-                .UseApplication()
-                .CreateResolver();
+            using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
             var copyTradeId = CopyTradeId.New;
             var distributionGroupId = DistributionGroupId.New;
@@ -38,10 +35,7 @@ namespace Trsys.CopyTrading.Application.Tests
         [TestMethod]
         public async Task SuccessWithASubscriber()
         {
-            using var resolver = EventFlowOptions
-                .New
-                .UseApplication()
-                .CreateResolver();
+            using var resolver = CreateResolver();
             var bus = resolver.Resolve<ICommandBus>();
 
             var accountId = AccountId.New;
@@ -64,10 +58,7 @@ namespace Trsys.CopyTrading.Application.Tests
         public async Task SuccessWithMultipleSubscribers()
         {
             var result = default(IExecutionResult);
-            using var resolver = EventFlowOptions
-                .New
-                .UseApplication()
-                .CreateResolver();
+            using var resolver = CreateResolver();
             var bus = resolver.Resolve<ICommandBus>();
 
             var distributionGroupId = DistributionGroupId.New;
@@ -91,6 +82,14 @@ namespace Trsys.CopyTrading.Application.Tests
 
             var queryResult2 = await queryProcessor.ProcessAsync(new TradeOrderReadModelAllQuery(), CancellationToken.None);
             Assert.AreEqual(100, queryResult2.Count);
+        }
+
+        private static EventFlow.Configuration.IRootResolver CreateResolver()
+        {
+            return EventFlowOptions
+                            .New
+                            .UseApplication()
+                            .CreateResolver();
         }
     }
 }
