@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class DistributionGroupAggregate : AggregateRoot<DistributionGroupAggregate, DistributionGroupId>
+    public class DistributionGroupAggregate : AggregateRoot<DistributionGroupAggregate, DistributionGroupId>,
+        IEmit<SubscriptionAddedEvent>,
+        IEmit<TradeDistributionStartedEvent>
     {
         public DistributionGroupAggregate(DistributionGroupId id) : base(id)
         {

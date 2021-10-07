@@ -5,7 +5,10 @@ using System.Linq;
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class CopyTradeAggregate : AggregateRoot<CopyTradeAggregate, CopyTradeId>
+    public class CopyTradeAggregate : AggregateRoot<CopyTradeAggregate, CopyTradeId>,
+        IEmit<CopyTradeOpenedEvent>,
+        IEmit<CopyTradeApplicantAddedEvent>,
+        IEmit<CopyTradeClosedEvent>
     {
         public bool IsOpen { get; private set; }
         public HashSet<AccountId> TradeApplicants { get; } = new();

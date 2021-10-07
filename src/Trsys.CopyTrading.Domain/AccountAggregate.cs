@@ -4,7 +4,12 @@ using System.Collections.Generic;
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class AccountAggregate : AggregateRoot<AccountAggregate, AccountId>
+    public class AccountAggregate : AggregateRoot<AccountAggregate, AccountId>,
+        IEmit<AccountStateUpdatedEvent>,
+        IEmit<TradeOrderOpenedEvent>,
+        IEmit<TradeOrderOpenDistributedEvent>,
+        IEmit<TradeOrderClosedEvent>,
+        IEmit<TradeOrderCloseDistributedEvent>
     {
         private readonly Dictionary<CopyTradeId, TradeOrderEntity> ActiveTrades = new();
 
