@@ -20,5 +20,12 @@ namespace Trsys.CopyTrading.Domain
         public ForexTradeSymbol Symbol { get; }
         public OrderType OrderType { get; }
         public TradeQuantity Quantity { get; }
+
+        public bool IsOpenDistributed { get; private set; }
+
+        public void OpenDistributed()
+        {
+            IsOpenDistributed = true;
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace Trsys.CopyTrading.Application
                     typeof(StartTradeDistributionCommand),
                     typeof(OpenTradeCommand),
                     typeof(AddCopyTradeApplicantCommand),
+                    typeof(OpenTradeDistributedCommand),
                     typeof(PublishOrderCloseCommand),
                     typeof(CloseTradeCommand)
                 )
@@ -27,6 +28,7 @@ namespace Trsys.CopyTrading.Application
                     typeof(StartTradeDistributionCommandHandler),
                     typeof(OpenTradeCommandHandler),
                     typeof(AddCopyTradeApplicantCommandHandler),
+                    typeof(OpenTradeDistributedCommandHandler),
                     typeof(PublishOrderCloseCommandHandler),
                     typeof(CloseTradeCommandHandler)
                 )
@@ -36,6 +38,7 @@ namespace Trsys.CopyTrading.Application
                     typeof(TradeDistributionStartedEvent),
                     typeof(TradeOrderOpenedEvent),
                     typeof(CopyTradeApplicantAddedEvent),
+                    typeof(TradeOrderOpenDistributedEvent),
                     typeof(CopyTradeClosedEvent),
                     typeof(TradeOrderClosedEvent)
                 )

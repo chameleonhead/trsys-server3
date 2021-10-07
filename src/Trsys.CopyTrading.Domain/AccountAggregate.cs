@@ -20,6 +20,15 @@ namespace Trsys.CopyTrading.Domain
             }
         }
 
+        public void OpenTradeDistributed(CopyTradeId copyTradeId)
+        {
+            if (!ActiveTrades.TryGetValue(copyTradeId, out var entity))
+            {
+                throw new InvalidOperationException();
+            }
+            Emit(new TradeOrderOpenDistributedEvent(entity.Id, entity.CopyTradeId));
+        }
+
         public void CloseTrade(CopyTradeId copyTradeId)
         {
             if (!ActiveTrades.TryGetValue(copyTradeId, out var entity))
@@ -32,6 +41,11 @@ namespace Trsys.CopyTrading.Domain
         public void Apply(TradeOrderOpenedEvent e)
         {
             ActiveTrades.Add(e.CopyTradeId, new TradeOrderEntity(e.TradeOrderId, e.CopyTradeId, e.Symbol, e.OrderType, e.Quantity));
+        }
+
+        public void Apply(TradeOrderOpenDistributedEvent e)
+        {
+            ActiveTrades[e.CopyTradeId].OpenDistributed();
         }
 
         public void Apply(TradeOrderClosedEvent e)
