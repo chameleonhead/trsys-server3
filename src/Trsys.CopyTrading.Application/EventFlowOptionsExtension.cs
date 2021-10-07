@@ -13,6 +13,7 @@ namespace Trsys.CopyTrading.Application
         {
             options
                 .AddCommands(
+                    typeof(AccountStateUpdateCommand),
                     typeof(AddSubscriberCommand),
                     typeof(PublishOrderOpenCommand),
                     typeof(StartTradeDistributionCommand),
@@ -24,6 +25,7 @@ namespace Trsys.CopyTrading.Application
                     typeof(CloseTradeDistributedCommand)
                 )
                 .AddCommandHandlers(
+                    typeof(AccountStateUpdateCommandHandler),
                     typeof(AddSubscriberCommandHandler),
                     typeof(PublishOrderOpenCommandHandler),
                     typeof(StartTradeDistributionCommandHandler),
@@ -35,6 +37,7 @@ namespace Trsys.CopyTrading.Application
                     typeof(CloseTradeDistributedCommandHandler)
                 )
                 .AddEvents(
+                    typeof(AccountStateUpdatedEvent),
                     typeof(SubscriptionAddedEvent),
                     typeof(CopyTradeOpenedEvent),
                     typeof(TradeDistributionStartedEvent),
@@ -57,6 +60,7 @@ namespace Trsys.CopyTrading.Application
                     typeof(TradeDistributionSagaFinishedEvent)
                 );
             options
+                .UseInMemoryReadStoreFor<AccountReadModel>()
                 .UseInMemoryReadStoreFor<CopyTradeReadModel>()
                 .UseInMemoryReadStoreFor<TradeOrderReadModel, TradeOrderReadModelLocator>()
                 .RegisterServices(sr => sr.RegisterType(typeof(TradeOrderReadModelLocator)))

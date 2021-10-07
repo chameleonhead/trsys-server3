@@ -12,6 +12,11 @@ namespace Trsys.CopyTrading.Domain
         {
         }
 
+        public void UpdateState(AccountBalance balance)
+        {
+            Emit(new AccountStateUpdatedEvent(balance));
+        }
+
         public void OpenTrade(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType, TradeQuantity quantity)
         {
             if (!ActiveTrades.ContainsKey(copyTradeId))
@@ -47,6 +52,10 @@ namespace Trsys.CopyTrading.Domain
             {
                 Emit(new TradeOrderCloseDistributedEvent(entity.Id, entity.CopyTradeId));
             }
+        }
+
+        public void Apply(AccountStateUpdatedEvent e)
+        {
         }
 
         public void Apply(TradeOrderOpenedEvent e)
