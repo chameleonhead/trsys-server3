@@ -6,8 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Trsys.CopyTrading.Application.Read;
-using Trsys.CopyTrading.Application.Write;
+using Trsys.CopyTrading.Application.Read.Models;
+using Trsys.CopyTrading.Application.Read.Queries;
+using Trsys.CopyTrading.Application.Write.Commands;
 using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application.Tests

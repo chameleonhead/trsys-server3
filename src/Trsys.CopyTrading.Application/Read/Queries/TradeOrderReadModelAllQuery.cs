@@ -3,8 +3,9 @@ using EventFlow.ReadStores.InMemory;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Trsys.CopyTrading.Application.Read.Models;
 
-namespace Trsys.CopyTrading.Application.Read
+namespace Trsys.CopyTrading.Application.Read.Queries
 {
     public class TradeOrderReadModelAllQuery : IQuery<IReadOnlyCollection<TradeOrderReadModel>>
     {

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Domain;
 
-namespace Trsys.CopyTrading.Application.Write
+namespace Trsys.CopyTrading.Application.Write.Commands
 {
     public class OpenTradeDistributedCommand : Command<AccountAggregate, AccountId>
     {

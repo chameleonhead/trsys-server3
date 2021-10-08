@@ -3,7 +3,7 @@ using EventFlow.ReadStores;
 using System;
 using Trsys.CopyTrading.Domain;
 
-namespace Trsys.CopyTrading.Application.Read
+namespace Trsys.CopyTrading.Application.Read.Models
 {
     public class CopyTradeReadModel : IReadModel,
         IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,

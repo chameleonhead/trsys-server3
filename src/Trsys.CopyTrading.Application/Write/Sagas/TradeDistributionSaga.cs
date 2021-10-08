@@ -4,12 +4,15 @@ using EventFlow.Sagas.AggregateSagas;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Trsys.CopyTrading.Application.Write.Commands;
 using Trsys.CopyTrading.Domain;
 
-namespace Trsys.CopyTrading.Application.Write
+namespace Trsys.CopyTrading.Application.Write.Sagas
 {
     public class TradeDistributionSaga :
         AggregateSaga<TradeDistributionSaga, TradeDistributionSagaId, TradeDistributionSagaLocator>,
+        IEmit<TradeDistributionSagaStartedEvent>,
+        IEmit<TradeDistributionSagaFinishedEvent>,
         ISagaIsStartedBy<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,
         ISagaHandles<DistributionGroupAggregate, DistributionGroupId, TradeDistributionStartedEvent>,
         ISagaHandles<AccountAggregate, AccountId, TradeOrderOpenedEvent>,

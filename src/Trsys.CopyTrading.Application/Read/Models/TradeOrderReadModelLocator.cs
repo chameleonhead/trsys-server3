@@ -3,7 +3,7 @@ using EventFlow.ReadStores;
 using System.Collections.Generic;
 using Trsys.CopyTrading.Domain;
 
-namespace Trsys.CopyTrading.Application.Read
+namespace Trsys.CopyTrading.Application.Read.Models
 {
     public class TradeOrderReadModelLocator : IReadModelLocator
     {

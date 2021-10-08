@@ -3,7 +3,7 @@ using EventFlow.Sagas;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Trsys.CopyTrading.Application.Write
+namespace Trsys.CopyTrading.Application.Write.Sagas
 {
     public class TradeDistributionSagaLocator : ISagaLocator
     {

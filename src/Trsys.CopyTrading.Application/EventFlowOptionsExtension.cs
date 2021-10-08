@@ -1,8 +1,10 @@
 ﻿using EventFlow;
 using EventFlow.Extensions;
 using System.Collections.Generic;
-using Trsys.CopyTrading.Application.Read;
-using Trsys.CopyTrading.Application.Write;
+using Trsys.CopyTrading.Application.Read.Models;
+using Trsys.CopyTrading.Application.Read.Queries;
+using Trsys.CopyTrading.Application.Write.Commands;
+using Trsys.CopyTrading.Application.Write.Sagas;
 using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application
