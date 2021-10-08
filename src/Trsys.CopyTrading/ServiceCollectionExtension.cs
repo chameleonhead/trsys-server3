@@ -14,6 +14,7 @@ namespace Trsys.CopyTrading
                 ef.UseApplication();
                 ef.AddAspNetCore();
             });
+            services.AddTransient<IEaService, EaService>();
             return services;
         } 
     }
