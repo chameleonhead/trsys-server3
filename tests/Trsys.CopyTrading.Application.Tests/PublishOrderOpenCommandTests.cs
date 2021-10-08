@@ -42,7 +42,7 @@ namespace Trsys.CopyTrading.Application.Tests
 
             var accountId = AccountId.New;
             var distributionGroupId = DistributionGroupId.New;
-            var result = await bus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId, TradeQuantity.Percentage(98)), CancellationToken.None);
+            var result = await bus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var copyTradeId = CopyTradeId.New;
             result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
@@ -68,7 +68,7 @@ namespace Trsys.CopyTrading.Application.Tests
                 .Range(0, 100)
                 .Select(_ => AccountId.New))
             {
-                result = await bus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId, TradeQuantity.Percentage(98)), CancellationToken.None);
+                result = await bus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
                 Assert.IsTrue(result.IsSuccess);
             }
             var copyTradeId = CopyTradeId.New;

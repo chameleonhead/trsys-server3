@@ -36,7 +36,7 @@ namespace Trsys.CopyTrading.Application
                 )
                 .AddEvents(
                     typeof(AccountStateUpdatedEvent),
-                    typeof(SubscriptionAddedEvent),
+                    typeof(SubscriberAddedEvent),
                     typeof(CopyTradeOpenedEvent),
                     typeof(TradeDistributionStartedEvent),
                     typeof(TradeOrderOpenedEvent),

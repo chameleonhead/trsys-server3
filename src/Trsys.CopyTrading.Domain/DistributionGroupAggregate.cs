@@ -1,31 +1,35 @@
 ﻿using EventFlow.Aggregates;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Trsys.CopyTrading.Domain
 {
     public class DistributionGroupAggregate : AggregateRoot<DistributionGroupAggregate, DistributionGroupId>,
-        IEmit<SubscriptionAddedEvent>,
+        IEmit<SubscriberAddedEvent>,
         IEmit<TradeDistributionStartedEvent>
     {
         public DistributionGroupAggregate(DistributionGroupId id) : base(id)
         {
         }
 
-        public List<Subscription> Subscriptions { get; private set; } = new();
+        public HashSet<AccountId> Subscribers { get; private set; } = new();
 
-        public void AddSubscriber(AccountId accountId, TradeQuantity quantity)
+        public void AddSubscriber(AccountId accountId)
         {
-            Emit(new SubscriptionAddedEvent(SubscriptionId.New, accountId, quantity));
+            if (Subscribers.Add(accountId))
+            {
+                Emit(new SubscriberAddedEvent(accountId));
+            }
         }
 
         public void StartDistribution(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)
         {
-            Emit(new TradeDistributionStartedEvent(copyTradeId, symbol, orderType, Subscriptions), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            Emit(new TradeDistributionStartedEvent(copyTradeId, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
-        public void Apply(SubscriptionAddedEvent e)
+        public void Apply(SubscriberAddedEvent e)
         {
-            Subscriptions.Add(new Subscription(e.SubscriptionId, e.AccountId, e.Quantity));
+            Subscribers.Add(e.AccountId);
         }
 
         public void Apply(TradeDistributionStartedEvent _)
