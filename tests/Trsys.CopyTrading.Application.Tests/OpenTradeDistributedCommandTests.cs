@@ -29,7 +29,7 @@ namespace Trsys.CopyTrading.Application.Tests
             var copyTradeId = CopyTradeId.New;
             result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
-            result = await bus.PublishAsync(new OpenTradeDistributedCommand(accountId, copyTradeId), CancellationToken.None);
+            result = await bus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
@@ -59,7 +59,7 @@ namespace Trsys.CopyTrading.Application.Tests
             Assert.IsTrue(result.IsSuccess);
             foreach (var accountId in accounts)
             {
-                result = await bus.PublishAsync(new OpenTradeDistributedCommand(accountId, copyTradeId), CancellationToken.None);
+                result = await bus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
                 Assert.IsTrue(result.IsSuccess);
             }
 

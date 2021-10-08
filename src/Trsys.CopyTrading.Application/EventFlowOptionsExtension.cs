@@ -19,24 +19,20 @@ namespace Trsys.CopyTrading.Application
                     typeof(AddSubscriberCommand),
                     typeof(PublishOrderOpenCommand),
                     typeof(StartTradeDistributionCommand),
-                    typeof(OpenTradeCommand),
-                    typeof(AddCopyTradeApplicantCommand),
-                    typeof(OpenTradeDistributedCommand),
+                    typeof(AddCopyTradeDistributedAccountCommand),
+                    typeof(DistributeOpenTradeCommand),
                     typeof(PublishOrderCloseCommand),
-                    typeof(CloseTradeCommand),
-                    typeof(CloseTradeDistributedCommand)
+                    typeof(DistributeCloseTradeCommand)
                 )
                 .AddCommandHandlers(
                     typeof(AccountStateUpdateCommandHandler),
                     typeof(AddSubscriberCommandHandler),
                     typeof(PublishOrderOpenCommandHandler),
                     typeof(StartTradeDistributionCommandHandler),
-                    typeof(OpenTradeCommandHandler),
-                    typeof(AddCopyTradeApplicantCommandHandler),
-                    typeof(OpenTradeDistributedCommandHandler),
+                    typeof(AddCopyTradeDistributedAccountCommandHandler),
+                    typeof(DistributeOpenTradeCommandHandler),
                     typeof(PublishOrderCloseCommandHandler),
-                    typeof(CloseTradeCommandHandler),
-                    typeof(CloseTradeDistributedCommandHandler)
+                    typeof(DistributeCloseTradeCommandHandler)
                 )
                 .AddEvents(
                     typeof(AccountStateUpdatedEvent),
