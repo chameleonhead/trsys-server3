@@ -6,9 +6,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
 {
     public class AccountReadModel : IReadModel,
         IAmReadModelFor<AccountAggregate, AccountId, AccountStateUpdatedEvent>,
-        IAmReadModelFor<AccountAggregate, AccountId, TradeOrderOpenedEvent>,
         IAmReadModelFor<AccountAggregate, AccountId, TradeOrderOpenDistributedEvent>,
-        IAmReadModelFor<AccountAggregate, AccountId, TradeOrderClosedEvent>,
         IAmReadModelFor<AccountAggregate, AccountId, TradeOrderCloseDistributedEvent>,
         IAmReadModelFor<AccountAggregate, AccountId, TradeOrderInactivatedEvent>
     {
@@ -19,15 +17,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             Balance = domainEvent.AggregateEvent.Balance.Value;
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, TradeOrderOpenedEvent> domainEvent)
-        {
-        }
-
         public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, TradeOrderOpenDistributedEvent> domainEvent)
-        {
-        }
-
-        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, TradeOrderClosedEvent> domainEvent)
         {
         }
 

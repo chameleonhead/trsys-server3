@@ -39,11 +39,9 @@ namespace Trsys.CopyTrading.Application
                     typeof(SubscriberAddedEvent),
                     typeof(CopyTradeOpenedEvent),
                     typeof(TradeDistributionStartedEvent),
-                    typeof(TradeOrderOpenedEvent),
                     typeof(CopyTradeApplicantAddedEvent),
                     typeof(TradeOrderOpenDistributedEvent),
                     typeof(CopyTradeClosedEvent),
-                    typeof(TradeOrderClosedEvent),
                     typeof(TradeOrderCloseDistributedEvent),
                     typeof(TradeOrderInactivatedEvent)
                 )
@@ -59,10 +57,9 @@ namespace Trsys.CopyTrading.Application
                 );
             options
                 .UseInMemoryReadStoreFor<AccountReadModel>()
-                .UseInMemoryReadStoreFor<CopyTradeReadModel>()
-                .UseInMemoryReadStoreFor<TradeOrderReadModel, TradeOrderReadModelLocator>()
-                .RegisterServices(sr => sr.RegisterType(typeof(TradeOrderReadModelLocator)))
-                .AddQueryHandler<TradeOrderReadModelAllQueryHandler, TradeOrderReadModelAllQuery, IReadOnlyCollection<TradeOrderReadModel>>();
+                .UseInMemoryReadStoreFor<CopyTradeReadModel, CopyTradeReadModelLocator>()
+                .RegisterServices(sr => sr.RegisterType(typeof(CopyTradeReadModelLocator)))
+                .AddQueryHandler<CopyTradeReadModelAllQueryHandler, CopyTradeReadModelAllQuery, IReadOnlyCollection<CopyTradeReadModel>>();
             return options;
         }
     }

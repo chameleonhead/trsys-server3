@@ -14,8 +14,9 @@ namespace Trsys.CopyTrading.Application.Write.Sagas
         IEmit<TradeDistributionSagaStartedEvent>,
         IEmit<TradeDistributionSagaFinishedEvent>,
         ISagaIsStartedBy<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,
-        ISagaHandles<AccountAggregate, AccountId, TradeOrderOpenedEvent>,
-        ISagaHandles<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent>
+        ISagaHandles<AccountAggregate, AccountId, TradeOrderOpenDistributedEvent>,
+        ISagaHandles<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent>,
+        ISagaHandles<AccountAggregate, AccountId, TradeOrderCloseDistributedEvent>
     {
         public TradeDistributionSaga(TradeDistributionSagaId id) : base(id)
         {
@@ -34,7 +35,7 @@ namespace Trsys.CopyTrading.Application.Write.Sagas
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(IDomainEvent<AccountAggregate, AccountId, TradeOrderOpenedEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
+        public Task HandleAsync(IDomainEvent<AccountAggregate, AccountId, TradeOrderOpenDistributedEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
         {
             var aggregateEvent = domainEvent.AggregateEvent;
             Publish(new AddCopyTradeDistributedAccountCommand(aggregateEvent.CopyTradeId, domainEvent.AggregateIdentity));
@@ -48,6 +49,11 @@ namespace Trsys.CopyTrading.Application.Write.Sagas
             {
                 Emit(new TradeDistributionSagaFinishedEvent());
             }
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(IDomainEvent<AccountAggregate, AccountId, TradeOrderCloseDistributedEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
+        {
             return Task.CompletedTask;
         }
 

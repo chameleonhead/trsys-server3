@@ -11,27 +11,11 @@ namespace Trsys.CopyTrading.Domain
         public TradeOrderEntity(TradeOrderId id, CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType, TradeQuantity quantity) : this(id)
         {
             CopyTradeId = copyTradeId;
-            Symbol = symbol;
-            OrderType = orderType;
-            Quantity = quantity;
         }
 
         public CopyTradeId CopyTradeId { get; }
         public ForexTradeSymbol Symbol { get; }
         public OrderType OrderType { get; }
         public TradeQuantity Quantity { get; }
-
-        public bool IsOpenDistributed { get; private set; }
-        public bool IsCloseDistributed { get; private set; }
-
-        public void OpenDistributed()
-        {
-            IsOpenDistributed = true;
-        }
-
-        public void CloseDistributed()
-        {
-            IsCloseDistributed = true;
-        }
     }
 }

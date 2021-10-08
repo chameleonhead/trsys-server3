@@ -77,10 +77,8 @@ namespace Trsys.CopyTrading.Application.Tests
             Assert.AreEqual("USDJPY", queryResult.Symbol);
             Assert.AreEqual("BUY", queryResult.OrderType);
             Assert.IsTrue(queryResult.IsOpen);
-
-            var queryResult2 = await queryProcessor.ProcessAsync(new TradeOrderReadModelAllQuery(), CancellationToken.None);
-            Assert.AreEqual(100, queryResult2.Count);
-            Assert.IsTrue(queryResult2.All(e => e.IsCloseDistributed));
+            Assert.AreEqual(100, queryResult.TradeOrders.Count);
+            Assert.IsTrue(queryResult.TradeOrders.All(e => e.CloseDistributedTimestamp.HasValue));
         }
 
         private static IRootResolver CreateResolver()
