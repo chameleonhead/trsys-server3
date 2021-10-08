@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Trsys.Fronend.Web.Models;
+using Trsys.Frontend.Web.Models;
 
-namespace Trsys.Fronend.Web.Controllers
+namespace Trsys.Frontend.Web.Controllers
 {
     public class HomeController : Controller
     {

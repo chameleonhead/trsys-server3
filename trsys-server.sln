@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C9DD5F9B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BE62412F-403C-4A84-9398-1F7C297115EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Fronend.Web", "src\Trsys.Fronend.Web\Trsys.Fronend.Web.csproj", "{391C04BA-408C-43C8-8157-BF83A54F04F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Frontend.Web", "src\Trsys.Frontend.Web\Trsys.Frontend.Web.csproj", "{391C04BA-408C-43C8-8157-BF83A54F04F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.CopyTrading", "src\Trsys.CopyTrading\Trsys.CopyTrading.csproj", "{6AF746F7-35D5-48F3-A415-E9FD7B326EDA}"
 EndProject

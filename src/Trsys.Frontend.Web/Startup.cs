@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Trsys.CopyTrading;
 
-namespace Trsys.Fronend.Web
+namespace Trsys.Frontend.Web
 {
     public class Startup
     {

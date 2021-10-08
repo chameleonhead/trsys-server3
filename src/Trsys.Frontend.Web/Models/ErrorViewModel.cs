@@ -1,6 +1,6 @@
 using System;
 
-namespace Trsys.Fronend.Web.Models
+namespace Trsys.Frontend.Web.Models
 {
     public class ErrorViewModel
     {
