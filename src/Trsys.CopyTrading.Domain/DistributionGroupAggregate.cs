@@ -1,10 +1,12 @@
 ﻿using EventFlow.Aggregates;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Trsys.CopyTrading.Domain
 {
     public class DistributionGroupAggregate : AggregateRoot<DistributionGroupAggregate, DistributionGroupId>,
+        IEmit<PublisherAddedEvent>,
         IEmit<SubscriberAddedEvent>,
         IEmit<TradeDistributionStartedEvent>
     {
@@ -15,6 +17,11 @@ namespace Trsys.CopyTrading.Domain
         public HashSet<PublisherEntity> Publishers { get; } = new();
 
         public HashSet<AccountId> Subscribers { get; } = new();
+
+        public void AddPublisher(PublisherIdentifier clientKey)
+        {
+            Emit(new PublisherAddedEvent(PublisherId.New, clientKey));
+        }
 
         public void AddSubscriber(AccountId accountId)
         {
@@ -29,9 +36,14 @@ namespace Trsys.CopyTrading.Domain
             Emit(new TradeDistributionStartedEvent(copyTradeId, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
-        public void Apply(SubscriberAddedEvent e)
+        public void Apply(PublisherAddedEvent aggregateEvent)
         {
-            Subscribers.Add(e.AccountId);
+            Publishers.Add(new PublisherEntity(aggregateEvent.PublisherId, aggregateEvent.ClientKey));
+        }
+
+        public void Apply(SubscriberAddedEvent aggregateEvent)
+        {
+            Subscribers.Add(aggregateEvent.AccountId);
         }
 
         public void Apply(TradeDistributionStartedEvent _)

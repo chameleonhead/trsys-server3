@@ -17,7 +17,7 @@ namespace Trsys.CopyTrading.Domain
         {
         }
 
-        public void Open(PublisherId publisherId, DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType)
+        public void Open(PublisherIdentifier publisherId, DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType)
         {
             if (!IsNew)
             {
@@ -35,7 +35,7 @@ namespace Trsys.CopyTrading.Domain
             Emit(new CopyTradeApplicantAddedEvent(accountId));
         }
 
-        public void Close(PublisherId publisherId)
+        public void Close(PublisherIdentifier clientKey)
         {
             if (IsNew)
             {
@@ -43,7 +43,7 @@ namespace Trsys.CopyTrading.Domain
             }
             if (IsOpen)
             {
-                Emit(new CopyTradeClosedEvent(publisherId, TradeApplicants.ToArray()), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
+                Emit(new CopyTradeClosedEvent(clientKey, TradeApplicants.ToArray()), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
             }
         }
 

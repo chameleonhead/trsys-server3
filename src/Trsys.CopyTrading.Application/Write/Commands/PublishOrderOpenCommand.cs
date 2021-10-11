@@ -7,7 +7,7 @@ namespace Trsys.CopyTrading.Application.Write.Commands
 {
     public class PublishOrderOpenCommand : Command<CopyTradeAggregate, CopyTradeId>
     {
-        public PublishOrderOpenCommand(CopyTradeId aggregateId, PublisherId publisherId, DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType) : base(aggregateId)
+        public PublishOrderOpenCommand(CopyTradeId aggregateId, PublisherIdentifier publisherId, DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType) : base(aggregateId)
         {
             PublisherId = publisherId;
             DistributionGroupId = distributionGroupId;
@@ -15,7 +15,7 @@ namespace Trsys.CopyTrading.Application.Write.Commands
             OrderType = orderType;
         }
 
-        public PublisherId PublisherId { get; }
+        public PublisherIdentifier PublisherId { get; }
         public DistributionGroupId DistributionGroupId { get; }
         public ForexTradeSymbol Symbol { get; }
         public OrderType OrderType { get; }

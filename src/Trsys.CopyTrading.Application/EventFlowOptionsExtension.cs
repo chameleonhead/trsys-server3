@@ -16,6 +16,7 @@ namespace Trsys.CopyTrading.Application
             options
                 .AddCommands(
                     typeof(AccountStateUpdateCommand),
+                    typeof(AddPublisherCommand),
                     typeof(AddSubscriberCommand),
                     typeof(PublishOrderOpenCommand),
                     typeof(StartTradeDistributionCommand),
@@ -26,6 +27,7 @@ namespace Trsys.CopyTrading.Application
                 )
                 .AddCommandHandlers(
                     typeof(AccountStateUpdateCommandHandler),
+                    typeof(AddPublisherCommandHandler),
                     typeof(AddSubscriberCommandHandler),
                     typeof(PublishOrderOpenCommandHandler),
                     typeof(StartTradeDistributionCommandHandler),
@@ -36,6 +38,7 @@ namespace Trsys.CopyTrading.Application
                 )
                 .AddEvents(
                     typeof(AccountStateUpdatedEvent),
+                    typeof(PublisherAddedEvent),
                     typeof(SubscriberAddedEvent),
                     typeof(CopyTradeOpenedEvent),
                     typeof(TradeDistributionStartedEvent),

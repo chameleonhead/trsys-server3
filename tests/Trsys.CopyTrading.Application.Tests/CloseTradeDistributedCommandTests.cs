@@ -22,10 +22,11 @@ namespace Trsys.CopyTrading.Application.Tests
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
 
-            var publisherId = PublisherId.New;
+            var publisherId = new PublisherIdentifier("PublisherIdentifier");
             var distributionGroupId = DistributionGroupId.New;
+            var result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             var accountId = AccountId.New;
-            var result = await commandBus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
+            result = await commandBus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var copyTradeId = CopyTradeId.New;
             result = await commandBus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, publisherId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
@@ -50,7 +51,7 @@ namespace Trsys.CopyTrading.Application.Tests
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
 
-            var publisherId = PublisherId.New;
+            var publisherId = new PublisherIdentifier("PublisherIdentifier");
             var distributionGroupId = DistributionGroupId.New;
             var accounts = Enumerable.Range(0, 100).Select(_ => AccountId.New).ToArray();
             foreach (var accountId in accounts)
