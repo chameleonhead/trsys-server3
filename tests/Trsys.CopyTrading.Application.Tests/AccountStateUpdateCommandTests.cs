@@ -17,10 +17,10 @@ namespace Trsys.CopyTrading.Application.Tests
         public async Task Success()
         {
             using var resolver = CreateResolver();
-            var bus = resolver.Resolve<ICommandBus>();
+            var commandBus = resolver.Resolve<ICommandBus>();
 
             var accountId = AccountId.New;
-            var result = await bus.PublishAsync(new AccountStateUpdateCommand(accountId, new AccountBalance(100)), CancellationToken.None);
+            var result = await commandBus.PublishAsync(new AccountStateUpdateCommand(accountId, new AccountBalance(100)), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();

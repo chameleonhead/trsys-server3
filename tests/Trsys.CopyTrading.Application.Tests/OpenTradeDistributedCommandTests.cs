@@ -19,17 +19,17 @@ namespace Trsys.CopyTrading.Application.Tests
         public async Task SuccessWithASubscriber()
         {
             using var resolver = CreateResolver();
-            var bus = resolver.Resolve<ICommandBus>();
+            var commandBus = resolver.Resolve<ICommandBus>();
 
             var accountId = AccountId.New;
             var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
-            var result = await bus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
+            var result = await commandBus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var copyTradeId = CopyTradeId.New;
-            result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, publisherId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, publisherId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
-            result = await bus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
+            result = await commandBus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
@@ -45,22 +45,22 @@ namespace Trsys.CopyTrading.Application.Tests
         {
             var result = default(IExecutionResult);
             using var resolver = CreateResolver();
-            var bus = resolver.Resolve<ICommandBus>();
+            var commandBus = resolver.Resolve<ICommandBus>();
 
             var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
             var accounts = Enumerable.Range(0, 100).Select(_ => AccountId.New).ToArray();
             foreach (var accountId in accounts)
             {
-                result = await bus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
+                result = await commandBus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
                 Assert.IsTrue(result.IsSuccess);
             }
             var copyTradeId = CopyTradeId.New;
-            result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, publisherId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, publisherId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             foreach (var accountId in accounts)
             {
-                result = await bus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
+                result = await commandBus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
                 Assert.IsTrue(result.IsSuccess);
             }
 
