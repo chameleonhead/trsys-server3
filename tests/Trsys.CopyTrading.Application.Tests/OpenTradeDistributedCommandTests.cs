@@ -22,11 +22,12 @@ namespace Trsys.CopyTrading.Application.Tests
             var bus = resolver.Resolve<ICommandBus>();
 
             var accountId = AccountId.New;
+            var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
             var result = await bus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var copyTradeId = CopyTradeId.New;
-            result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, publisherId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             result = await bus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
@@ -46,6 +47,7 @@ namespace Trsys.CopyTrading.Application.Tests
             using var resolver = CreateResolver();
             var bus = resolver.Resolve<ICommandBus>();
 
+            var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
             var accounts = Enumerable.Range(0, 100).Select(_ => AccountId.New).ToArray();
             foreach (var accountId in accounts)
@@ -54,7 +56,7 @@ namespace Trsys.CopyTrading.Application.Tests
                 Assert.IsTrue(result.IsSuccess);
             }
             var copyTradeId = CopyTradeId.New;
-            result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await bus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, publisherId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             foreach (var accountId in accounts)
             {

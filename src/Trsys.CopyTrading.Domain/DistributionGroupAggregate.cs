@@ -12,7 +12,9 @@ namespace Trsys.CopyTrading.Domain
         {
         }
 
-        public HashSet<AccountId> Subscribers { get; private set; } = new();
+        public HashSet<PublisherEntity> Publishers { get; } = new();
+
+        public HashSet<AccountId> Subscribers { get; } = new();
 
         public void AddSubscriber(AccountId accountId)
         {
