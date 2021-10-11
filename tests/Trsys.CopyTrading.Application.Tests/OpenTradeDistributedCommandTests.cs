@@ -21,13 +21,15 @@ namespace Trsys.CopyTrading.Application.Tests
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
 
-            var accountId = AccountId.New;
             var publisherId = new PublisherIdentifier("PublisherIdentifier");
             var distributionGroupId = DistributionGroupId.New;
-            var result = await commandBus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
+            var result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
+            Assert.IsTrue(result.IsSuccess);
+            var accountId = AccountId.New;
+            result = await commandBus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var copyTradeId = CopyTradeId.New;
-            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, publisherId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, copyTradeId, publisherId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             result = await commandBus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
@@ -49,6 +51,8 @@ namespace Trsys.CopyTrading.Application.Tests
 
             var publisherId = new PublisherIdentifier("PublisherIdentifier");
             var distributionGroupId = DistributionGroupId.New;
+            result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
+            Assert.IsTrue(result.IsSuccess);
             var accounts = Enumerable.Range(0, 100).Select(_ => AccountId.New).ToArray();
             foreach (var accountId in accounts)
             {
@@ -56,7 +60,7 @@ namespace Trsys.CopyTrading.Application.Tests
                 Assert.IsTrue(result.IsSuccess);
             }
             var copyTradeId = CopyTradeId.New;
-            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(copyTradeId, publisherId, distributionGroupId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, copyTradeId, publisherId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             foreach (var accountId in accounts)
             {

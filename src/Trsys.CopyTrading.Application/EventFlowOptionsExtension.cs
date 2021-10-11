@@ -19,10 +19,11 @@ namespace Trsys.CopyTrading.Application
                     typeof(AddPublisherCommand),
                     typeof(AddSubscriberCommand),
                     typeof(PublishOrderOpenCommand),
-                    typeof(StartTradeDistributionCommand),
+                    typeof(OpenCopyTradeCommand),
                     typeof(AddCopyTradeDistributedAccountCommand),
                     typeof(DistributeOpenTradeCommand),
                     typeof(PublishOrderCloseCommand),
+                    typeof(CloseCopyTradeCommand),
                     typeof(DistributeCloseTradeCommand)
                 )
                 .AddCommandHandlers(
@@ -30,10 +31,11 @@ namespace Trsys.CopyTrading.Application
                     typeof(AddPublisherCommandHandler),
                     typeof(AddSubscriberCommandHandler),
                     typeof(PublishOrderOpenCommandHandler),
-                    typeof(StartTradeDistributionCommandHandler),
+                    typeof(OpenCopyTradeCommandHandler),
                     typeof(AddCopyTradeDistributedAccountCommandHandler),
                     typeof(DistributeOpenTradeCommandHandler),
                     typeof(PublishOrderCloseCommandHandler),
+                    typeof(CloseCopyTradeCommandHandler),
                     typeof(DistributeCloseTradeCommandHandler)
                 )
                 .AddEvents(
@@ -41,9 +43,10 @@ namespace Trsys.CopyTrading.Application
                     typeof(PublisherAddedEvent),
                     typeof(SubscriberAddedEvent),
                     typeof(CopyTradeOpenedEvent),
-                    typeof(TradeDistributionStartedEvent),
+                    typeof(TradeOpenDistributionStartedEvent),
                     typeof(CopyTradeApplicantAddedEvent),
                     typeof(TradeOrderOpenDistributedEvent),
+                    typeof(TradeCloseDistributionStartedEvent),
                     typeof(CopyTradeClosedEvent),
                     typeof(TradeOrderCloseDistributedEvent),
                     typeof(TradeOrderInactivatedEvent)

@@ -8,12 +8,14 @@ namespace Trsys.CopyTrading.Domain
     public class DistributionGroupAggregate : AggregateRoot<DistributionGroupAggregate, DistributionGroupId>,
         IEmit<PublisherAddedEvent>,
         IEmit<SubscriberAddedEvent>,
-        IEmit<TradeDistributionStartedEvent>
+        IEmit<TradeOpenDistributionStartedEvent>,
+        IEmit<TradeCloseDistributionStartedEvent>
     {
         public DistributionGroupAggregate(DistributionGroupId id) : base(id)
         {
         }
 
+        public Dictionary<PublisherIdentifier, PublisherEntity> PublishersByKeys { get; } = new();
         public HashSet<PublisherEntity> Publishers { get; } = new();
 
         public HashSet<AccountId> Subscribers { get; } = new();
@@ -31,14 +33,29 @@ namespace Trsys.CopyTrading.Domain
             }
         }
 
-        public void StartDistribution(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)
+        public void StartOpenDistribution(CopyTradeId copyTradeId, PublisherIdentifier clientKey, ForexTradeSymbol symbol, OrderType orderType)
         {
-            Emit(new TradeDistributionStartedEvent(copyTradeId, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            if (!PublishersByKeys.TryGetValue(clientKey, out var entity))
+            {
+                throw new InvalidOperationException();
+            }
+            Emit(new TradeOpenDistributionStartedEvent(copyTradeId, entity.Id, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+        }
+
+        public void StartCloseDistribution(CopyTradeId copyTradeId, PublisherIdentifier clientKey)
+        {
+            if (!PublishersByKeys.TryGetValue(clientKey, out var entity))
+            {
+                throw new InvalidOperationException();
+            }
+            Emit(new TradeCloseDistributionStartedEvent(copyTradeId, entity.Id), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
         public void Apply(PublisherAddedEvent aggregateEvent)
         {
-            Publishers.Add(new PublisherEntity(aggregateEvent.PublisherId, aggregateEvent.ClientKey));
+            var entity = new PublisherEntity(aggregateEvent.PublisherId, aggregateEvent.ClientKey);
+            Publishers.Add(entity);
+            PublishersByKeys.Add(aggregateEvent.ClientKey, entity);
         }
 
         public void Apply(SubscriberAddedEvent aggregateEvent)
@@ -46,7 +63,11 @@ namespace Trsys.CopyTrading.Domain
             Subscribers.Add(aggregateEvent.AccountId);
         }
 
-        public void Apply(TradeDistributionStartedEvent _)
+        public void Apply(TradeOpenDistributionStartedEvent _)
+        {
+        }
+
+        public void Apply(TradeCloseDistributionStartedEvent aggregateEvent)
         {
         }
     }

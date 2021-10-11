@@ -5,21 +5,23 @@ using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application.Write.Commands
 {
-    public class PublishOrderCloseCommand : Command<CopyTradeAggregate, CopyTradeId>
+    public class PublishOrderCloseCommand : Command<DistributionGroupAggregate, DistributionGroupId>
     {
-        public PublishOrderCloseCommand(CopyTradeId aggregateId, PublisherIdentifier clientKey) : base(aggregateId)
+        public PublishOrderCloseCommand(DistributionGroupId aggregateId, CopyTradeId copyTradeId, PublisherIdentifier clientKey) : base(aggregateId)
         {
+            CopyTradeId = copyTradeId;
             ClientKey = clientKey;
         }
 
+        public CopyTradeId CopyTradeId { get; }
         public PublisherIdentifier ClientKey { get; }
     }
 
-    public class PublishOrderCloseCommandHandler : CommandHandler<CopyTradeAggregate, CopyTradeId, PublishOrderCloseCommand>
+    public class PublishOrderCloseCommandHandler : CommandHandler<DistributionGroupAggregate, DistributionGroupId, PublishOrderCloseCommand>
     {
-        public override Task ExecuteAsync(CopyTradeAggregate aggregate, PublishOrderCloseCommand command, CancellationToken cancellationToken)
+        public override Task ExecuteAsync(DistributionGroupAggregate aggregate, PublishOrderCloseCommand command, CancellationToken cancellationToken)
         {
-            aggregate.Close(command.ClientKey);
+            aggregate.StartCloseDistribution(command.CopyTradeId, command.ClientKey);
             return Task.CompletedTask;
         }
     }

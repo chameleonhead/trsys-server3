@@ -5,27 +5,27 @@ using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application.Write.Commands
 {
-    public class PublishOrderOpenCommand : Command<CopyTradeAggregate, CopyTradeId>
+    public class PublishOrderOpenCommand : Command<DistributionGroupAggregate, DistributionGroupId>
     {
-        public PublishOrderOpenCommand(CopyTradeId aggregateId, PublisherIdentifier publisherId, DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType) : base(aggregateId)
+        public PublishOrderOpenCommand(DistributionGroupId aggregateId, CopyTradeId copyTradeId, PublisherIdentifier clientKey, ForexTradeSymbol symbol, OrderType orderType) : base(aggregateId)
         {
-            PublisherId = publisherId;
-            DistributionGroupId = distributionGroupId;
+            CopyTradeId = copyTradeId;
+            ClientKey = clientKey;
             Symbol = symbol;
             OrderType = orderType;
         }
 
-        public PublisherIdentifier PublisherId { get; }
-        public DistributionGroupId DistributionGroupId { get; }
+        public CopyTradeId CopyTradeId { get; }
+        public PublisherIdentifier ClientKey { get; }
         public ForexTradeSymbol Symbol { get; }
         public OrderType OrderType { get; }
     }
 
-    public class PublishOrderOpenCommandHandler : CommandHandler<CopyTradeAggregate, CopyTradeId, PublishOrderOpenCommand>
+    public class PublishOrderOpenCommandHandler : CommandHandler<DistributionGroupAggregate, DistributionGroupId, PublishOrderOpenCommand>
     {
-        public override Task ExecuteAsync(CopyTradeAggregate aggregate, PublishOrderOpenCommand command, CancellationToken cancellationToken)
+        public override Task ExecuteAsync(DistributionGroupAggregate aggregate, PublishOrderOpenCommand command, CancellationToken cancellationToken)
         {
-            aggregate.Open(command.PublisherId, command.DistributionGroupId, command.Symbol, command.OrderType);
+            aggregate.StartOpenDistribution(command.CopyTradeId, command.ClientKey, command.Symbol, command.OrderType);
             return Task.CompletedTask;
         }
     }

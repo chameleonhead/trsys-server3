@@ -4,13 +4,13 @@ namespace Trsys.CopyTrading.Domain
 {
     public class CopyTradeClosedEvent : AggregateEvent<CopyTradeAggregate, CopyTradeId>
     {
-        public CopyTradeClosedEvent(PublisherIdentifier clientKey, AccountId[] tradeApplicants)
+        public CopyTradeClosedEvent(PublisherId publisherId, AccountId[] tradeApplicants)
         {
-            ClientKey = clientKey;
+            PublisherId = publisherId;
             TradeApplicants = tradeApplicants;
         }
 
-        public PublisherIdentifier ClientKey { get; }
+        public PublisherId PublisherId { get; }
         public AccountId[] TradeApplicants { get; }
     }
 }
