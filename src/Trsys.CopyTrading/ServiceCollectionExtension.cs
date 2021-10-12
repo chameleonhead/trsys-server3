@@ -15,6 +15,8 @@ namespace Trsys.CopyTrading
                 ef.AddAspNetCore();
             });
             services.AddTransient<IEaService, EaService>();
+            services.AddSingleton<IEaSessionTokenProvider, EaSessionTokenProvider>();
+            services.AddSingleton<IEaSessionTokenValidator, EaSessionTokenValidator>();
             return services;
         } 
     }

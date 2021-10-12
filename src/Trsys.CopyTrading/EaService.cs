@@ -15,16 +15,20 @@ namespace Trsys.CopyTrading
         private readonly string DISTRIBUTION_GROUP_ID = DistributionGroupId.New.Value;
         private readonly ICommandBus commandBus;
         private readonly IQueryProcessor queryProcessor;
+        private readonly IEaSessionTokenProvider tokenProvider;
+        private readonly IEaSessionTokenValidator tokenValidator;
 
-        public EaService(ICommandBus commandBus, IQueryProcessor queryProcessor)
+        public EaService(ICommandBus commandBus, IQueryProcessor queryProcessor, IEaSessionTokenProvider tokenProvider, IEaSessionTokenValidator tokenValidator)
         {
             this.commandBus = commandBus;
             this.queryProcessor = queryProcessor;
+            this.tokenProvider = tokenProvider;
+            this.tokenValidator = tokenValidator;
         }
 
         public async Task AddSecretKeyAsync(string key, string keyType)
         {
-            switch(keyType)
+            switch (keyType)
             {
                 case "Publisher":
                     await commandBus.PublishAsync(new AddPublisherCommand(DistributionGroupId.With(DISTRIBUTION_GROUP_ID), new ClientKey(key)), CancellationToken.None);
@@ -36,7 +40,8 @@ namespace Trsys.CopyTrading
                     {
                         accountId = AccountId.New;
                         await commandBus.PublishAsync(new CreateAccountCommand(accountId, new ClientKey(key)), CancellationToken.None);
-                    } else
+                    }
+                    else
                     {
                         accountId = AccountId.With(model.Id);
                     }
@@ -52,12 +57,32 @@ namespace Trsys.CopyTrading
             throw new NotImplementedException();
         }
 
-        public Task DiscardSessionTokenAsync(string token, string key, string keyType)
+        public async Task<EaSession> GenerateSessionTokenAsync(string key, string keyType)
         {
-            throw new NotImplementedException();
+            switch (keyType)
+            {
+                case "Publisher":
+                    var publisherReadModel = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
+                    if (publisherReadModel == null)
+                    {
+                        return null;
+                    }
+                    var publisherToken = tokenProvider.GenerateToken(publisherReadModel.Id, key, keyType);
+                    return new EaSession(key, keyType, publisherToken);
+                case "Subscriber":
+                    var subscriberReadModel = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
+                    if (subscriberReadModel == null)
+                    {
+                        return null;
+                    }
+                    var subscriberToken = tokenProvider.GenerateToken(subscriberReadModel.Id, key, keyType);
+                    return new EaSession(key, keyType, subscriberToken);
+                default:
+                    throw new ArgumentException();
+            }
         }
 
-        public Task<EaSession> GenerateSessionTokenAsync(string key, string keyType)
+        public Task DiscardSessionTokenAsync(string token, string key, string keyType)
         {
             throw new NotImplementedException();
         }
