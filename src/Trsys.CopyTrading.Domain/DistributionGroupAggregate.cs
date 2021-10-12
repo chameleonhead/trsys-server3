@@ -15,12 +15,12 @@ namespace Trsys.CopyTrading.Domain
         {
         }
 
-        public Dictionary<PublisherIdentifier, PublisherEntity> PublishersByKeys { get; } = new();
+        public Dictionary<ClientKey, PublisherEntity> PublishersByKeys { get; } = new();
         public HashSet<PublisherEntity> Publishers { get; } = new();
 
         public HashSet<AccountId> Subscribers { get; } = new();
 
-        public void AddPublisher(PublisherIdentifier clientKey)
+        public void AddPublisher(ClientKey clientKey)
         {
             Emit(new PublisherAddedEvent(PublisherId.New, clientKey));
         }
@@ -33,7 +33,7 @@ namespace Trsys.CopyTrading.Domain
             }
         }
 
-        public void StartOpenDistribution(CopyTradeId copyTradeId, PublisherIdentifier clientKey, ForexTradeSymbol symbol, OrderType orderType)
+        public void StartOpenDistribution(CopyTradeId copyTradeId, ClientKey clientKey, ForexTradeSymbol symbol, OrderType orderType)
         {
             if (!PublishersByKeys.TryGetValue(clientKey, out var entity))
             {
@@ -42,7 +42,7 @@ namespace Trsys.CopyTrading.Domain
             Emit(new TradeOpenDistributionStartedEvent(copyTradeId, entity.Id, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
-        public void StartCloseDistribution(CopyTradeId copyTradeId, PublisherIdentifier clientKey)
+        public void StartCloseDistribution(CopyTradeId copyTradeId, ClientKey clientKey)
         {
             if (!PublishersByKeys.TryGetValue(clientKey, out var entity))
             {

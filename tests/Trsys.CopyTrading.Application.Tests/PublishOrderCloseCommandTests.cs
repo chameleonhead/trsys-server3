@@ -20,7 +20,7 @@ namespace Trsys.CopyTrading.Application.Tests
         {
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
-            var publisherId = new PublisherIdentifier("PublisherIdentifier");
+            var publisherId = new ClientKey("PublisherIdentifier");
             var distributionGroupId = DistributionGroupId.New;
             var result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
@@ -44,7 +44,7 @@ namespace Trsys.CopyTrading.Application.Tests
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
 
-            var publisherId = new PublisherIdentifier("PublisherIdentifier");
+            var publisherId = new ClientKey("PublisherIdentifier");
             var distributionGroupId = DistributionGroupId.New;
             var result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
@@ -72,7 +72,7 @@ namespace Trsys.CopyTrading.Application.Tests
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
 
-            var publisherId = new PublisherIdentifier("PublisherIdentifier");
+            var publisherId = new ClientKey("PublisherIdentifier");
             var distributionGroupId = DistributionGroupId.New;
             result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);

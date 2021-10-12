@@ -7,12 +7,12 @@ namespace Trsys.CopyTrading.Application.Write.Commands
 {
     public class AddPublisherCommand : Command<DistributionGroupAggregate, DistributionGroupId>
     {
-        public AddPublisherCommand(DistributionGroupId aggregateId, PublisherIdentifier clientKey) : base(aggregateId)
+        public AddPublisherCommand(DistributionGroupId aggregateId, ClientKey clientKey) : base(aggregateId)
         {
             ClientKey = clientKey;
         }
 
-        public PublisherIdentifier ClientKey { get; }
+        public ClientKey ClientKey { get; }
     }
 
     public class AddPublisherCommandHandler : CommandHandler<DistributionGroupAggregate, DistributionGroupId, AddPublisherCommand>

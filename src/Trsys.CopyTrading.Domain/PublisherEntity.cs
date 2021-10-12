@@ -5,12 +5,12 @@ namespace Trsys.CopyTrading.Domain
 {
     public class PublisherEntity : Entity<PublisherId>
     {
-        public PublisherEntity(PublisherId id, PublisherIdentifier clientKey) : base(id)
+        public PublisherEntity(PublisherId id, ClientKey clientKey) : base(id)
         {
             ClientKey = clientKey; 
         }
 
-        public PublisherIdentifier ClientKey { get; private set; }
+        public ClientKey ClientKey { get; private set; }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

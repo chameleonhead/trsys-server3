@@ -5,12 +5,21 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Read.Models
 {
     public class AccountReadModel : IReadModel,
+        IAmReadModelFor<AccountAggregate, AccountId, AccountClientKeyUpdatedEvent>,
         IAmReadModelFor<AccountAggregate, AccountId, AccountStateUpdatedEvent>,
         IAmReadModelFor<AccountAggregate, AccountId, TradeOrderOpenDistributedEvent>,
         IAmReadModelFor<AccountAggregate, AccountId, TradeOrderCloseDistributedEvent>,
         IAmReadModelFor<AccountAggregate, AccountId, TradeOrderInactivatedEvent>
     {
+        public string Id { get; private set; }
+        public string ClientKey { get; private set; }
         public decimal Balance { get; private set; }
+
+        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, AccountClientKeyUpdatedEvent> domainEvent)
+        {
+            Id = domainEvent.AggregateIdentity.Value;
+            ClientKey = domainEvent.AggregateEvent.ClientKey.Value;
+        }
 
         public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, AccountStateUpdatedEvent> domainEvent)
         {
