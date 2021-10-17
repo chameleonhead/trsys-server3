@@ -7,19 +7,19 @@ namespace Trsys.CopyTrading.Application.Write.Commands
 {
     public class AddPublisherCommand : Command<DistributionGroupAggregate, DistributionGroupId>
     {
-        public AddPublisherCommand(DistributionGroupId aggregateId, ClientKey clientKey) : base(aggregateId)
+        public AddPublisherCommand(DistributionGroupId aggregateId, PublisherId publisherId) : base(aggregateId)
         {
-            ClientKey = clientKey;
+            PublisherId = publisherId;
         }
 
-        public ClientKey ClientKey { get; }
+        public PublisherId PublisherId { get; }
     }
 
     public class AddPublisherCommandHandler : CommandHandler<DistributionGroupAggregate, DistributionGroupId, AddPublisherCommand>
     {
         public override Task ExecuteAsync(DistributionGroupAggregate aggregate, AddPublisherCommand command, CancellationToken cancellationToken)
         {
-            aggregate.AddPublisher(command.ClientKey);
+            aggregate.AddPublisher(command.PublisherId);
             return Task.CompletedTask;
         }
     }

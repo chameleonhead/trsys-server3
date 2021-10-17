@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace Trsys.CopyTrading.Domain
 {
     public class AccountAggregate : AggregateRoot<AccountAggregate, AccountId>,
-        IEmit<AccountClientKeyUpdatedEvent>,
         IEmit<AccountStateUpdatedEvent>,
         IEmit<TradeOrderOpenDistributedEvent>,
         IEmit<TradeOrderCloseDistributedEvent>,
@@ -14,11 +13,6 @@ namespace Trsys.CopyTrading.Domain
 
         public AccountAggregate(AccountId id) : base(id)
         {
-        }
-
-        public void SetClientKey(ClientKey clientKey)
-        {
-            Emit(new AccountClientKeyUpdatedEvent(clientKey));
         }
 
         public void UpdateState(AccountBalance balance)
@@ -41,10 +35,6 @@ namespace Trsys.CopyTrading.Domain
                 Emit(new TradeOrderCloseDistributedEvent(entity.Id, entity.CopyTradeId), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
                 Emit(new TradeOrderInactivatedEvent(entity.Id, entity.CopyTradeId), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
             }
-        }
-
-        public void Apply(AccountClientKeyUpdatedEvent aggregateEvent)
-        {
         }
 
         public void Apply(AccountStateUpdatedEvent e)

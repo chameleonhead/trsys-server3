@@ -5,16 +5,16 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Read.Models
 {
     public class PublisherReadModel : IReadModel,
-        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, PublisherAddedEvent>
+        IAmReadModelFor<SecretKeyAggregate, SecretKeyId, PublisherSecretKeyRegisteredEvent>
     {
         public string Id { get; set; }
         public string DistributorGroupId { get; set; }
-        public string ClientKey { get; set; }
-        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, PublisherAddedEvent> domainEvent)
+        public string Key { get; set; }
+        public void Apply(IReadModelContext context, IDomainEvent<SecretKeyAggregate, SecretKeyId, PublisherSecretKeyRegisteredEvent> domainEvent)
         {
             Id = domainEvent.AggregateEvent.PublisherId.Value;
             DistributorGroupId = domainEvent.AggregateIdentity.Value;
-            ClientKey = domainEvent.AggregateEvent.ClientKey.Value;
+            Key = domainEvent.AggregateEvent.Key.Value;
         }
     }
 }

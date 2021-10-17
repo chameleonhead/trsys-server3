@@ -7,21 +7,21 @@ namespace Trsys.CopyTrading.Application.Write.Commands
 {
     public class PublishOrderCloseCommand : Command<DistributionGroupAggregate, DistributionGroupId>
     {
-        public PublishOrderCloseCommand(DistributionGroupId aggregateId, CopyTradeId copyTradeId, ClientKey clientKey) : base(aggregateId)
+        public PublishOrderCloseCommand(DistributionGroupId aggregateId, CopyTradeId copyTradeId, PublisherId publisherId) : base(aggregateId)
         {
+            PublisherId = publisherId;
             CopyTradeId = copyTradeId;
-            ClientKey = clientKey;
         }
 
+        public PublisherId PublisherId { get; }
         public CopyTradeId CopyTradeId { get; }
-        public ClientKey ClientKey { get; }
     }
 
     public class PublishOrderCloseCommandHandler : CommandHandler<DistributionGroupAggregate, DistributionGroupId, PublishOrderCloseCommand>
     {
         public override Task ExecuteAsync(DistributionGroupAggregate aggregate, PublishOrderCloseCommand command, CancellationToken cancellationToken)
         {
-            aggregate.StartCloseDistribution(command.CopyTradeId, command.ClientKey);
+            aggregate.StartCloseDistribution(command.PublisherId, command.CopyTradeId);
             return Task.CompletedTask;
         }
     }

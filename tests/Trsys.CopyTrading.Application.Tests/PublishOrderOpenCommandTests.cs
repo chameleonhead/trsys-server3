@@ -20,12 +20,12 @@ namespace Trsys.CopyTrading.Application.Tests
         {
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
-            var publisherId = new ClientKey("PublisherIdentifier");
+            var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
             var result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var copyTradeId = CopyTradeId.New;
-            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, copyTradeId, publisherId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
@@ -42,7 +42,7 @@ namespace Trsys.CopyTrading.Application.Tests
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
 
-            var publisherId = new ClientKey("PublisherIdentifier");
+            var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
             var result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
@@ -50,7 +50,7 @@ namespace Trsys.CopyTrading.Application.Tests
             result = await commandBus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var copyTradeId = CopyTradeId.New;
-            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, copyTradeId, publisherId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
@@ -68,7 +68,7 @@ namespace Trsys.CopyTrading.Application.Tests
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
 
-            var publisherId = new ClientKey("PublisherIdentifier");
+            var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
             result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
@@ -78,7 +78,7 @@ namespace Trsys.CopyTrading.Application.Tests
                 Assert.IsTrue(result.IsSuccess);
             }
             var copyTradeId = CopyTradeId.New;
-            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, copyTradeId, publisherId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();

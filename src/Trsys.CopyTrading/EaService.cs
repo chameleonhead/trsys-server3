@@ -4,7 +4,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Application.Read.Models;
-using Trsys.CopyTrading.Application.Read.Queries;
 using Trsys.CopyTrading.Application.Write.Commands;
 using Trsys.CopyTrading.Domain;
 
@@ -31,19 +30,23 @@ namespace Trsys.CopyTrading
             switch (keyType)
             {
                 case "Publisher":
-                    await commandBus.PublishAsync(new AddPublisherCommand(DistributionGroupId.With(DISTRIBUTION_GROUP_ID), new ClientKey(key)), CancellationToken.None);
+                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
+                    if (publisher == null)
+                    {
+                        await commandBus.PublishAsync(new RegisterPublisherSecretKeyCommand(SecretKeyId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.New), CancellationToken.None);
+                    }
                     break;
                 case "Subscriber":
-                    var model = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
+                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
                     AccountId accountId;
-                    if (model == null)
+                    if (subscriber == null)
                     {
                         accountId = AccountId.New;
-                        await commandBus.PublishAsync(new CreateAccountCommand(accountId, new ClientKey(key)), CancellationToken.None);
+                        await commandBus.PublishAsync(new RegisterSubscriberSecretKeyCommand(SecretKeyId.New, new SecretKey(key), accountId), CancellationToken.None);
                     }
                     else
                     {
-                        accountId = AccountId.With(model.Id);
+                        accountId = AccountId.With(subscriber.Id);
                     }
                     await commandBus.PublishAsync(new AddSubscriberCommand(DistributionGroupId.With(DISTRIBUTION_GROUP_ID), accountId), CancellationToken.None);
                     break;

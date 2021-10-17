@@ -15,14 +15,14 @@ namespace Trsys.CopyTrading.Domain
         {
         }
 
-        public Dictionary<ClientKey, PublisherEntity> PublishersByKeys { get; } = new();
+        public Dictionary<PublisherId, PublisherEntity> PublishersById { get; } = new();
         public HashSet<PublisherEntity> Publishers { get; } = new();
 
         public HashSet<AccountId> Subscribers { get; } = new();
 
-        public void AddPublisher(ClientKey clientKey)
+        public void AddPublisher(PublisherId publisherId)
         {
-            Emit(new PublisherAddedEvent(PublisherId.New, clientKey));
+            Emit(new PublisherAddedEvent(publisherId));
         }
 
         public void AddSubscriber(AccountId accountId)
@@ -33,18 +33,18 @@ namespace Trsys.CopyTrading.Domain
             }
         }
 
-        public void StartOpenDistribution(CopyTradeId copyTradeId, ClientKey clientKey, ForexTradeSymbol symbol, OrderType orderType)
+        public void StartOpenDistribution(PublisherId publisherId, CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)
         {
-            if (!PublishersByKeys.TryGetValue(clientKey, out var entity))
+            if (!PublishersById.TryGetValue(publisherId, out var entity))
             {
                 throw new InvalidOperationException();
             }
             Emit(new TradeOpenDistributionStartedEvent(copyTradeId, entity.Id, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
-        public void StartCloseDistribution(CopyTradeId copyTradeId, ClientKey clientKey)
+        public void StartCloseDistribution(PublisherId publisherId, CopyTradeId copyTradeId)
         {
-            if (!PublishersByKeys.TryGetValue(clientKey, out var entity))
+            if (!PublishersById.TryGetValue(publisherId, out var entity))
             {
                 throw new InvalidOperationException();
             }
@@ -53,9 +53,9 @@ namespace Trsys.CopyTrading.Domain
 
         public void Apply(PublisherAddedEvent aggregateEvent)
         {
-            var entity = new PublisherEntity(aggregateEvent.PublisherId, aggregateEvent.ClientKey);
+            var entity = new PublisherEntity(aggregateEvent.PublisherId);
             Publishers.Add(entity);
-            PublishersByKeys.Add(aggregateEvent.ClientKey, entity);
+            PublishersById.Add(aggregateEvent.PublisherId, entity);
         }
 
         public void Apply(SubscriberAddedEvent aggregateEvent)

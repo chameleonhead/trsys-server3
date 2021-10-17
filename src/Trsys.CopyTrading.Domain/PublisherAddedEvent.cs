@@ -4,13 +4,11 @@ namespace Trsys.CopyTrading.Domain
 {
     public class PublisherAddedEvent : AggregateEvent<DistributionGroupAggregate, DistributionGroupId>
     {
-        public PublisherAddedEvent(PublisherId publisherId, ClientKey clientKey)
+        public PublisherAddedEvent(PublisherId publisherId)
         {
             PublisherId = publisherId;
-            ClientKey = clientKey;
         }
 
         public PublisherId PublisherId { get; }
-        public ClientKey ClientKey { get; }
     }
 }

@@ -9,9 +9,9 @@ namespace Trsys.CopyTrading.Application.Read.Models
     {
         public IEnumerable<string> GetReadModelIds(IDomainEvent domainEvent)
         {
-            if (domainEvent is IDomainEvent<AccountAggregate, AccountId, AccountClientKeyUpdatedEvent> openEvent)
+            if (domainEvent is IDomainEvent<SecretKeyAggregate,SecretKeyId, SubscriberSecretKeyRegisteredEvent> openEvent)
             {
-                yield return openEvent.AggregateEvent.ClientKey.Value;
+                yield return openEvent.AggregateEvent.Key.Value;
                 yield break;
             }
         }
