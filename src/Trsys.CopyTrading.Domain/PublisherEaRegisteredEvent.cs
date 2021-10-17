@@ -2,9 +2,9 @@
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class PublisherSecretKeyRegisteredEvent : AggregateEvent<SecretKeyAggregate, SecretKeyId>
+    public class PublisherEaRegisteredEvent : AggregateEvent<PublisherEaAggregate, PublisherEaId>
     {
-        public PublisherSecretKeyRegisteredEvent(SecretKey key, DistributionGroupId distributionGroupId, PublisherId publisherId)
+        public PublisherEaRegisteredEvent(SecretKey key, DistributionGroupId distributionGroupId, PublisherId publisherId)
         {
             Key = key;
             DistributionGroupId = distributionGroupId;

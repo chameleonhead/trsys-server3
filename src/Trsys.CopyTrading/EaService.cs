@@ -1,6 +1,7 @@
 ﻿using EventFlow;
 using EventFlow.Queries;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Application.Read.Models;
@@ -30,25 +31,18 @@ namespace Trsys.CopyTrading
             switch (keyType)
             {
                 case "Publisher":
-                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
+                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
                     if (publisher == null)
                     {
-                        await commandBus.PublishAsync(new RegisterPublisherSecretKeyCommand(SecretKeyId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.New), CancellationToken.None);
+                        await commandBus.PublishAsync(new RegisterPublisherEaCommand(PublisherEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.New), CancellationToken.None);
                     }
                     break;
                 case "Subscriber":
-                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
-                    AccountId accountId;
+                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
-                        accountId = AccountId.New;
-                        await commandBus.PublishAsync(new RegisterSubscriberSecretKeyCommand(SecretKeyId.New, new SecretKey(key), accountId), CancellationToken.None);
+                        await commandBus.PublishAsync(new RegisterSubscriberEaCommand(SubscriberEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), AccountId.New), CancellationToken.None);
                     }
-                    else
-                    {
-                        accountId = AccountId.With(subscriber.Id);
-                    }
-                    await commandBus.PublishAsync(new AddSubscriberCommand(DistributionGroupId.With(DISTRIBUTION_GROUP_ID), accountId), CancellationToken.None);
                     break;
                 default:
                     throw new ArgumentException();
@@ -65,24 +59,33 @@ namespace Trsys.CopyTrading
             switch (keyType)
             {
                 case "Publisher":
-                    var publisherReadModel = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
-                    if (publisherReadModel == null)
+                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
+                    if (publisher == null)
                     {
                         return null;
                     }
-                    var publisherToken = tokenProvider.GenerateToken(publisherReadModel.Id, key, keyType);
+                    var publisherToken = tokenProvider.GenerateToken(publisher.Id, key, keyType);
                     return new EaSession(key, keyType, publisherToken);
                 case "Subscriber":
-                    var subscriberReadModel = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
-                    if (subscriberReadModel == null)
+                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+                    if (subscriber == null)
                     {
                         return null;
                     }
-                    var subscriberToken = tokenProvider.GenerateToken(subscriberReadModel.Id, key, keyType);
+                    var subscriberToken = tokenProvider.GenerateToken(subscriber.Id, key, keyType);
                     return new EaSession(key, keyType, subscriberToken);
                 default:
                     throw new ArgumentException();
             }
+        }
+
+        public Task ValidateSessionTokenAsync(string token, string key, string keyType)
+        {
+            if (tokenValidator.ValidateToken(key, keyType, token))
+            {
+                return Task.CompletedTask;
+            }
+            throw new EaSessionTokenInvalidException();
         }
 
         public Task DiscardSessionTokenAsync(string token, string key, string keyType)
@@ -90,14 +93,35 @@ namespace Trsys.CopyTrading
             throw new NotImplementedException();
         }
 
-        public Task<OrderText> GetCurrentOrderTextAsync()
+        public async Task PublishOrderTextAsync(DateTimeOffset timestamp, string key, string text)
         {
-            throw new NotImplementedException();
+            var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
+            if (publisher == null)
+            {
+                throw new InvalidOperationException();
+            }
+            await commandBus.PublishAsync(new PublisherEaUpdateOrdersCommand(PublisherEaId.With(publisher.Id), new EaOrderText(text)), CancellationToken.None);
         }
 
-        public Task PublishOrderTextAsync(DateTimeOffset timestamp, string key, string text)
+        public async Task<OrderText> GetCurrentOrderTextAsync()
         {
-            throw new NotImplementedException();
+            var distributionGroup = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<DistributionGroupReadModel>(DISTRIBUTION_GROUP_ID), CancellationToken.None);
+            if (distributionGroup == null)
+            {
+                return OrderText.Empty;
+            }
+            return OrderText.From(distributionGroup.CopyTrades.Select(t => new OrderTextItem(t.Id.GetHashCode(), t.Symbol, t.OrderType == "BUY" ? OrderType.Buy : OrderType.Sell, 0, 0, 0)));
+
+        }
+
+        public async Task SubscribeOrderTextAsync(DateTimeOffset timestamp, string key, string text)
+        {
+            var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+            if (subscriber == null)
+            {
+                throw new InvalidOperationException();
+            }
+            await commandBus.PublishAsync(new SubscriberEaUpdateOrdersCommand(SubscriberEaId.With(subscriber.Id), new EaOrderText(text)), CancellationToken.None);
         }
 
         public Task ReceiveLogAsync(DateTimeOffset serverTimestamp, string key, string keyType, string version, string token, string text)
@@ -110,22 +134,12 @@ namespace Trsys.CopyTrading
             throw new NotImplementedException();
         }
 
-        public Task SubscribeOrderTextAsync(DateTimeOffset timestamp, string key, string text)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SubscribeOrderTextUpdated(Action<OrderText> handler)
         {
             throw new NotImplementedException();
         }
 
         public void UnsubscribeOrderTextUpdated(Action<OrderText> handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ValidateSessionTokenAsync(string token, string key, string keyType)
         {
             throw new NotImplementedException();
         }

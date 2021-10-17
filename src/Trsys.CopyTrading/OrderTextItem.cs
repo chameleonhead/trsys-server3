@@ -4,9 +4,8 @@ namespace Trsys.CopyTrading
 {
     public class OrderTextItem
     {
-        private OrderTextItem(string text, int ticketNo, string symbol, OrderType orderType, decimal price, decimal lots, long time)
+        public OrderTextItem(int ticketNo, string symbol, OrderType orderType, decimal price, decimal lots, long time)
         {
-            Text = text;
             TicketNo = ticketNo;
             Symbol = symbol;
             OrderType = orderType;
@@ -15,7 +14,6 @@ namespace Trsys.CopyTrading
             Time = time;
         }
 
-        public string Text { get; }
         public int TicketNo { get; }
         public string Symbol { get; }
         public OrderType OrderType { get; }
@@ -37,7 +35,7 @@ namespace Trsys.CopyTrading
             var lots = splitted[4];
             var time = splitted[5];
 
-            return new OrderTextItem(text, int.Parse(ticketNo), symbol, orderType, decimal.Parse(price), decimal.Parse(lots), long.Parse(time));
+            return new OrderTextItem(int.Parse(ticketNo), symbol, orderType, decimal.Parse(price), decimal.Parse(lots), long.Parse(time));
         }
 
         public override string ToString()

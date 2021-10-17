@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -54,6 +55,11 @@ namespace Trsys.CopyTrading
                 }
             }
             return new OrderText(text);
+        }
+
+        public static OrderText From(IEnumerable<OrderTextItem> items)
+        {
+            return new OrderText(string.Join("@", items.Select(e => e.ToString())));
         }
 
         private string CalculateHash(string text)
