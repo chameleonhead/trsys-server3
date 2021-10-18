@@ -7,7 +7,7 @@ namespace Trsys.CopyTrading.Application.Write.Commands
 {
     public class PublishOrderCloseCommand : Command<DistributionGroupAggregate, DistributionGroupId>
     {
-        public PublishOrderCloseCommand(DistributionGroupId aggregateId, CopyTradeId copyTradeId, PublisherId publisherId) : base(aggregateId)
+        public PublishOrderCloseCommand(DistributionGroupId aggregateId, PublisherId publisherId, CopyTradeId copyTradeId) : base(aggregateId)
         {
             PublisherId = publisherId;
             CopyTradeId = copyTradeId;

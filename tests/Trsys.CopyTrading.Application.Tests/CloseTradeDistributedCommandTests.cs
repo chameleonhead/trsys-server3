@@ -33,7 +33,7 @@ namespace Trsys.CopyTrading.Application.Tests
             Assert.IsTrue(result.IsSuccess);
             result = await commandBus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
-            result = await commandBus.PublishAsync(new PublishOrderCloseCommand(distributionGroupId, copyTradeId, publisherId), CancellationToken.None);
+            result = await commandBus.PublishAsync(new PublishOrderCloseCommand(distributionGroupId, publisherId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             result = await commandBus.PublishAsync(new DistributeCloseTradeCommand(accountId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);

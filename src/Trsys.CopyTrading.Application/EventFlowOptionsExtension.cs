@@ -62,17 +62,21 @@ namespace Trsys.CopyTrading.Application
                     typeof(PublisherEaRegisteredEvent),
                     typeof(PublisherEaOrderTextUpdatedEvent),
                     typeof(SubscriberEaRegisteredEvent),
-                    typeof(SubscriberEaOrderTextUpdatedEvent)
+                    typeof(SubscriberEaOrderTextUpdatedEvent),
+                    typeof(PublisherEaOpenedOrderEvent),
+                    typeof(PublisherEaClosedOrderEvent)
                 )
                 .AddSagaLocators(
                     typeof(TradeDistributionSagaLocator),
                     typeof(PublisherEaRegistrationSagaLocator),
-                    typeof(SubscriberEaRegistrationSagaLocator)
+                    typeof(SubscriberEaRegistrationSagaLocator),
+                    typeof(OrderPublishingSagaLocator)
                 )
                 .AddSagas(
                     typeof(TradeDistributionSaga),
                     typeof(PublisherEaRegistrationSaga),
-                    typeof(SubscriberEaRegistrationSaga)
+                    typeof(SubscriberEaRegistrationSaga),
+                    typeof(OrderPublishingSaga)
                 )
                 .AddEvents(
                     typeof(TradeDistributionSagaStartedEvent),
