@@ -1,6 +1,6 @@
 ﻿using EventFlow.Sagas;
 
-namespace Trsys.CopyTrading.Application.Write.Sagas.RegisteringEa
+namespace Trsys.CopyTrading.Application.Write.Sagas.Ea
 {
     public class PublisherEaRegistrationSagaId : ISagaId
     {

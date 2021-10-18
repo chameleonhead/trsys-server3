@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Trsys.CopyTrading.Application.Read.Models;
 using Trsys.CopyTrading.Application.Read.Queries;
 using Trsys.CopyTrading.Application.Write.Commands;
-using Trsys.CopyTrading.Application.Write.Sagas.RegisteringEa;
+using Trsys.CopyTrading.Application.Write.Sagas.Ea;
 using Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution;
 using Trsys.CopyTrading.Domain;
 

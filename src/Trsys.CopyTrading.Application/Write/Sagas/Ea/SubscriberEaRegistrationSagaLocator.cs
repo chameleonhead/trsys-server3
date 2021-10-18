@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Domain;
 
-namespace Trsys.CopyTrading.Application.Write.Sagas.RegisteringEa
+namespace Trsys.CopyTrading.Application.Write.Sagas.Ea
 {
     public class SubscriberEaRegistrationSagaLocator : ISagaLocator
     {
