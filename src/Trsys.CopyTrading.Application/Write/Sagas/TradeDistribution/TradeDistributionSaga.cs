@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Trsys.CopyTrading.Application.Write.Commands;
 using Trsys.CopyTrading.Domain;
 
-namespace Trsys.CopyTrading.Application.Write.Sagas
+namespace Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution
 {
     public class TradeDistributionSaga :
         AggregateSaga<TradeDistributionSaga, TradeDistributionSagaId, TradeDistributionSagaLocator>,
@@ -25,9 +25,10 @@ namespace Trsys.CopyTrading.Application.Write.Sagas
 
         public Task HandleAsync(IDomainEvent<DistributionGroupAggregate, DistributionGroupId, TradeOpenDistributionStartedEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
         {
-            Emit(new TradeDistributionSagaStartedEvent());
-
             var aggregateEvent = domainEvent.AggregateEvent;
+
+            Emit(new TradeDistributionSagaStartedEvent(aggregateEvent.CopyTradeId));
+
             Publish(new OpenCopyTradeCommand(
                 aggregateEvent.CopyTradeId,
                 domainEvent.AggregateIdentity,

@@ -1,6 +1,6 @@
 ﻿using EventFlow.Sagas;
 
-namespace Trsys.CopyTrading.Application.Write.Sagas
+namespace Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution
 {
     public class TradeDistributionSagaId : ISagaId
     {

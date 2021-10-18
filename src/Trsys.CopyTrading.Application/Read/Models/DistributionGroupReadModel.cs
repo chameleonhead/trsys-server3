@@ -6,6 +6,8 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Read.Models
 {
     public class DistributionGroupReadModel : IReadModel,
+        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, PublisherAddedEvent>,
+        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, SubscriberAddedEvent>,
         IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, TradeOpenDistributionStartedEvent>,
         IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, TradeCloseDistributionStartedEvent>
     {
@@ -18,6 +20,18 @@ namespace Trsys.CopyTrading.Application.Read.Models
 
         public Dictionary<string, CopyTradeDto> CopyTradesById { get; } = new();
         public List<CopyTradeDto> CopyTrades { get; } = new();
+        public HashSet<string> Publishers { get; } = new();
+        public HashSet<string> Subscribers { get; } = new();
+
+        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, PublisherAddedEvent> domainEvent)
+        {
+            Publishers.Add(domainEvent.AggregateEvent.PublisherId.Value);
+        }
+
+        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, SubscriberAddedEvent> domainEvent)
+        {
+            Subscribers.Add(domainEvent.AggregateEvent.AccountId.Value);
+        }
 
         public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, TradeOpenDistributionStartedEvent> domainEvent)
         {

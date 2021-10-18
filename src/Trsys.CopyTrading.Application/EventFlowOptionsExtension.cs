@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using Trsys.CopyTrading.Application.Read.Models;
 using Trsys.CopyTrading.Application.Read.Queries;
 using Trsys.CopyTrading.Application.Write.Commands;
-using Trsys.CopyTrading.Application.Write.Sagas;
+using Trsys.CopyTrading.Application.Write.Sagas.RegisteringEa;
+using Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution;
 using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application
@@ -64,10 +65,14 @@ namespace Trsys.CopyTrading.Application
                     typeof(SubscriberEaOrderTextUpdatedEvent)
                 )
                 .AddSagaLocators(
-                    typeof(TradeDistributionSagaLocator)
+                    typeof(TradeDistributionSagaLocator),
+                    typeof(PublisherEaRegistrationSagaLocator),
+                    typeof(SubscriberEaRegistrationSagaLocator)
                 )
                 .AddSagas(
-                    typeof(TradeDistributionSaga)
+                    typeof(TradeDistributionSaga),
+                    typeof(PublisherEaRegistrationSaga),
+                    typeof(SubscriberEaRegistrationSaga)
                 )
                 .AddEvents(
                     typeof(TradeDistributionSagaStartedEvent),
