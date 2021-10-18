@@ -64,7 +64,7 @@ namespace Trsys.Frontend.Web.Tests.EaApi
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.AreEqual("text/plain; charset=utf-8", response.Content.Headers.ContentType.ToString());
-            Assert.AreEqual("1:USDJPY:0:1:2:1617271883", await response.Content.ReadAsStringAsync());
+            Assert.AreEqual("1:USDJPY:0", await response.Content.ReadAsStringAsync());
         }
 
         [TestMethod]
@@ -87,7 +87,7 @@ namespace Trsys.Frontend.Web.Tests.EaApi
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.AreEqual("text/plain; charset=utf-8", response.Content.Headers.ContentType.ToString());
-            Assert.AreEqual("1:USDJPY:0:1:2:1617271883", await response.Content.ReadAsStringAsync());
+            Assert.AreEqual("1:USDJPY:0@2:EURUSD:1", await response.Content.ReadAsStringAsync());
         }
 
         [TestMethod]
@@ -111,7 +111,7 @@ namespace Trsys.Frontend.Web.Tests.EaApi
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.AreEqual("text/plain; charset=utf-8", response.Content.Headers.ContentType.ToString());
-            Assert.AreEqual("1:USDJPY:0:1:2:1617271883", await response.Content.ReadAsStringAsync());
+            Assert.AreEqual("1:USDJPY:0@2:EURUSD:1", await response.Content.ReadAsStringAsync());
         }
 
         [TestMethod]

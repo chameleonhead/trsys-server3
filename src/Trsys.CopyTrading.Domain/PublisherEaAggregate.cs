@@ -32,7 +32,7 @@ namespace Trsys.CopyTrading.Domain
                 Emit(new PublisherEaOrderTextUpdatedEvent(Key, text));
                 var prevOrderTicketNos = OrdersByTicketNumber.Keys;
                 var nextOrders = text.ToOrders().ToHashSet();
-                var nextOrderTicketNos = nextOrders.Select(e => e.TicketNo);
+                var nextOrderTicketNos = nextOrders.Select(e => e.TicketNo).ToHashSet();
 
                 foreach (var prevTicketNo in prevOrderTicketNos)
                 {

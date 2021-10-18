@@ -33,6 +33,7 @@ namespace Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution
                 aggregateEvent.CopyTradeId,
                 domainEvent.AggregateIdentity,
                 aggregateEvent.PublisherId,
+                aggregateEvent.Sequence,
                 aggregateEvent.Symbol,
                 aggregateEvent.OrderType,
                 aggregateEvent.Subscribers));

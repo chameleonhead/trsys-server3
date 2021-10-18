@@ -110,7 +110,7 @@ namespace Trsys.CopyTrading
             {
                 return OrderText.Empty;
             }
-            return OrderText.From(distributionGroup.CopyTrades.Select(t => new OrderTextItem(t.Id.GetHashCode(), t.Symbol, t.OrderType == "BUY" ? OrderType.Buy : OrderType.Sell, 0, 0, 0)));
+            return OrderText.From(distributionGroup.CopyTrades.Select(t => new OrderTextItem(t.Sequence, t.Symbol, t.OrderType == "BUY" ? OrderType.Buy : OrderType.Sell)));
 
         }
 

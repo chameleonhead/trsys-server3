@@ -8,10 +8,11 @@ namespace Trsys.CopyTrading.Application.Write.Commands
 {
     public class OpenCopyTradeCommand : Command<CopyTradeAggregate, CopyTradeId>
     {
-        public OpenCopyTradeCommand(CopyTradeId aggregateId, DistributionGroupId distributionGroupId, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers) : base(aggregateId)
+        public OpenCopyTradeCommand(CopyTradeId aggregateId, DistributionGroupId distributionGroupId, PublisherId publisherId, int sequence, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers) : base(aggregateId)
         {
             DistributionGroupId = distributionGroupId;
             PublisherId = publisherId;
+            Sequence = sequence;
             Symbol = symbol;
             OrderType = orderType;
             Subscribers = subscribers;
@@ -19,6 +20,7 @@ namespace Trsys.CopyTrading.Application.Write.Commands
 
         public DistributionGroupId DistributionGroupId { get; }
         public PublisherId PublisherId { get; }
+        public int Sequence { get; }
         public ForexTradeSymbol Symbol { get; }
         public OrderType OrderType { get; }
         public List<AccountId> Subscribers { get; }
@@ -28,7 +30,7 @@ namespace Trsys.CopyTrading.Application.Write.Commands
     {
         public override Task ExecuteAsync(CopyTradeAggregate aggregate, OpenCopyTradeCommand command, CancellationToken cancellationToken)
         {
-            aggregate.Open(command.PublisherId, command.DistributionGroupId, command.Symbol, command.OrderType, command.Subscribers);
+            aggregate.Open(command.DistributionGroupId, command.PublisherId, command.Sequence, command.Symbol, command.OrderType, command.Subscribers);
             return Task.CompletedTask;
         }
     }

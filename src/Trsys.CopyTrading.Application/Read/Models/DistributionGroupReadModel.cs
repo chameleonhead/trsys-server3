@@ -16,6 +16,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             public string Id { get; set; }
             public string Symbol { get; set; }
             public string OrderType { get; set; }
+            public int Sequence { get; set; }
         }
 
         public Dictionary<string, CopyTradeDto> CopyTradesById { get; } = new();
@@ -35,12 +36,15 @@ namespace Trsys.CopyTrading.Application.Read.Models
 
         public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, TradeOpenDistributionStartedEvent> domainEvent)
         {
-            CopyTrades.Add(new CopyTradeDto()
+            var dto = new CopyTradeDto()
             {
                 Id = domainEvent.AggregateEvent.CopyTradeId.Value,
+                Sequence = domainEvent.AggregateEvent.Sequence,
                 Symbol = domainEvent.AggregateEvent.Symbol.Value,
                 OrderType = domainEvent.AggregateEvent.OrderType.Value,
-            });
+            };
+            CopyTrades.Add(dto);
+            CopyTradesById.Add(dto.Id, dto);
         }
 
         public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, TradeCloseDistributionStartedEvent> domainEvent)

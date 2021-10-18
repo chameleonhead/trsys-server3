@@ -26,13 +26,13 @@ namespace Trsys.CopyTrading.Domain
             Emit(new CopyTradeApplicantAddedEvent(accountId));
         }
 
-        public void Open(PublisherId publisherId, DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
+        public void Open(DistributionGroupId distributionGroupId, PublisherId publisherId, int sequence, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
         {
             if (!IsNew)
             {
                 throw new InvalidOperationException();
             }
-            Emit(new CopyTradeOpenedEvent(publisherId, distributionGroupId, symbol, orderType, subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
+            Emit(new CopyTradeOpenedEvent(distributionGroupId, publisherId, sequence, symbol, orderType, subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
         }
 
         public void Close(PublisherId publisherId)
@@ -47,17 +47,17 @@ namespace Trsys.CopyTrading.Domain
             }
         }
 
-        public void Apply(CopyTradeOpenedEvent _)
+        public void Apply(CopyTradeOpenedEvent aggregateEvent)
         {
             IsOpen = true;
         }
 
-        public void Apply(CopyTradeApplicantAddedEvent e)
+        public void Apply(CopyTradeApplicantAddedEvent aggregateEvent)
         {
-            TradeApplicants.Add(e.AccountId);
+            TradeApplicants.Add(aggregateEvent.AccountId);
         }
 
-        public void Apply(CopyTradeClosedEvent _)
+        public void Apply(CopyTradeClosedEvent aggregateEvent)
         {
             IsOpen = false;
         }

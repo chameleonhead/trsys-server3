@@ -15,6 +15,7 @@ namespace Trsys.CopyTrading.Domain
         {
         }
 
+        public int CurrentSequence { get; private set; }
         public Dictionary<PublisherId, PublisherEntity> PublishersById { get; } = new();
         public HashSet<PublisherEntity> Publishers { get; } = new();
 
@@ -39,7 +40,7 @@ namespace Trsys.CopyTrading.Domain
             {
                 throw new InvalidOperationException();
             }
-            Emit(new TradeOpenDistributionStartedEvent(copyTradeId, entity.Id, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            Emit(new TradeOpenDistributionStartedEvent(copyTradeId, CurrentSequence + 1, entity.Id, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
         public void StartCloseDistribution(PublisherId publisherId, CopyTradeId copyTradeId)
@@ -63,8 +64,9 @@ namespace Trsys.CopyTrading.Domain
             Subscribers.Add(aggregateEvent.AccountId);
         }
 
-        public void Apply(TradeOpenDistributionStartedEvent _)
+        public void Apply(TradeOpenDistributionStartedEvent aggregateEvent)
         {
+            CurrentSequence = aggregateEvent.Sequence;
         }
 
         public void Apply(TradeCloseDistributionStartedEvent aggregateEvent)

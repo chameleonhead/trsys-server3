@@ -4,26 +4,20 @@ namespace Trsys.CopyTrading
 {
     public class OrderTextItem
     {
-        public OrderTextItem(int ticketNo, string symbol, OrderType orderType, decimal price, decimal lots, long time)
+        public OrderTextItem(int ticketNo, string symbol, OrderType orderType)
         {
             TicketNo = ticketNo;
             Symbol = symbol;
             OrderType = orderType;
-            Price = price.Normalize();
-            Lots = lots.Normalize();
-            Time = time;
         }
 
         public int TicketNo { get; }
         public string Symbol { get; }
         public OrderType OrderType { get; }
-        public decimal Price { get; }
-        public decimal Lots { get; }
-        public long Time { get; set; }
 
         public static OrderTextItem Parse(string text)
         {
-            if (!Regex.IsMatch(text, @"^\d+:[A-Z]+:[01]:\d+(\.\d+)?:\d+(\.\d+)?:\d+"))
+            if (!Regex.IsMatch(text, @"^\d+:[A-Z]+:[01]"))
             {
                 throw new OrderTextFormatException();
             }
@@ -31,16 +25,13 @@ namespace Trsys.CopyTrading
             var ticketNo = splitted[0];
             var symbol = splitted[1];
             var orderType = (OrderType)int.Parse(splitted[2]);
-            var price = splitted[3];
-            var lots = splitted[4];
-            var time = splitted[5];
 
-            return new OrderTextItem(int.Parse(ticketNo), symbol, orderType, decimal.Parse(price), decimal.Parse(lots), long.Parse(time));
+            return new OrderTextItem(int.Parse(ticketNo), symbol, orderType);
         }
 
         public override string ToString()
         {
-            return $"{TicketNo}:{Symbol}:{(int)OrderType}:{Price}:{Lots}:{Time}";
+            return $"{TicketNo}:{Symbol}:{(int)OrderType}";
         }
     }
 
