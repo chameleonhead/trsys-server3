@@ -2,6 +2,7 @@
 using LoadTesting.Server;
 using NBomber.Contracts;
 using Serilog;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LoadTesting.Client
@@ -16,14 +17,14 @@ namespace LoadTesting.Client
             this.orderProvider = orderProvider;
         }
 
-        protected override async Task<Response> OnExecuteAsync()
+        protected override async Task<Response> OnExecuteAsync(CancellationToken cancellationToken)
         {
             var orderText = orderProvider.GetCurrentOrder();
             if (sentOrder != orderText)
             {
                 try
                 {
-                    await ClientPool.UseClientAsync(client => client.PublishOrderAsync(SecretKey, Token, orderText));
+                    await ClientPool.UseClientAsync(client => client.PublishOrderAsync(SecretKey, Token, orderText, cancellationToken: cancellationToken));
                 }
                 catch
                 {

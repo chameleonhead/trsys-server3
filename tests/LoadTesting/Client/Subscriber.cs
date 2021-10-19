@@ -14,11 +14,11 @@ namespace LoadTesting.Client
 
         public OrderResponse Order { get; private set; }
 
-        protected override async Task<Response> OnExecuteAsync()
+        protected override async Task<Response> OnExecuteAsync(System.Threading.CancellationToken cancellationToken)
         {
             try
             {
-                var order = await ClientPool.UseClientAsync(client => client.SubscribeOrderAsync(SecretKey, Token, Order));
+                var order = await ClientPool.UseClientAsync(client => client.SubscribeOrderAsync(SecretKey, Token, Order, cancellationToken));
                 if (order != Order)
                 {
                     Order = order;

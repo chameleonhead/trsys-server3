@@ -15,7 +15,6 @@ namespace LoadTesting.Client
         protected string Token { get; private set; }
 
         private bool isInit = false;
-        private readonly SemaphoreSlim lockObject = new SemaphoreSlim(1);
 
         public TokenClientBase(HttpClientPool pool, string secretKey, string keyType)
         {
@@ -37,19 +36,11 @@ namespace LoadTesting.Client
             isInit = false;
         }
 
-        public async Task<Response> ExecuteAsync()
+        public async Task<Response> ExecuteAsync(CancellationToken cancellationToken)
         {
             EnsureInited();
-
-            await lockObject.WaitAsync();
-            try
-            {
-                return await OnExecuteAsync();
-            }
-            finally
-            {
-                lockObject.Release();
-            }
+            cancellationToken.ThrowIfCancellationRequested();
+            return await OnExecuteAsync(cancellationToken);
         }
 
         private void EnsureInited()
@@ -57,6 +48,6 @@ namespace LoadTesting.Client
             if (!isInit) throw new InvalidOperationException("not initialized");
         }
 
-        protected abstract Task<Response> OnExecuteAsync();
+        protected abstract Task<Response> OnExecuteAsync(CancellationToken cancellationToken);
     }
 }

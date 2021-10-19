@@ -32,7 +32,9 @@ namespace LoadTesting
                 .AddZipkinExporter()
                 .Build();
 
-            var httpClientPool = new HttpClientPool(() => HttpClientFactory.Create(Environment.GetEnvironmentVariable("FRONTENT_URL") ?? "https://localhost:5001", true), COUNT_OF_CLIENTS / 2);
+            using var server = new ProcessRunner("dotnet", "run --project ..\\..\\..\\..\\..\\src\\Trsys.Frontend.Web\\Trsys.Frontend.Web.csproj");
+
+            var httpClientPool = new HttpClientPool(() => HttpClientFactory.Create(Environment.GetEnvironmentVariable("FRONTENT_URL") ?? "https://localhost:5001", true), 10);
             var publisherKey = "MT4/OANDA Corporation/899999999/2";
             var subscriberKeys = Enumerable.Range(1, COUNT_OF_CLIENTS).Select(i => $"MT4/OANDA Corporation/8{i:00000000}/2").ToList();
             WithRetry(() => RegisterKeys(httpClientPool, new[] { publisherKey }, "Publisher")).Wait();
@@ -44,15 +46,15 @@ namespace LoadTesting
             orderProvider.SetStart();
 
             var random = new Random();
-            var step1 = Step.Create("publisher", feeds, context => publisher.ExecuteAsync());
-            var step2 = Step.Create("subscriber", feeds, context => subscribers[random.Next(0, COUNT_OF_CLIENTS - 1)].ExecuteAsync());
+            var step1 = Step.Create("publisher", feeds, context => publisher.ExecuteAsync(context.CancellationToken));
+            var step2 = Step.Create("subscriber", feeds, context => subscribers[random.Next(0, COUNT_OF_CLIENTS - 1)].ExecuteAsync(context.CancellationToken));
 
             var scenario1 = ScenarioBuilder
                 .CreateScenario("pub", step1)
                 .WithInit(async context =>
                 {
                     await publisher.InitializeAsync();
-                    await publisher.ExecuteAsync();
+                    await publisher.ExecuteAsync(context.CancellationToken);
                 })
                 .WithWarmUpDuration(TimeSpan.FromSeconds(5))
                 .WithLoadSimulations(LoadSimulation.NewInjectPerSec(1, TimeSpan.FromMinutes(LENGTH_OF_TEST_MINUTES)))
@@ -87,7 +89,7 @@ namespace LoadTesting
             {
                 try
                 {
-                    return await Task.Run(async () => await func());
+                    return await func();
                 }
                 catch (Exception e)
                 {
@@ -99,9 +101,9 @@ namespace LoadTesting
             throw new Exception("Failed to execute.", lastException);
         }
 
-        private static async Task<bool> RegisterKeys(HttpClientPool httpClientPool, IEnumerable<string> secretKeys, string keyType)
+        private static Task<bool> RegisterKeys(HttpClientPool httpClientPool, IEnumerable<string> secretKeys, string keyType)
         {
-            return await httpClientPool.UseClientAsync(async httpClient =>
+            return httpClientPool.UseClientAsync(async httpClient =>
             {
                 foreach (var key in secretKeys)
                 {
@@ -111,9 +113,9 @@ namespace LoadTesting
             });
         }
 
-        private static async Task UnregisterKeys(HttpClientPool httpClientPool, IEnumerable<string> secretKeys, string keyType)
+        private static Task UnregisterKeys(HttpClientPool httpClientPool, IEnumerable<string> secretKeys, string keyType)
         {
-            await httpClientPool.UseClientAsync(async httpClient =>
+            return httpClientPool.UseClientAsync(async httpClient =>
             {
                 foreach (var key in secretKeys)
                 {

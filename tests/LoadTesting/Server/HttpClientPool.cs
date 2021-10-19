@@ -8,42 +8,31 @@ namespace LoadTesting.Server
 {
     public class HttpClientPool
     {
-        private readonly List<HttpClient> clients;
+        private readonly List<Lazy<HttpClient>> clients;
         private int index = 0;
 
         public HttpClientPool(Func<HttpClient> clientFactory, int poolCount)
         {
-            var clients = new List<HttpClient>();
+            var clients = new List<Lazy<HttpClient>>();
             for (int i = 0; i < poolCount; i++)
             {
-                clients.Add(clientFactory.Invoke());
+                clients.Add(new Lazy<HttpClient>(clientFactory));
             }
             this.clients = clients;
         }
 
-        public Task UseClientAsync(Func<HttpClient, Task> task)
+        public async Task UseClientAsync(Func<HttpClient, Task> task)
         {
-            var tcs = new TaskCompletionSource();
-            Task.Run(async () =>
-            {
-                var nextIndex = Interlocked.Increment(ref index);
-                var client = clients[nextIndex % clients.Count];
-                await task?.Invoke(client);
-                tcs.SetResult();
-            });
-            return tcs.Task;
+            var nextIndex = Interlocked.Increment(ref index);
+            var client = clients[nextIndex % clients.Count];
+            await task.Invoke(client.Value);
         }
 
-        public Task<T> UseClientAsync<T>(Func<HttpClient, Task<T>> task)
+        public async Task<T> UseClientAsync<T>(Func<HttpClient, Task<T>> task)
         {
-            var tcs = new TaskCompletionSource<T>();
-            Task.Run(async () =>
-            {
-                var nextIndex = Interlocked.Increment(ref index);
-                var client = clients[nextIndex % clients.Count];
-                tcs.SetResult(await task?.Invoke(client));
-            });
-            return tcs.Task;
+            var nextIndex = Interlocked.Increment(ref index);
+            var client = clients[nextIndex % clients.Count];
+            return await task.Invoke(client.Value);
         }
     }
 }
