@@ -27,8 +27,15 @@ namespace Trsys.CopyTrading
 
         public EaSession ExtractToken(string token)
         {
-            var session = decoder.DecodeToObject<Session>(token, "s3cr3t", verify: true);
-            return new EaSession(session.Id, session.Key, session.KeyType, token);
+            try
+            {
+                var session = decoder.DecodeToObject<Session>(token, "s3cr3t", verify: true);
+                return new EaSession(session.Id, session.Key, session.KeyType, token);
+            }
+            catch
+            {
+                throw new EaSessionTokenInvalidException();
+            }
         }
     }
 }

@@ -1,8 +1,11 @@
-﻿namespace Trsys.CopyTrading
+﻿using System.Threading.Tasks;
+
+namespace Trsys.CopyTrading
 {
     public interface IEaSessionManager
     {
-        EaSession CreateSession(string id, string key, string keyType);
-        bool ValidateToken(string key, string keyType, string token);
+        Task<EaSession> CreateSessionAsync(string id, string key, string keyType);
+        Task<bool> ValidateTokenAsync(string key, string keyType, string token);
+        Task DestroySessionAsync(string key, string keyType, string token);
     }
 }

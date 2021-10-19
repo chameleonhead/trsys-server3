@@ -62,31 +62,31 @@ namespace Trsys.CopyTrading
                     {
                         return null;
                     }
-                    return sessionManager.CreateSession(publisher.Id, key, keyType);
+                    return await sessionManager.CreateSessionAsync(publisher.Id, key, keyType);
                 case "Subscriber":
                     var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
                         return null;
                     }
-                    return sessionManager.CreateSession(subscriber.Id, key, keyType);
+                    return await sessionManager.CreateSessionAsync(subscriber.Id, key, keyType);
                 default:
                     throw new ArgumentException();
             }
         }
 
-        public Task ValidateSessionTokenAsync(string token, string key, string keyType)
+        public async Task ValidateSessionTokenAsync(string token, string key, string keyType)
         {
-            if (sessionManager.ValidateToken(key, keyType, token))
+            if (await sessionManager.ValidateTokenAsync(key, keyType, token))
             {
-                return Task.CompletedTask;
+                return;
             }
             throw new EaSessionTokenInvalidException();
         }
 
         public Task DiscardSessionTokenAsync(string token, string key, string keyType)
         {
-            throw new NotImplementedException();
+            return sessionManager.DestroySessionAsync(key, keyType, token);
         }
 
         public async Task PublishOrderTextAsync(DateTimeOffset timestamp, string key, string text)

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 
 namespace Trsys.CopyTrading
 {
@@ -6,41 +6,44 @@ namespace Trsys.CopyTrading
     {
         private readonly IEaSessionTokenProvider tokenProvider;
         private readonly IEaSessionTokenParser tokenParser;
-        private readonly Dictionary<string, Dictionary<string, EaSession>> sessionsById = new();
-        private readonly Dictionary<string, string> activeSessions = new();
+        private readonly IEaSessionStore sessionStore;
 
-        public EaSessionManager(IEaSessionTokenProvider tokenProvider, IEaSessionTokenParser tokenParser)
+        public EaSessionManager(IEaSessionTokenProvider tokenProvider, IEaSessionTokenParser tokenParser, IEaSessionStore sessionStore)
         {
             this.tokenProvider = tokenProvider;
             this.tokenParser = tokenParser;
+            this.sessionStore = sessionStore;
         }
 
-        public EaSession CreateSession(string id, string key, string keyType)
+        public Task<EaSession> CreateSessionAsync(string id, string key, string keyType)
         {
             var token = tokenProvider.GenerateToken(id, key, keyType);
             var session = new EaSession(id, key, keyType, token);
-            if (!sessionsById.TryGetValue(id, out var sessions))
+            if (sessionStore.SetActiveSessionIfActiveSessionNotExists(session))
             {
-                sessions = new();
-                sessionsById.Add(id, sessions);
+                return Task.FromResult(session);
             }
-            sessions.Add(token, session);
-            return session;
+            throw new EaSessionAlreadyExistsException();
         }
 
-        public bool ValidateToken(string key, string keyType, string token)
+        public Task DestroySessionAsync(string key, string keyType, string token)
+        {
+            var session = tokenParser.ExtractToken(token);
+            sessionStore.ClearActiveSession(session);
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> ValidateTokenAsync(string key, string keyType, string token)
         {
             var session = tokenParser.ExtractToken(token);
             if (session.Key == key && session.KeyType == keyType)
             {
-                if (!activeSessions.TryGetValue(session.Id, out var activeToken))
+                if (sessionStore.SetActiveSessionIfActiveSessionNotExists(session))
                 {
-                    activeSessions.Add(session.Id, token);
-                    return true;
+                    return Task.FromResult(true);
                 }
-                return activeToken == token;
             }
-            return false;
+            return Task.FromResult(false);
         }
     }
 }
