@@ -15,15 +15,13 @@ namespace Trsys.CopyTrading
         private readonly string DISTRIBUTION_GROUP_ID = DistributionGroupId.New.Value;
         private readonly ICommandBus commandBus;
         private readonly IQueryProcessor queryProcessor;
-        private readonly IEaSessionTokenProvider tokenProvider;
-        private readonly IEaSessionTokenValidator tokenValidator;
+        private readonly IEaSessionManager sessionManager;
 
-        public EaService(ICommandBus commandBus, IQueryProcessor queryProcessor, IEaSessionTokenProvider tokenProvider, IEaSessionTokenValidator tokenValidator)
+        public EaService(ICommandBus commandBus, IQueryProcessor queryProcessor, IEaSessionManager sessionManager)
         {
             this.commandBus = commandBus;
             this.queryProcessor = queryProcessor;
-            this.tokenProvider = tokenProvider;
-            this.tokenValidator = tokenValidator;
+            this.sessionManager = sessionManager;
         }
 
         public async Task AddSecretKeyAsync(string key, string keyType)
@@ -64,16 +62,14 @@ namespace Trsys.CopyTrading
                     {
                         return null;
                     }
-                    var publisherToken = tokenProvider.GenerateToken(publisher.Id, key, keyType);
-                    return new EaSession(key, keyType, publisherToken);
+                    return sessionManager.CreateSession(publisher.Id, key, keyType);
                 case "Subscriber":
                     var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
                         return null;
                     }
-                    var subscriberToken = tokenProvider.GenerateToken(subscriber.Id, key, keyType);
-                    return new EaSession(key, keyType, subscriberToken);
+                    return sessionManager.CreateSession(subscriber.Id, key, keyType);
                 default:
                     throw new ArgumentException();
             }
@@ -81,7 +77,7 @@ namespace Trsys.CopyTrading
 
         public Task ValidateSessionTokenAsync(string token, string key, string keyType)
         {
-            if (tokenValidator.ValidateToken(key, keyType, token))
+            if (sessionManager.ValidateToken(key, keyType, token))
             {
                 return Task.CompletedTask;
             }

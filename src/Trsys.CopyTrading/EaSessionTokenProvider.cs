@@ -24,6 +24,7 @@ namespace Trsys.CopyTrading
                 {"id", id},
                 {"key", key},
                 {"keyType", keyType},
+                {"sessionId", Guid.NewGuid().ToString() },
             }, "s3cr3t");
         }
     }

@@ -4,7 +4,7 @@ using JWT.Serializers;
 
 namespace Trsys.CopyTrading
 {
-    public class EaSessionTokenValidator : IEaSessionTokenValidator
+    public class EaSessionTokenParser : IEaSessionTokenParser
     {
         class Session
         {
@@ -15,7 +15,7 @@ namespace Trsys.CopyTrading
 
         private readonly JwtDecoder decoder;
 
-        public EaSessionTokenValidator()
+        public EaSessionTokenParser()
         {
             var serializer = new JsonNetSerializer();
             var provider = new UtcDateTimeProvider();
@@ -25,10 +25,10 @@ namespace Trsys.CopyTrading
             decoder = new JwtDecoder(serializer, validator, urlEncoder, algorithm);
         }
 
-        public bool ValidateToken(string key, string keyType, string token)
+        public EaSession ExtractToken(string token)
         {
             var session = decoder.DecodeToObject<Session>(token, "s3cr3t", verify: true);
-            return session.Key == key && session.KeyType == keyType;
+            return new EaSession(session.Id, session.Key, session.KeyType, token);
         }
     }
 }

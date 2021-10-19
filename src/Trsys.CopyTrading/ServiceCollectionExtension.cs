@@ -16,8 +16,9 @@ namespace Trsys.CopyTrading
             });
             services.AddSingleton<IEaService, EaService>();
             services.AddSingleton<IEaSessionTokenProvider, EaSessionTokenProvider>();
-            services.AddSingleton<IEaSessionTokenValidator, EaSessionTokenValidator>();
+            services.AddSingleton<IEaSessionTokenParser, EaSessionTokenParser>();
+            services.AddSingleton<IEaSessionManager, EaSessionManager>();
             return services;
-        } 
+        }
     }
 }
