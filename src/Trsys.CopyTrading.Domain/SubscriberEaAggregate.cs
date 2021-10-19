@@ -4,6 +4,7 @@ namespace Trsys.CopyTrading.Domain
 {
     public class SubscriberEaAggregate : AggregateRoot<SubscriberEaAggregate, SubscriberEaId>,
         IEmit<SubscriberEaRegisteredEvent>,
+        IEmit<SubscriberEaUnregisteredEvent>,
         IEmit<SubscriberEaOrderTextUpdatedEvent>
     {
         public EaOrderText Text { get; private set; }
@@ -18,6 +19,11 @@ namespace Trsys.CopyTrading.Domain
             Emit(new SubscriberEaRegisteredEvent(key, distributionGroupId, accountId));
         }
 
+        public void Unregister(DistributionGroupId distributionGroupId, AccountId accountId)
+        {
+            Emit(new SubscriberEaUnregisteredEvent(Key, distributionGroupId, accountId));
+        }
+
         public void UpdateOrderText(EaOrderText text)
         {
             if (Text != text)
@@ -29,6 +35,10 @@ namespace Trsys.CopyTrading.Domain
         public void Apply(SubscriberEaRegisteredEvent aggregateEvent)
         {
             Key = aggregateEvent.Key;
+        }
+
+        public void Apply(SubscriberEaUnregisteredEvent aggregateEvent)
+        {
         }
 
         public void Apply(SubscriberEaOrderTextUpdatedEvent aggregateEvent)

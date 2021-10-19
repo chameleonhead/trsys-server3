@@ -1,4 +1,5 @@
 ﻿using EventFlow.Aggregates;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace Trsys.CopyTrading.Domain
 {
     public class PublisherEaAggregate : AggregateRoot<PublisherEaAggregate, PublisherEaId>,
         IEmit<PublisherEaRegisteredEvent>,
+        IEmit<PublisherEaUnregisteredEvent>,
         IEmit<PublisherEaOrderTextUpdatedEvent>,
         IEmit<PublisherEaOpenedOrderEvent>,
         IEmit<PublisherEaClosedOrderEvent>
@@ -23,6 +25,11 @@ namespace Trsys.CopyTrading.Domain
         public void Register(SecretKey key, DistributionGroupId distributionGroupId, PublisherId publisherId)
         {
             Emit(new PublisherEaRegisteredEvent(key, distributionGroupId, publisherId));
+        }
+
+        public void Unregister(DistributionGroupId distributionGroupId, PublisherId publisherId)
+        {
+            Emit(new PublisherEaUnregisteredEvent(Key, distributionGroupId, publisherId));
         }
 
         public void UpdateOrderText(EaOrderText text)
@@ -56,6 +63,11 @@ namespace Trsys.CopyTrading.Domain
         {
             Key = aggregateEvent.Key;
             Targets.Add(new PublisherEaDistributionTarget(aggregateEvent.DistributionGroupId, aggregateEvent.PublisherId));
+        }
+
+        public void Apply(PublisherEaUnregisteredEvent aggregateEvent)
+        {
+            Targets.Remove(new PublisherEaDistributionTarget(aggregateEvent.DistributionGroupId, aggregateEvent.PublisherId));
         }
 
         public void Apply(PublisherEaOrderTextUpdatedEvent aggregateEvent)

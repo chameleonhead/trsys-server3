@@ -19,7 +19,7 @@ namespace Trsys.CopyTrading
         {
             var token = tokenProvider.GenerateToken(id, key, keyType);
             var session = new EaSession(id, key, keyType, token);
-            if (sessionStore.SetActiveSessionIfActiveSessionNotExists(session))
+            if (sessionStore.SetActiveSessionIfActiveSessionNotExists(session.Id, session.Token))
             {
                 return Task.FromResult(session);
             }
@@ -29,7 +29,13 @@ namespace Trsys.CopyTrading
         public Task DestroySessionAsync(string key, string keyType, string token)
         {
             var session = tokenParser.ExtractToken(token);
-            sessionStore.ClearActiveSession(session);
+            sessionStore.ClearActiveSessionTokenIfExists(session.Id, session.Token);
+            return Task.CompletedTask;
+        }
+
+        public Task DestroySessionAsync(string id)
+        {
+            sessionStore.ClearActiveSession(id);
             return Task.CompletedTask;
         }
 
@@ -38,7 +44,7 @@ namespace Trsys.CopyTrading
             var session = tokenParser.ExtractToken(token);
             if (session.Key == key && session.KeyType == keyType)
             {
-                if (sessionStore.SetActiveSessionIfActiveSessionNotExists(session))
+                if (sessionStore.SetActiveSessionIfActiveSessionNotExists(session.Id, session.Token))
                 {
                     return Task.FromResult(true);
                 }

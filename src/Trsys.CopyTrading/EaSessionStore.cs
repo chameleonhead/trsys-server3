@@ -6,27 +6,32 @@ namespace Trsys.CopyTrading
     {
         private readonly Dictionary<string, string> activeSessions = new();
 
-        public void ClearActiveSession(EaSession session)
+        public void SetActiveSession(string id, string token)
         {
-            if (activeSessions.TryGetValue(session.Id, out var activeToken) && activeToken == session.Token)
+            activeSessions[id] = token;
+        }
+
+        public void ClearActiveSession(string id)
+        {
+            activeSessions.Remove(id);
+        }
+
+        public void ClearActiveSessionTokenIfExists(string id, string token)
+        {
+            if (activeSessions.TryGetValue(id, out var activeToken) && activeToken == token)
             {
-                activeSessions.Remove(session.Id);
+                activeSessions.Remove(id);
             }
         }
 
-        public void SetActiveSession(EaSession session)
+        public bool SetActiveSessionIfActiveSessionNotExists(string id, string token)
         {
-            activeSessions[session.Id] = session.Token;
-        }
-
-        public bool SetActiveSessionIfActiveSessionNotExists(EaSession session)
-        {
-            if (!activeSessions.TryGetValue(session.Id, out var activeToken))
+            if (!activeSessions.TryGetValue(id, out var activeToken))
             {
-                activeSessions.Add(session.Id, session.Token);
+                activeSessions.Add(id, token);
                 return true;
             }
-            return activeToken == session.Token;
+            return activeToken == token;
         }
     }
 }

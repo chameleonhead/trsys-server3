@@ -2,8 +2,9 @@
 {
     public interface IEaSessionStore
     {
-        void SetActiveSession(EaSession session);
-        bool SetActiveSessionIfActiveSessionNotExists(EaSession session);
-        void ClearActiveSession(EaSession session);
+        void SetActiveSession(string id, string token);
+        void ClearActiveSession(string id);
+        bool SetActiveSessionIfActiveSessionNotExists(string id, string token);
+        void ClearActiveSessionTokenIfExists(string id, string token);
     }
 }

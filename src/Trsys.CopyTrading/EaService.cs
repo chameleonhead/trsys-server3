@@ -47,9 +47,30 @@ namespace Trsys.CopyTrading
             }
         }
 
-        public Task RemvoeSecretKeyAsync(string key, string keyType)
+        public async Task RemvoeSecretKeyAsync(string key, string keyType)
         {
-            throw new NotImplementedException();
+            switch (keyType)
+            {
+                case "Publisher":
+                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
+                    if (publisher == null)
+                    {
+                        return;
+                    }
+                    await sessionManager.DestroySessionAsync(publisher.Id);
+                    await commandBus.PublishAsync(new UnregisterPublisherEaCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.With(publisher.PublisherId)), CancellationToken.None);
+                    return;
+                case "Subscriber":
+                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+                    if (subscriber == null)
+                    {
+                        return;
+                    }
+                    await sessionManager.DestroySessionAsync(subscriber.Id);
+                    return;
+                default:
+                    throw new ArgumentException();
+            }
         }
 
         public async Task<EaSession> GenerateSessionTokenAsync(string key, string keyType)
