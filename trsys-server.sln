@@ -13,11 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C9DD5F9B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BE62412F-403C-4A84-9398-1F7C297115EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Frontend.Web", "src\Trsys.Frontend.Web\Trsys.Frontend.Web.csproj", "{391C04BA-408C-43C8-8157-BF83A54F04F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend.Web", "src\Trsys.Frontend.Web\Trsys.Frontend.Web.csproj", "{391C04BA-408C-43C8-8157-BF83A54F04F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.CopyTrading", "src\Trsys.CopyTrading\Trsys.CopyTrading.csproj", "{6AF746F7-35D5-48F3-A415-E9FD7B326EDA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend.Web.Tests", "tests\Trsys.Frontend.Web.Tests\Trsys.Frontend.Web.Tests.csproj", "{E9555C6D-820F-47A6-ADA1-291BDFB7A51F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadTesting", "tests\LoadTesting\LoadTesting.csproj", "{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +103,18 @@ Global
 		{E9555C6D-820F-47A6-ADA1-291BDFB7A51F}.Release|x64.Build.0 = Release|Any CPU
 		{E9555C6D-820F-47A6-ADA1-291BDFB7A51F}.Release|x86.ActiveCfg = Release|Any CPU
 		{E9555C6D-820F-47A6-ADA1-291BDFB7A51F}.Release|x86.Build.0 = Release|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Debug|x64.Build.0 = Debug|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Debug|x86.Build.0 = Debug|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Release|x64.ActiveCfg = Release|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Release|x64.Build.0 = Release|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Release|x86.ActiveCfg = Release|Any CPU
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +126,7 @@ Global
 		{391C04BA-408C-43C8-8157-BF83A54F04F8} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 		{6AF746F7-35D5-48F3-A415-E9FD7B326EDA} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 		{E9555C6D-820F-47A6-ADA1-291BDFB7A51F} = {C9DD5F9B-264B-4777-8320-82E30769FEC2}
+		{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5} = {C9DD5F9B-264B-4777-8320-82E30769FEC2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {080E749E-E248-4B95-B548-61854474AB22}
