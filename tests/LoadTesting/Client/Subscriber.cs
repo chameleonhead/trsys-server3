@@ -2,6 +2,7 @@
 using LoadTesting.Server;
 using NBomber.Contracts;
 using Serilog;
+using System;
 using System.Threading.Tasks;
 
 namespace LoadTesting.Client
@@ -26,9 +27,13 @@ namespace LoadTesting.Client
                 }
                 return Response.Ok();
             }
-            catch
+            catch (OperationCanceledException)
             {
-                return Response.Fail($"Subscribe order failed.");
+                throw;
+            }
+            catch (Exception e)
+            {
+                return Response.Fail($"Subscribe order failed. {e.Message}");
             }
         }
     }

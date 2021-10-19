@@ -2,6 +2,7 @@
 using LoadTesting.Server;
 using NBomber.Contracts;
 using Serilog;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,9 +27,13 @@ namespace LoadTesting.Client
                 {
                     await ClientPool.UseClientAsync(client => client.PublishOrderAsync(SecretKey, Token, orderText, cancellationToken: cancellationToken));
                 }
-                catch
+                catch (OperationCanceledException)
                 {
-                    return Response.Fail($"Publish order failed");
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    return Response.Fail($"Subscribe order failed. {e.Message}");
                 }
                 Log.Logger.Information($"Publisher:{SecretKey}:OrderUpdated:{orderText}");
                 sentOrder = orderText;
