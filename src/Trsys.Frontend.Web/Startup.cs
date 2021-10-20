@@ -1,10 +1,16 @@
+using EventFlow.AspNetCore.Extensions;
+using EventFlow.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Trsys.BackOffice;
+using Trsys.BackOffice.Application;
 using Trsys.CopyTrading;
+using Trsys.CopyTrading.Application;
 using Trsys.Ea;
+using Trsys.Ea.Application;
 using Trsys.Frontend.Web.Formatters;
 
 namespace Trsys.Frontend.Web
@@ -25,8 +31,17 @@ namespace Trsys.Frontend.Web
             {
                 config.InputFormatters.Add(new TextPlainInputFormatter());
             });
-            // services.AddCopyTrading();
+
+            services.AddEventFlow(ef =>
+            {
+                ef.UseCopyTradeApplication();
+                ef.UseEaApplication();
+                ef.UseBackOfficeApplication();
+                ef.AddAspNetCore();
+            });
+            services.AddCopyTrading();
             services.AddEa();
+            services.AddBackOffice();
             //services.AddOpenTelemetryTracing(builder =>
             //{
             //    builder

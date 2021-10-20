@@ -1,8 +1,4 @@
-﻿using EventFlow.AspNetCore.Extensions;
-using EventFlow.DependencyInjection.Extensions;
-using Microsoft.Extensions.DependencyInjection;
-using Trsys.CopyTrading.Application;
-using Trsys.Ea.Application;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Trsys.Ea
 {
@@ -10,12 +6,6 @@ namespace Trsys.Ea
     {
         public static IServiceCollection AddEa(this IServiceCollection services)
         {
-            services.AddEventFlow(ef =>
-            {
-                ef.UseCopyTradeApplication();
-                ef.UseEaApplication();
-                ef.AddAspNetCore();
-            });
             services.AddSingleton<IEaService, EaService>();
             services.AddSingleton<IEaSessionTokenProvider, EaSessionTokenProvider>();
             services.AddSingleton<IEaSessionTokenParser, EaSessionTokenParser>();

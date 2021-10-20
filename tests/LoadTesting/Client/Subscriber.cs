@@ -3,6 +3,7 @@ using LoadTesting.Server;
 using NBomber.Contracts;
 using Serilog;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LoadTesting.Client
@@ -15,7 +16,7 @@ namespace LoadTesting.Client
 
         public OrderResponse Order { get; private set; }
 
-        protected override async Task<Response> OnExecuteAsync(System.Threading.CancellationToken cancellationToken)
+        protected override async Task<Response> OnExecuteAsync(CancellationToken cancellationToken)
         {
             try
             {
