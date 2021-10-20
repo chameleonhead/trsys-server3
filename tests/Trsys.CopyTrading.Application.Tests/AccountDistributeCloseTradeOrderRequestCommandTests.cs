@@ -13,29 +13,8 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Tests
 {
     [TestClass]
-    public class PublishOrderOpenCommandTests
+    public class AccountDistributeCloseTradeOrderRequestCommandTests
     {
-        [TestMethod]
-        public async Task SuccessWithoutSubscriber()
-        {
-            using var resolver = CreateResolver();
-            var commandBus = resolver.Resolve<ICommandBus>();
-            var publisherId = PublisherId.New;
-            var distributionGroupId = DistributionGroupId.New;
-            var result = await commandBus.PublishAsync(new DistributionGroupAddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
-            Assert.IsTrue(result.IsSuccess);
-            var copyTradeId = CopyTradeId.New;
-            result = await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
-            Assert.IsTrue(result.IsSuccess);
-
-            var queryProcessor = resolver.Resolve<IQueryProcessor>();
-            var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<CopyTradeReadModel>(copyTradeId), CancellationToken.None);
-            Assert.AreEqual(distributionGroupId.Value, queryResult.DistributionGroupId);
-            Assert.AreEqual("USDJPY", queryResult.Symbol);
-            Assert.AreEqual("BUY", queryResult.OrderType);
-            Assert.IsTrue(queryResult.IsOpen);
-        }
-
         [TestMethod]
         public async Task SuccessWithASubscriber()
         {
@@ -52,13 +31,19 @@ namespace Trsys.CopyTrading.Application.Tests
             var copyTradeId = CopyTradeId.New;
             result = await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
+            result = await commandBus.PublishAsync(new AccountDistributeOpenTradeOrderRequestCommand(accountId, copyTradeId), CancellationToken.None);
+            Assert.IsTrue(result.IsSuccess);
+            result = await commandBus.PublishAsync(new DistributionGroupPublishCloseCommand(distributionGroupId, publisherId, copyTradeId), CancellationToken.None);
+            Assert.IsTrue(result.IsSuccess);
+            result = await commandBus.PublishAsync(new AccountDistributeCloseTradeOrderRequestCommand(accountId, copyTradeId), CancellationToken.None);
+            Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<CopyTradeReadModel>(copyTradeId), CancellationToken.None);
             Assert.AreEqual(distributionGroupId.Value, queryResult.DistributionGroupId);
             Assert.AreEqual("USDJPY", queryResult.Symbol);
             Assert.AreEqual("BUY", queryResult.OrderType);
-            Assert.IsTrue(queryResult.IsOpen);
+            Assert.IsFalse(queryResult.IsOpen);
         }
 
         [TestMethod]
@@ -72,7 +57,8 @@ namespace Trsys.CopyTrading.Application.Tests
             var distributionGroupId = DistributionGroupId.New;
             result = await commandBus.PublishAsync(new DistributionGroupAddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
-            foreach (var accountId in Enumerable.Range(0, 100).Select(_ => AccountId.New))
+            var accounts = Enumerable.Range(0, 100).Select(_ => AccountId.New).ToArray();
+            foreach (var accountId in accounts)
             {
                 result = await commandBus.PublishAsync(new DistributionGroupAddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
                 Assert.IsTrue(result.IsSuccess);
@@ -81,12 +67,25 @@ namespace Trsys.CopyTrading.Application.Tests
             result = await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
+            foreach (var accountId in accounts)
+            {
+                result = await commandBus.PublishAsync(new AccountDistributeOpenTradeOrderRequestCommand(accountId, copyTradeId), CancellationToken.None);
+                Assert.IsTrue(result.IsSuccess);
+            }
+            foreach (var accountId in accounts)
+            {
+                result = await commandBus.PublishAsync(new AccountDistributeCloseTradeOrderRequestCommand(accountId, copyTradeId), CancellationToken.None);
+                Assert.IsTrue(result.IsSuccess);
+            }
+
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<CopyTradeReadModel>(copyTradeId), CancellationToken.None);
             Assert.AreEqual(distributionGroupId.Value, queryResult.DistributionGroupId);
             Assert.AreEqual("USDJPY", queryResult.Symbol);
             Assert.AreEqual("BUY", queryResult.OrderType);
             Assert.IsTrue(queryResult.IsOpen);
+            Assert.AreEqual(100, queryResult.TradeOrders.Count);
+            Assert.IsTrue(queryResult.TradeOrders.All(e => e.CloseDistributedTimestamp.HasValue));
         }
 
         private static IRootResolver CreateResolver()

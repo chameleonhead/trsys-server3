@@ -13,7 +13,7 @@ using Trsys.Ea.Domain;
 namespace Trsys.Ea.Application.Tests
 {
     [TestClass]
-    public class RegisterSubscriberEaCommandTests
+    public class PublisherEaRegisterCommandTests
     {
         [TestMethod]
         public async Task Success()
@@ -21,17 +21,17 @@ namespace Trsys.Ea.Application.Tests
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
 
-            var subscriberEaId = SubscriberEaId.New;
+            var publisherEaId = PublisherEaId.New;
 
             var distributionGroupId = DistributionGroupId.New;
-            var subscriberId = AccountId.New;
+            var publisherId = PublisherId.New;
 
-            var result = await commandBus.PublishAsync(new SubscriberEaRegisterCommand(subscriberEaId, new SecretKey("SubscriberKey"), distributionGroupId, subscriberId), CancellationToken.None);
+            var result = await commandBus.PublishAsync(new PublisherEaRegisterCommand(publisherEaId, new SecretKey("PublisherKey"), distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<DistributionGroupReadModel>(distributionGroupId.Value), CancellationToken.None);
-            Assert.IsTrue(queryResult.Subscribers.Contains(subscriberId.Value));
+            Assert.IsTrue(queryResult.Publishers.Contains(publisherId.Value));
         }
 
         private static IRootResolver CreateResolver()

@@ -13,7 +13,7 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Tests
 {
     [TestClass]
-    public class PublishOrderCloseCommandTests
+    public class DistributionGroupPublishCloseCommandTests
     {
         [TestMethod]
         public async Task SuccessWithoutSubscriber()

@@ -13,7 +13,7 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Tests
 {
     [TestClass]
-    public class OpenTradeDistributedCommandTests
+    public class AccountDistributeOpenTradeOrderRequestCommandTests
     {
         [TestMethod]
         public async Task SuccessWithASubscriber()
