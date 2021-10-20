@@ -11,11 +11,9 @@ namespace Trsys.CopyTrading
         Task DiscardSessionTokenAsync(string token, string key, string keyType);
         Task ValidateSessionTokenAsync(string token, string key, string keyType);
         Task PublishOrderTextAsync(DateTimeOffset timestamp, string key, string text);
-        Task<OrderText> GetCurrentOrderTextAsync();
+        Task<OrderText> GetCurrentOrderTextAsync(string key);
         Task SubscribeOrderTextAsync(DateTimeOffset timestamp, string key, string text);
         Task ReceiveLogAsync(DateTimeOffset serverTimestamp, string key, string keyType, string version, string token, string text);
         Task ReceiveLogAsync(DateTimeOffset serverTimestamp, long eaTimestamp, string key, string keyType, string version, string token, string text);
-        void SubscribeOrderTextUpdated(Action<OrderText> handler);
-        void UnsubscribeOrderTextUpdated(Action<OrderText> handler);
     }
 }

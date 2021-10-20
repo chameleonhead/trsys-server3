@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class EaOrderEntity : Entity<EaOrderId>
+    public class PublisherEaOrderEntity : Entity<EaOrderId>
     {
-        public EaOrderEntity(EaOrderId id, EaTicketNumber ticketNo, ForexTradeSymbol symbol, OrderType orderType, List<PublisherEaCopyTradeEntity> targets) : base(id)
+        public PublisherEaOrderEntity(EaOrderId id, EaTicketNumber ticketNo, ForexTradeSymbol symbol, OrderType orderType, List<PublisherEaCopyTradeEntity> targets) : base(id)
         {
             TicketNo = ticketNo;
             Symbol = symbol;

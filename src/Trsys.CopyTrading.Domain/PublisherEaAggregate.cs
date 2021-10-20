@@ -8,15 +8,15 @@ namespace Trsys.CopyTrading.Domain
     public class PublisherEaAggregate : AggregateRoot<PublisherEaAggregate, PublisherEaId>,
         IEmit<PublisherEaRegisteredEvent>,
         IEmit<PublisherEaUnregisteredEvent>,
-        IEmit<PublisherEaOrderTextUpdatedEvent>,
+        IEmit<PublisherEaOrderTextChangedEvent>,
         IEmit<PublisherEaOpenedOrderEvent>,
         IEmit<PublisherEaClosedOrderEvent>
     {
         public SecretKey Key { get; private set; }
         public List<PublisherEaDistributionTarget> Targets { get; } = new();
         public EaOrderText Text { get; private set; }
-        public Dictionary<EaOrderId, EaOrderEntity> OrdersById { get; } = new();
-        public Dictionary<EaTicketNumber, EaOrderEntity> OrdersByTicketNumber { get; } = new();
+        public Dictionary<EaOrderId, PublisherEaOrderEntity> OrdersById { get; } = new();
+        public Dictionary<EaTicketNumber, PublisherEaOrderEntity> OrdersByTicketNumber { get; } = new();
 
         public PublisherEaAggregate(PublisherEaId id) : base(id)
         {
@@ -36,7 +36,7 @@ namespace Trsys.CopyTrading.Domain
         {
             if (Text != text)
             {
-                Emit(new PublisherEaOrderTextUpdatedEvent(Key, text));
+                Emit(new PublisherEaOrderTextChangedEvent(Key, text));
                 var prevOrderTicketNos = OrdersByTicketNumber.Keys;
                 var nextOrders = text.ToOrders().ToHashSet();
                 var nextOrderTicketNos = nextOrders.Select(e => e.TicketNo).ToHashSet();
@@ -53,7 +53,7 @@ namespace Trsys.CopyTrading.Domain
                 {
                     if (!prevOrderTicketNos.Contains(order.TicketNo))
                     {
-                        Emit(new PublisherEaOpenedOrderEvent(new EaOrderEntity(EaOrderId.New, order.TicketNo, order.Symbol, order.OrderType, Targets.Select(t => new PublisherEaCopyTradeEntity(CopyTradeId.New, t.DistributionGroupId, t.PublisherId)).ToList())));
+                        Emit(new PublisherEaOpenedOrderEvent(new PublisherEaOrderEntity(EaOrderId.New, order.TicketNo, order.Symbol, order.OrderType, Targets.Select(t => new PublisherEaCopyTradeEntity(CopyTradeId.New, t.DistributionGroupId, t.PublisherId)).ToList())));
                     }
                 }
             }
@@ -70,7 +70,7 @@ namespace Trsys.CopyTrading.Domain
             Targets.Remove(new PublisherEaDistributionTarget(aggregateEvent.DistributionGroupId, aggregateEvent.PublisherId));
         }
 
-        public void Apply(PublisherEaOrderTextUpdatedEvent aggregateEvent)
+        public void Apply(PublisherEaOrderTextChangedEvent aggregateEvent)
         {
             Text = aggregateEvent.Text;
         }

@@ -6,6 +6,7 @@ using Trsys.CopyTrading.Application.Read.Queries;
 using Trsys.CopyTrading.Application.Write.Commands;
 using Trsys.CopyTrading.Application.Write.Sagas.Ea;
 using Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution;
+using Trsys.CopyTrading.Application.Write.Subscribers;
 using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application
@@ -31,10 +32,12 @@ namespace Trsys.CopyTrading.Application
                     typeof(CopyTradeRemoveDistributedAccountCommand),
                     typeof(PublisherEaRegisterCommand),
                     typeof(PublisherEaUnregisterCommand),
-                    typeof(PublisherEaUpdateOrdersCommand),
+                    typeof(PublisherEaUpdateOrderTextCommand),
                     typeof(SubscriberEaRegisterCommand),
                     typeof(SubscriberEaUnregisterCommand),
-                    typeof(SubscriberEaUpdateOrdersCommand)
+                    typeof(SubscriberEaOpenTradeOrderCommand),
+                    typeof(SubscriberEaCloseTradeOrderCommand),
+                    typeof(SubscriberEaDistributeOrderTextCommand)
                 )
                 .AddCommandHandlers(
                     typeof(AccountStateUpdateCommandHandler),
@@ -52,10 +55,12 @@ namespace Trsys.CopyTrading.Application
                     typeof(CopyTradeRemoveDistributedAccountCommandHandler),
                     typeof(PublisherEaRegisterCommandHandler),
                     typeof(PublisherEaUnregisterCommandHandler),
-                    typeof(PublisherEaUpdateOrdersCommandHandler),
+                    typeof(PublisherEaUpdateOrderTextCommandHandler),
                     typeof(SubscriberEaRegisterCommandHandler),
                     typeof(SubscriberEaUnregisterCommandHandler),
-                    typeof(SubscriberEaUpdateOrdersCommandHandler)
+                    typeof(SubscriberEaOpenTradeOrderCommandHandler),
+                    typeof(SubscriberEaCloseTradeOrderCommandHandler),
+                    typeof(SubscriberEaDistributeOrderTextCommandHandler)
                 )
                 .AddEvents(
                     typeof(AccountStateUpdatedEvent),
@@ -75,12 +80,18 @@ namespace Trsys.CopyTrading.Application
                     typeof(CopyTradeFinishedEvent),
                     typeof(PublisherEaRegisteredEvent),
                     typeof(PublisherEaUnregisteredEvent),
-                    typeof(PublisherEaOrderTextUpdatedEvent),
+                    typeof(PublisherEaOrderTextChangedEvent),
                     typeof(PublisherEaOpenedOrderEvent),
                     typeof(PublisherEaClosedOrderEvent),
                     typeof(SubscriberEaRegisteredEvent),
                     typeof(SubscriberEaUnregisteredEvent),
-                    typeof(SubscriberEaOrderTextUpdatedEvent)
+                    typeof(SubscriberEaTradeOrderOpenRequestAppliedEvent),
+                    typeof(SubscriberEaTradeOrderCloseRequestAppliedEvent),
+                    typeof(SubscriberEaOrderTextChangedEvent),
+                    typeof(SubscriberEaDistributedOrderTextChangedEvent)
+                )
+                .AddSubscribers(
+                    typeof(AccountTradeOrderRequestEventSubscriber)
                 )
                 .AddSagaLocators(
                     typeof(TradeDistributionSagaLocator),
@@ -103,12 +114,14 @@ namespace Trsys.CopyTrading.Application
                     sr.RegisterType(typeof(CopyTradeReadModelLocator));
                     sr.RegisterType(typeof(PublisherEaReadModelLocator));
                     sr.RegisterType(typeof(SubscriberEaReadModelLocator));
+                    sr.RegisterType(typeof(AccountIdToSubscriberEaIdReadModelLocator));
                 })
                 .UseInMemoryReadStoreFor<AccountReadModel>()
                 .UseInMemoryReadStoreFor<DistributionGroupReadModel>()
                 .UseInMemoryReadStoreFor<CopyTradeReadModel, CopyTradeReadModelLocator>()
                 .UseInMemoryReadStoreFor<PublisherEaReadModel, PublisherEaReadModelLocator>()
                 .UseInMemoryReadStoreFor<SubscriberEaReadModel, SubscriberEaReadModelLocator>()
+                .UseInMemoryReadStoreFor<AccountIdToSubscriberEaIdReadModel, AccountIdToSubscriberEaIdReadModelLocator>()
                 .AddQueryHandler<CopyTradeReadModelAllQueryHandler, CopyTradeReadModelAllQuery, IReadOnlyCollection<CopyTradeReadModel>>();
             return options;
         }

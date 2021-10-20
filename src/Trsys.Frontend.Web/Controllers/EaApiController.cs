@@ -103,7 +103,7 @@ namespace Trsys.Frontend.Web.Controllers
             {
                 await service.ValidateSessionTokenAsync(token, key, "Subscriber");
 
-                var orderText = await service.GetCurrentOrderTextAsync();
+                var orderText = await service.GetCurrentOrderTextAsync(key);
                 var etags = HttpContext.Request.Headers["If-None-Match"];
                 if (etags.Any())
                 {

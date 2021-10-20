@@ -2,9 +2,9 @@
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class SubscriberEaOrderTextUpdatedEvent : AggregateEvent<SubscriberEaAggregate, SubscriberEaId>
+    public class SubscriberEaDistributedOrderTextChangedEvent : AggregateEvent<SubscriberEaAggregate, SubscriberEaId>
     {
-        public SubscriberEaOrderTextUpdatedEvent(SecretKey key, EaOrderText text)
+        public SubscriberEaDistributedOrderTextChangedEvent(SecretKey key, EaOrderText text)
         {
             Key  = key;
             Text = text;

@@ -1,7 +1,6 @@
 ﻿using EventFlow;
 using EventFlow.Queries;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Application.Read.Models;
@@ -57,8 +56,13 @@ namespace Trsys.CopyTrading
                     {
                         return;
                     }
+                    var publisherId = publisher.GetPublisherId(DISTRIBUTION_GROUP_ID);
+                    if (publisherId == null)
+                    {
+                        return;
+                    }
+                    await commandBus.PublishAsync(new PublisherEaUnregisterCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.With(publisherId)), CancellationToken.None);
                     await sessionManager.DestroySessionAsync(publisher.Id);
-                    await commandBus.PublishAsync(new PublisherEaUnregisterCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.With(publisher.PublisherId)), CancellationToken.None);
                     return;
                 case "Subscriber":
                     var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
@@ -66,6 +70,12 @@ namespace Trsys.CopyTrading
                     {
                         return;
                     }
+                    var accountId = subscriber.GetAccountId(DISTRIBUTION_GROUP_ID);
+                    if (accountId == null)
+                    {
+                        return;
+                    }
+                    await commandBus.PublishAsync(new SubscriberEaUnregisterCommand(SubscriberEaId.With(subscriber.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), AccountId.With(accountId)), CancellationToken.None);
                     await sessionManager.DestroySessionAsync(subscriber.Id);
                     return;
                 default:
@@ -117,17 +127,17 @@ namespace Trsys.CopyTrading
             {
                 throw new InvalidOperationException();
             }
-            await commandBus.PublishAsync(new PublisherEaUpdateOrdersCommand(PublisherEaId.With(publisher.Id), new EaOrderText(text)), CancellationToken.None);
+            await commandBus.PublishAsync(new PublisherEaUpdateOrderTextCommand(PublisherEaId.With(publisher.Id), new EaOrderText(text)), CancellationToken.None);
         }
 
-        public async Task<OrderText> GetCurrentOrderTextAsync()
+        public async Task<OrderText> GetCurrentOrderTextAsync(string key)
         {
-            var distributionGroup = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<DistributionGroupReadModel>(DISTRIBUTION_GROUP_ID), CancellationToken.None);
-            if (distributionGroup == null)
+            var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+            if (subscriber == null)
             {
                 return OrderText.Empty;
             }
-            return OrderText.From(distributionGroup.CopyTrades.Select(t => new OrderTextItem(t.Sequence, t.Symbol, t.OrderType == "BUY" ? OrderType.Buy : OrderType.Sell)));
+            return OrderText.Parse(subscriber.Text);
 
         }
 
@@ -138,7 +148,7 @@ namespace Trsys.CopyTrading
             {
                 throw new InvalidOperationException();
             }
-            await commandBus.PublishAsync(new SubscriberEaUpdateOrdersCommand(SubscriberEaId.With(subscriber.Id), new EaOrderText(text)), CancellationToken.None);
+            await commandBus.PublishAsync(new SubscriberEaDistributeOrderTextCommand(SubscriberEaId.With(subscriber.Id), new EaOrderText(text)), CancellationToken.None);
         }
 
         public Task ReceiveLogAsync(DateTimeOffset serverTimestamp, string key, string keyType, string version, string token, string text)
@@ -147,16 +157,6 @@ namespace Trsys.CopyTrading
         }
 
         public Task ReceiveLogAsync(DateTimeOffset serverTimestamp, long eaTimestamp, string key, string keyType, string version, string token, string text)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SubscribeOrderTextUpdated(Action<OrderText> handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UnsubscribeOrderTextUpdated(Action<OrderText> handler)
         {
             throw new NotImplementedException();
         }

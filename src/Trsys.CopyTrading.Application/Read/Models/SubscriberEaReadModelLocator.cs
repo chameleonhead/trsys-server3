@@ -9,14 +9,24 @@ namespace Trsys.CopyTrading.Application.Read.Models
     {
         public IEnumerable<string> GetReadModelIds(IDomainEvent domainEvent)
         {
-            if (domainEvent is IDomainEvent<SubscriberEaAggregate, SubscriberEaId, SubscriberEaRegisteredEvent> openEvent)
+            if (domainEvent is IDomainEvent<SubscriberEaAggregate, SubscriberEaId, SubscriberEaRegisteredEvent> registered)
             {
-                yield return openEvent.AggregateEvent.Key.Value;
+                yield return registered.AggregateEvent.Key.Value;
                 yield break; 
             }
-            if (domainEvent is IDomainEvent<SubscriberEaAggregate, SubscriberEaId, SubscriberEaOrderTextUpdatedEvent> orderUpdated)
+            if (domainEvent is IDomainEvent<SubscriberEaAggregate, SubscriberEaId, SubscriberEaUnregisteredEvent> unregistered)
             {
-                yield return orderUpdated.AggregateEvent.Key.Value;
+                yield return unregistered.AggregateEvent.Key.Value;
+                yield break;
+            }
+            if (domainEvent is IDomainEvent<SubscriberEaAggregate, SubscriberEaId, SubscriberEaOrderTextChangedEvent> orderChanged)
+            {
+                yield return orderChanged.AggregateEvent.Key.Value;
+                yield break;
+            }
+            if (domainEvent is IDomainEvent<SubscriberEaAggregate, SubscriberEaId, SubscriberEaDistributedOrderTextChangedEvent> distributedOrderCanged)
+            {
+                yield return distributedOrderCanged.AggregateEvent.Key.Value;
                 yield break;
             }
         }

@@ -4,11 +4,11 @@ namespace Trsys.CopyTrading.Domain
 {
     public class PublisherEaOpenedOrderEvent : AggregateEvent<PublisherEaAggregate, PublisherEaId>
     {
-        public PublisherEaOpenedOrderEvent(EaOrderEntity order)
+        public PublisherEaOpenedOrderEvent(PublisherEaOrderEntity order)
         {
             Order = order;
         }
 
-        public EaOrderEntity Order { get; }
+        public PublisherEaOrderEntity Order { get; }
     }
 }

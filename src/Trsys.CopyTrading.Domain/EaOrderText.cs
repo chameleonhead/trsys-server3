@@ -7,6 +7,8 @@ namespace Trsys.CopyTrading.Domain
 {
     public class EaOrderText : SingleValueObject<string>
     {
+        public static readonly EaOrderText Empty = new("");
+
         private IEnumerable<EaOrder> _orders;
 
         public EaOrderText(string value) : base(value)
