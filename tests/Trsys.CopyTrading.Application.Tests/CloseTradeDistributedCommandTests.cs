@@ -31,11 +31,11 @@ namespace Trsys.CopyTrading.Application.Tests
             var copyTradeId = CopyTradeId.New;
             result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
-            result = await commandBus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
+            result = await commandBus.PublishAsync(new AccountDistributeRequestOpenTradeOrderCommand(accountId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             result = await commandBus.PublishAsync(new PublishOrderCloseCommand(distributionGroupId, publisherId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
-            result = await commandBus.PublishAsync(new DistributeCloseTradeCommand(accountId, copyTradeId), CancellationToken.None);
+            result = await commandBus.PublishAsync(new AccountDistributeRequestCloseTradeOrderCommand(accountId, copyTradeId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
@@ -69,12 +69,12 @@ namespace Trsys.CopyTrading.Application.Tests
 
             foreach (var accountId in accounts)
             {
-                result = await commandBus.PublishAsync(new DistributeOpenTradeCommand(accountId, copyTradeId), CancellationToken.None);
+                result = await commandBus.PublishAsync(new AccountDistributeRequestOpenTradeOrderCommand(accountId, copyTradeId), CancellationToken.None);
                 Assert.IsTrue(result.IsSuccess);
             }
             foreach (var accountId in accounts)
             {
-                result = await commandBus.PublishAsync(new DistributeCloseTradeCommand(accountId, copyTradeId), CancellationToken.None);
+                result = await commandBus.PublishAsync(new AccountDistributeRequestCloseTradeOrderCommand(accountId, copyTradeId), CancellationToken.None);
                 Assert.IsTrue(result.IsSuccess);
             }
 

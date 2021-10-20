@@ -28,21 +28,21 @@ namespace Trsys.Frontend.Web
                 config.InputFormatters.Add(new TextPlainInputFormatter());
             });
             services.AddCopyTrading();
-            services.AddOpenTelemetryTracing(builder =>
-            {
-                builder
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME") ?? "trsys-server"))
-                    .AddAspNetCoreInstrumentation()
-                    .AddSource("Trsys.CopyTrading")
-                    .AddZipkinExporter(options =>
-                    {
-                        var endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_ZIPKIN_ENDPOINT");
-                        if (!string.IsNullOrEmpty(endpoint))
-                        {
-                            options.Endpoint = new Uri(endpoint);
-                        }
-                    });
-            });
+            //services.AddOpenTelemetryTracing(builder =>
+            //{
+            //    builder
+            //        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME") ?? "trsys-server"))
+            //        .AddAspNetCoreInstrumentation()
+            //        .AddSource("Trsys.CopyTrading")
+            //        .AddZipkinExporter(options =>
+            //        {
+            //            var endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_ZIPKIN_ENDPOINT");
+            //            if (!string.IsNullOrEmpty(endpoint))
+            //            {
+            //                options.Endpoint = new Uri(endpoint);
+            //            }
+            //        });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

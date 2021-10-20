@@ -19,12 +19,12 @@ namespace Trsys.CopyTrading.Application.Read.Models
                 yield return closeEvent.AggregateIdentity.Value;
                 yield break;
             }
-            if (domainEvent is IDomainEvent<AccountAggregate, AccountId, TradeOrderOpenDistributedEvent> openDistributedEvent)
+            if (domainEvent is IDomainEvent<AccountAggregate, AccountId, AccountTradeOrderOpenRequestDistributedEvent> openDistributedEvent)
             {
                 yield return openDistributedEvent.AggregateEvent.CopyTradeId.Value;
                 yield break;
             }
-            if (domainEvent is IDomainEvent<AccountAggregate, AccountId, TradeOrderCloseDistributedEvent> closeDistributedEvent)
+            if (domainEvent is IDomainEvent<AccountAggregate, AccountId, AccountTradeOrderCloseRequestDistributedEvent> closeDistributedEvent)
             {
                 yield return closeDistributedEvent.AggregateEvent.CopyTradeId.Value;
                 yield break;

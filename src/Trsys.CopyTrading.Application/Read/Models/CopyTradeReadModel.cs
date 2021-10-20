@@ -10,8 +10,8 @@ namespace Trsys.CopyTrading.Application.Read.Models
     public class CopyTradeReadModel : IReadModel,
         IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,
         IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent>,
-        IAmReadModelFor<AccountAggregate, AccountId, TradeOrderOpenDistributedEvent>,
-        IAmReadModelFor<AccountAggregate, AccountId, TradeOrderCloseDistributedEvent>
+        IAmReadModelFor<AccountAggregate, AccountId, AccountTradeOrderOpenRequestDistributedEvent>,
+        IAmReadModelFor<AccountAggregate, AccountId, AccountTradeOrderCloseRequestDistributedEvent>
     {
         public class TradeOrderDto
         {
@@ -46,7 +46,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             IsOpen = false;
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, TradeOrderOpenDistributedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, AccountTradeOrderOpenRequestDistributedEvent> domainEvent)
         {
             var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.TradeOrderId.Value);
             if (tradeOrder == null)
@@ -60,7 +60,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             }
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, TradeOrderCloseDistributedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, AccountTradeOrderCloseRequestDistributedEvent> domainEvent)
         {
             var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.TradeOrderId.Value);
             if (tradeOrder != null)
@@ -70,7 +70,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             }
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, TradeOrderInactivatedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, AccountTradeOrderInactivatedEvent> domainEvent)
         {
         }
     }

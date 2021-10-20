@@ -2,9 +2,9 @@
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class TradeOrderInactivatedEvent : AggregateEvent<AccountAggregate, AccountId>
+    public class AccountTradeOrderInactivatedEvent : AggregateEvent<AccountAggregate, AccountId>
     {
-        public TradeOrderInactivatedEvent(TradeOrderId tradeOrderId, CopyTradeId copyTradeId)
+        public AccountTradeOrderInactivatedEvent(TradeOrderId tradeOrderId, CopyTradeId copyTradeId)
         {
             TradeOrderId = tradeOrderId;
             CopyTradeId = copyTradeId;

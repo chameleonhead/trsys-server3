@@ -3,9 +3,6 @@ using LoadTesting.Extensions;
 using LoadTesting.Server;
 using NBomber.Contracts;
 using NBomber.CSharp;
-using OpenTelemetry;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,12 +22,6 @@ namespace LoadTesting
         {
             Activity.DefaultIdFormat = ActivityIdFormat.W3C;
             Activity.ForceDefaultIdFormat = true;
-            using var tracerProvider = Sdk.CreateTracerProviderBuilder()
-                .SetSampler(new AlwaysOnSampler())
-                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("LoadTesting"))
-                .AddSource("Trsys.Server.Client")
-                .AddZipkinExporter()
-                .Build();
 
             using var server = new ProcessRunner("dotnet", "run --project ..\\..\\..\\..\\..\\src\\Trsys.Frontend.Web\\Trsys.Frontend.Web.csproj");
 
