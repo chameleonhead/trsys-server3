@@ -1,5 +1,6 @@
 ﻿using EventFlow;
 using EventFlow.Queries;
+using Newtonsoft.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Trsys.CopyTrading.Domain;
 using Trsys.Ea.Application.Read.Models;
 using Trsys.Ea.Application.Write.Commands;
 using Trsys.Ea.Domain;
+using Trsys.Ea.LogParsing;
 
 namespace Trsys.Ea
 {
@@ -154,12 +156,12 @@ namespace Trsys.Ea
 
         public Task ReceiveLogAsync(DateTimeOffset serverTimestamp, string key, string keyType, string version, string token, string text)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task ReceiveLogAsync(DateTimeOffset serverTimestamp, long eaTimestamp, string key, string keyType, string version, string token, string text)
-        {
-            throw new NotImplementedException();
+            var logs = EaLogParser.Parse(serverTimestamp, key, keyType, token, version, text);
+            foreach (var logInfo in logs)
+            {
+                Console.WriteLine(JsonConvert.SerializeObject(logInfo));
+            }
+            return Task.CompletedTask;
         }
     }
 }

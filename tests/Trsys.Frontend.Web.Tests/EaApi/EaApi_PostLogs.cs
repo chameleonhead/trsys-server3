@@ -28,7 +28,7 @@ namespace Trsys.Frontend.Web.Tests.EaApi
             var client = _factory.CreateClient();
 
             // Act
-            var response = await client.PostAsync("/api/logs", "SECRETKEY", "Publisher");
+            var response = await client.PostAsync("/api/logs", "SECRETKEY", "Publisher", content: "Test");
 
             // Assert
             response.EnsureSuccessStatusCode();

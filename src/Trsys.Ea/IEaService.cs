@@ -14,6 +14,5 @@ namespace Trsys.Ea
         Task<OrderText> GetCurrentOrderTextAsync(string key);
         Task SubscribeOrderTextAsync(DateTimeOffset timestamp, string key, string text);
         Task ReceiveLogAsync(DateTimeOffset serverTimestamp, string key, string keyType, string version, string token, string text);
-        Task ReceiveLogAsync(DateTimeOffset serverTimestamp, long eaTimestamp, string key, string keyType, string version, string token, string text);
     }
 }
