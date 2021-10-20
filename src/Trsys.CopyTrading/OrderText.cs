@@ -49,7 +49,7 @@ namespace Trsys.CopyTrading
             }
             foreach (var order in text.Split("@"))
             {
-                if (!Regex.IsMatch(order, @"^\d+:[A-Z]+:[01]:\d+(\.\d+)?:\d+(\.\d+)?:\d+"))
+                if (!Regex.IsMatch(order, @"^\d+:[A-Z]+:[01]"))
                 {
                     throw new OrderTextFormatException();
                 }
