@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using System;
 using Trsys.CopyTrading;
+using Trsys.Ea;
 using Trsys.Frontend.Web.Formatters;
 
 namespace Trsys.Frontend.Web
@@ -27,7 +25,8 @@ namespace Trsys.Frontend.Web
             {
                 config.InputFormatters.Add(new TextPlainInputFormatter());
             });
-            services.AddCopyTrading();
+            // services.AddCopyTrading();
+            services.AddEa();
             //services.AddOpenTelemetryTracing(builder =>
             //{
             //    builder

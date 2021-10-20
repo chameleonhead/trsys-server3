@@ -7,7 +7,6 @@
   <ItemGroup>
     <PackageReference Include="EventFlow.AspNetCore" Version="0.83.4713" />
     <PackageReference Include="EventFlow.DependencyInjection" Version="0.83.4713" />
-    <PackageReference Include="JWT" Version="8.4.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
   </ItemGroup>
 

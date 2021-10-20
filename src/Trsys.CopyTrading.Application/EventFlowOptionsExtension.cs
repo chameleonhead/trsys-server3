@@ -4,16 +4,14 @@ using System.Collections.Generic;
 using Trsys.CopyTrading.Application.Read.Models;
 using Trsys.CopyTrading.Application.Read.Queries;
 using Trsys.CopyTrading.Application.Write.Commands;
-using Trsys.CopyTrading.Application.Write.Sagas.Ea;
 using Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution;
-using Trsys.CopyTrading.Application.Write.Subscribers;
 using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application
 {
     public static class EventFlowOptionsExtension
     {
-        public static IEventFlowOptions UseApplication(this IEventFlowOptions options)
+        public static IEventFlowOptions UseCopyTradeApplication(this IEventFlowOptions options)
         {
             options
                 .AddCommands(
@@ -29,15 +27,7 @@ namespace Trsys.CopyTrading.Application
                     typeof(CopyTradeOpenCommand),
                     typeof(CopyTradeAddDistributedAccountCommand),
                     typeof(CopyTradeCloseCommand),
-                    typeof(CopyTradeRemoveDistributedAccountCommand),
-                    typeof(PublisherEaRegisterCommand),
-                    typeof(PublisherEaUnregisterCommand),
-                    typeof(PublisherEaUpdateOrderTextCommand),
-                    typeof(SubscriberEaRegisterCommand),
-                    typeof(SubscriberEaUnregisterCommand),
-                    typeof(SubscriberEaOpenTradeOrderCommand),
-                    typeof(SubscriberEaCloseTradeOrderCommand),
-                    typeof(SubscriberEaDistributeOrderTextCommand)
+                    typeof(CopyTradeRemoveDistributedAccountCommand)
                 )
                 .AddCommandHandlers(
                     typeof(AccountStateUpdateCommandHandler),
@@ -52,15 +42,7 @@ namespace Trsys.CopyTrading.Application
                     typeof(CopyTradeOpenCommandHandler),
                     typeof(CopyTradeCloseCommandHandler),
                     typeof(CopyTradeAddDistributedAccountCommandHandler),
-                    typeof(CopyTradeRemoveDistributedAccountCommandHandler),
-                    typeof(PublisherEaRegisterCommandHandler),
-                    typeof(PublisherEaUnregisterCommandHandler),
-                    typeof(PublisherEaUpdateOrderTextCommandHandler),
-                    typeof(SubscriberEaRegisterCommandHandler),
-                    typeof(SubscriberEaUnregisterCommandHandler),
-                    typeof(SubscriberEaOpenTradeOrderCommandHandler),
-                    typeof(SubscriberEaCloseTradeOrderCommandHandler),
-                    typeof(SubscriberEaDistributeOrderTextCommandHandler)
+                    typeof(CopyTradeRemoveDistributedAccountCommandHandler)
                 )
                 .AddEvents(
                     typeof(AccountStateUpdatedEvent),
@@ -77,33 +59,13 @@ namespace Trsys.CopyTrading.Application
                     typeof(CopyTradeApplicantAddedEvent),
                     typeof(CopyTradeClosedEvent),
                     typeof(CopyTradeApplicantRemovedEvent),
-                    typeof(CopyTradeFinishedEvent),
-                    typeof(PublisherEaRegisteredEvent),
-                    typeof(PublisherEaUnregisteredEvent),
-                    typeof(PublisherEaOrderTextChangedEvent),
-                    typeof(PublisherEaOpenedOrderEvent),
-                    typeof(PublisherEaClosedOrderEvent),
-                    typeof(SubscriberEaRegisteredEvent),
-                    typeof(SubscriberEaUnregisteredEvent),
-                    typeof(SubscriberEaTradeOrderOpenRequestAppliedEvent),
-                    typeof(SubscriberEaTradeOrderCloseRequestAppliedEvent),
-                    typeof(SubscriberEaOrderTextChangedEvent),
-                    typeof(SubscriberEaDistributedOrderTextChangedEvent)
-                )
-                .AddSubscribers(
-                    typeof(AccountTradeOrderRequestEventSubscriber)
+                    typeof(CopyTradeFinishedEvent)
                 )
                 .AddSagaLocators(
-                    typeof(TradeDistributionSagaLocator),
-                    typeof(PublisherEaRegistrationSagaLocator),
-                    typeof(SubscriberEaRegistrationSagaLocator),
-                    typeof(OrderPublishingSagaLocator)
+                    typeof(TradeDistributionSagaLocator)
                 )
                 .AddSagas(
-                    typeof(TradeDistributionSaga),
-                    typeof(PublisherEaRegistrationSaga),
-                    typeof(SubscriberEaRegistrationSaga),
-                    typeof(OrderPublishingSaga)
+                    typeof(TradeDistributionSaga)
                 )
                 .AddEvents(
                     typeof(TradeDistributionSagaStartedEvent),
@@ -112,16 +74,10 @@ namespace Trsys.CopyTrading.Application
             options
                 .RegisterServices(sr => {
                     sr.RegisterType(typeof(CopyTradeReadModelLocator));
-                    sr.RegisterType(typeof(PublisherEaReadModelLocator));
-                    sr.RegisterType(typeof(SubscriberEaReadModelLocator));
-                    sr.RegisterType(typeof(AccountIdToSubscriberEaIdReadModelLocator));
                 })
                 .UseInMemoryReadStoreFor<AccountReadModel>()
                 .UseInMemoryReadStoreFor<DistributionGroupReadModel>()
                 .UseInMemoryReadStoreFor<CopyTradeReadModel, CopyTradeReadModelLocator>()
-                .UseInMemoryReadStoreFor<PublisherEaReadModel, PublisherEaReadModelLocator>()
-                .UseInMemoryReadStoreFor<SubscriberEaReadModel, SubscriberEaReadModelLocator>()
-                .UseInMemoryReadStoreFor<AccountIdToSubscriberEaIdReadModel, AccountIdToSubscriberEaIdReadModelLocator>()
                 .AddQueryHandler<CopyTradeReadModelAllQueryHandler, CopyTradeReadModelAllQuery, IReadOnlyCollection<CopyTradeReadModel>>();
             return options;
         }

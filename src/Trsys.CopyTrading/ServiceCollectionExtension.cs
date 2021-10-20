@@ -11,14 +11,9 @@ namespace Trsys.CopyTrading
         {
             services.AddEventFlow(ef =>
             {
-                ef.UseApplication();
+                ef.UseCopyTradeApplication();
                 ef.AddAspNetCore();
             });
-            services.AddSingleton<IEaService, EaService>();
-            services.AddSingleton<IEaSessionTokenProvider, EaSessionTokenProvider>();
-            services.AddSingleton<IEaSessionTokenParser, EaSessionTokenParser>();
-            services.AddSingleton<IEaSessionManager, EaSessionManager>();
-            services.AddSingleton<IEaSessionStore, EaSessionStore>();
             return services;
         }
     }

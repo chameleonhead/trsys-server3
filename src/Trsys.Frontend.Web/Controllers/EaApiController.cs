@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Trsys.CopyTrading;
+using Trsys.Ea;
 using Trsys.Frontend.Web.Filters;
 
 namespace Trsys.Frontend.Web.Controllers

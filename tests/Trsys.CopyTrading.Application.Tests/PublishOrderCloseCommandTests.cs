@@ -99,7 +99,7 @@ namespace Trsys.CopyTrading.Application.Tests
         {
             return EventFlowOptions
                 .New
-                .UseApplication()
+                .UseCopyTradeApplication()
                 .CreateResolver();
         }
     }
