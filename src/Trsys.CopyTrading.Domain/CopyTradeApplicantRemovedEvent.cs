@@ -2,9 +2,9 @@
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class SubscriberAddedEvent: AggregateEvent<DistributionGroupAggregate, DistributionGroupId>
+    public class CopyTradeApplicantRemovedEvent : AggregateEvent<CopyTradeAggregate, CopyTradeId>
     {
-        public SubscriberAddedEvent(AccountId accountId)
+        public CopyTradeApplicantRemovedEvent(AccountId accountId)
         {
             AccountId = accountId;
         }

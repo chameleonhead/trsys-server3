@@ -5,9 +5,9 @@ using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application.Write.Commands
 {
-    public class CloseCopyTradeCommand : Command<CopyTradeAggregate, CopyTradeId>
+    public class CopyTradeCloseCommand : Command<CopyTradeAggregate, CopyTradeId>
     {
-        public CloseCopyTradeCommand(CopyTradeId aggregateId, DistributionGroupId aggregateIdentity, PublisherId publisherId) : base(aggregateId)
+        public CopyTradeCloseCommand(CopyTradeId aggregateId, DistributionGroupId aggregateIdentity, PublisherId publisherId) : base(aggregateId)
         {
             AggregateIdentity = aggregateIdentity;
             PublisherId = publisherId;
@@ -17,9 +17,9 @@ namespace Trsys.CopyTrading.Application.Write.Commands
         public PublisherId PublisherId { get; }
     }
 
-    public class CloseCopyTradeCommandHandler : CommandHandler<CopyTradeAggregate, CopyTradeId, CloseCopyTradeCommand>
+    public class CopyTradeCloseCommandHandler : CommandHandler<CopyTradeAggregate, CopyTradeId, CopyTradeCloseCommand>
     {
-        public override Task ExecuteAsync(CopyTradeAggregate aggregate, CloseCopyTradeCommand command, CancellationToken cancellationToken)
+        public override Task ExecuteAsync(CopyTradeAggregate aggregate, CopyTradeCloseCommand command, CancellationToken cancellationToken)
         {
             aggregate.Close(command.PublisherId);
             return Task.CompletedTask;

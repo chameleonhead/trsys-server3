@@ -44,7 +44,7 @@ namespace Trsys.CopyTrading.Domain
             }
         }
 
-        public void DistributeRequestOpenTradeOrder(CopyTradeId copyTradeId)
+        public void DistributeOpenTradeOrderRequest(CopyTradeId copyTradeId)
         {
             if (!ActiveTrades.TryGetValue(copyTradeId, out var entity))
             {
@@ -53,7 +53,7 @@ namespace Trsys.CopyTrading.Domain
             Emit(new AccountTradeOrderOpenRequestDistributedEvent(entity.Id, copyTradeId), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
-        public void DistributeRequestCloseTradeOrder(CopyTradeId copyTradeId)
+        public void DistributeCloseTradeOrderRequest(CopyTradeId copyTradeId)
         {
             if (!ActiveTrades.TryGetValue(copyTradeId, out var entity))
             {

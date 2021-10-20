@@ -32,14 +32,14 @@ namespace Trsys.CopyTrading
                     var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
                     if (publisher == null)
                     {
-                        await commandBus.PublishAsync(new RegisterPublisherEaCommand(PublisherEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.New), CancellationToken.None);
+                        await commandBus.PublishAsync(new PublisherEaRegisterCommand(PublisherEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.New), CancellationToken.None);
                     }
                     break;
                 case "Subscriber":
                     var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
-                        await commandBus.PublishAsync(new RegisterSubscriberEaCommand(SubscriberEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), AccountId.New), CancellationToken.None);
+                        await commandBus.PublishAsync(new SubscriberEaRegisterCommand(SubscriberEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), AccountId.New), CancellationToken.None);
                     }
                     break;
                 default:
@@ -58,7 +58,7 @@ namespace Trsys.CopyTrading
                         return;
                     }
                     await sessionManager.DestroySessionAsync(publisher.Id);
-                    await commandBus.PublishAsync(new UnregisterPublisherEaCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.With(publisher.PublisherId)), CancellationToken.None);
+                    await commandBus.PublishAsync(new PublisherEaUnregisterCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.With(publisher.PublisherId)), CancellationToken.None);
                     return;
                 case "Subscriber":
                     var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);

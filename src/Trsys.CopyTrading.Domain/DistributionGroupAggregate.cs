@@ -6,10 +6,10 @@ using System.Linq;
 namespace Trsys.CopyTrading.Domain
 {
     public class DistributionGroupAggregate : AggregateRoot<DistributionGroupAggregate, DistributionGroupId>,
-        IEmit<PublisherAddedEvent>,
-        IEmit<SubscriberAddedEvent>,
-        IEmit<TradeOpenDistributionStartedEvent>,
-        IEmit<TradeCloseDistributionStartedEvent>
+        IEmit<DistributionGroupPublisherAddedEvent>,
+        IEmit<DistributionGroupSubscriberAddedEvent>,
+        IEmit<DistributionGroupPublishedOpenEvent>,
+        IEmit<DistributionGroupPublishedCloseEvent>
     {
         public DistributionGroupAggregate(DistributionGroupId id) : base(id)
         {
@@ -23,53 +23,53 @@ namespace Trsys.CopyTrading.Domain
 
         public void AddPublisher(PublisherId publisherId)
         {
-            Emit(new PublisherAddedEvent(publisherId));
+            Emit(new DistributionGroupPublisherAddedEvent(publisherId));
         }
 
         public void AddSubscriber(AccountId accountId)
         {
             if (Subscribers.Add(accountId))
             {
-                Emit(new SubscriberAddedEvent(accountId));
+                Emit(new DistributionGroupSubscriberAddedEvent(accountId));
             }
         }
 
-        public void StartOpenDistribution(PublisherId publisherId, CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)
+        public void PublishOpen(PublisherId publisherId, CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)
         {
             if (!PublishersById.TryGetValue(publisherId, out var entity))
             {
                 throw new InvalidOperationException();
             }
-            Emit(new TradeOpenDistributionStartedEvent(copyTradeId, CurrentSequence + 1, entity.Id, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            Emit(new DistributionGroupPublishedOpenEvent(copyTradeId, CurrentSequence + 1, entity.Id, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
-        public void StartCloseDistribution(PublisherId publisherId, CopyTradeId copyTradeId)
+        public void PublishClose(PublisherId publisherId, CopyTradeId copyTradeId)
         {
             if (!PublishersById.TryGetValue(publisherId, out var entity))
             {
                 throw new InvalidOperationException();
             }
-            Emit(new TradeCloseDistributionStartedEvent(copyTradeId, entity.Id), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            Emit(new DistributionGroupPublishedCloseEvent(copyTradeId, entity.Id), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
-        public void Apply(PublisherAddedEvent aggregateEvent)
+        public void Apply(DistributionGroupPublisherAddedEvent aggregateEvent)
         {
             var entity = new PublisherEntity(aggregateEvent.PublisherId);
             Publishers.Add(entity);
             PublishersById.Add(aggregateEvent.PublisherId, entity);
         }
 
-        public void Apply(SubscriberAddedEvent aggregateEvent)
+        public void Apply(DistributionGroupSubscriberAddedEvent aggregateEvent)
         {
             Subscribers.Add(aggregateEvent.AccountId);
         }
 
-        public void Apply(TradeOpenDistributionStartedEvent aggregateEvent)
+        public void Apply(DistributionGroupPublishedOpenEvent aggregateEvent)
         {
             CurrentSequence = aggregateEvent.Sequence;
         }
 
-        public void Apply(TradeCloseDistributionStartedEvent aggregateEvent)
+        public void Apply(DistributionGroupPublishedCloseEvent aggregateEvent)
         {
         }
     }

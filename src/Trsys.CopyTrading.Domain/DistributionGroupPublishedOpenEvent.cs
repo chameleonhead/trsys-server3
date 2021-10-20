@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class TradeOpenDistributionStartedEvent : IAggregateEvent<DistributionGroupAggregate, DistributionGroupId>
+    public class DistributionGroupPublishedOpenEvent : IAggregateEvent<DistributionGroupAggregate, DistributionGroupId>
     {
-        public TradeOpenDistributionStartedEvent(CopyTradeId copyTradeId, int sequence, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
+        public DistributionGroupPublishedOpenEvent(CopyTradeId copyTradeId, int sequence, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
         {
             CopyTradeId = copyTradeId;
             Sequence = sequence;

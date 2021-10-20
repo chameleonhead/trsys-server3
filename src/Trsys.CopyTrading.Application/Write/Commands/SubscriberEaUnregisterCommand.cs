@@ -6,9 +6,9 @@ using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application.Write.Commands
 {
-    public class UnregisterSubscriberEaCommand : Command<SubscriberEaAggregate, SubscriberEaId>
+    public class SubscriberEaUnregisterCommand : Command<SubscriberEaAggregate, SubscriberEaId>
     {
-        public UnregisterSubscriberEaCommand(SubscriberEaId aggregateId, DistributionGroupId distributionGroupId, AccountId accountId) : base(aggregateId)
+        public SubscriberEaUnregisterCommand(SubscriberEaId aggregateId, DistributionGroupId distributionGroupId, AccountId accountId) : base(aggregateId)
         {
             DistributionGroupId = distributionGroupId;
             AccountId = accountId;
@@ -18,9 +18,9 @@ namespace Trsys.CopyTrading.Application.Write.Commands
         public AccountId AccountId { get; }
     }
 
-    public class UnregisterSubscriberEaCommandHandler : CommandHandler<SubscriberEaAggregate, SubscriberEaId, UnregisterSubscriberEaCommand>
+    public class SubscriberEaUnregisterCommandHandler : CommandHandler<SubscriberEaAggregate, SubscriberEaId, SubscriberEaUnregisterCommand>
     {
-        public override Task ExecuteAsync(SubscriberEaAggregate aggregate, UnregisterSubscriberEaCommand command, CancellationToken cancellationToken)
+        public override Task ExecuteAsync(SubscriberEaAggregate aggregate, SubscriberEaUnregisterCommand command, CancellationToken cancellationToken)
         {
             aggregate.Unregister(command.DistributionGroupId, command.AccountId);
             return Task.CompletedTask;

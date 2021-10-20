@@ -22,10 +22,10 @@ namespace Trsys.CopyTrading.Application.Tests
             var commandBus = resolver.Resolve<ICommandBus>();
             var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
-            var result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
+            var result = await commandBus.PublishAsync(new DistributionGroupAddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var copyTradeId = CopyTradeId.New;
-            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
@@ -44,13 +44,13 @@ namespace Trsys.CopyTrading.Application.Tests
 
             var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
-            var result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
+            var result = await commandBus.PublishAsync(new DistributionGroupAddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var accountId = AccountId.New;
-            result = await commandBus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
+            result = await commandBus.PublishAsync(new DistributionGroupAddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             var copyTradeId = CopyTradeId.New;
-            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
@@ -70,15 +70,15 @@ namespace Trsys.CopyTrading.Application.Tests
 
             var publisherId = PublisherId.New;
             var distributionGroupId = DistributionGroupId.New;
-            result = await commandBus.PublishAsync(new AddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
+            result = await commandBus.PublishAsync(new DistributionGroupAddPublisherCommand(distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
             foreach (var accountId in Enumerable.Range(0, 100).Select(_ => AccountId.New))
             {
-                result = await commandBus.PublishAsync(new AddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
+                result = await commandBus.PublishAsync(new DistributionGroupAddSubscriberCommand(distributionGroupId, accountId), CancellationToken.None);
                 Assert.IsTrue(result.IsSuccess);
             }
             var copyTradeId = CopyTradeId.New;
-            result = await commandBus.PublishAsync(new PublishOrderOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
+            result = await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(distributionGroupId, publisherId, copyTradeId, ForexTradeSymbol.ValueOf("USDJPY"), OrderType.Buy), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();

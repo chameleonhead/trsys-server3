@@ -5,9 +5,9 @@ using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application.Write.Commands
 {
-    public class RegisterPublisherEaCommand : Command<PublisherEaAggregate, PublisherEaId>
+    public class PublisherEaRegisterCommand : Command<PublisherEaAggregate, PublisherEaId>
     {
-        public RegisterPublisherEaCommand(PublisherEaId aggregateId, SecretKey key, DistributionGroupId distributionGroupId, PublisherId publisherId) : base(aggregateId)
+        public PublisherEaRegisterCommand(PublisherEaId aggregateId, SecretKey key, DistributionGroupId distributionGroupId, PublisherId publisherId) : base(aggregateId)
         {
             Key = key;
             DistributionGroupId = distributionGroupId;
@@ -19,9 +19,9 @@ namespace Trsys.CopyTrading.Application.Write.Commands
         public PublisherId PublisherId { get; }
     }
 
-    public class RegisterPublisherSecretKeyCommandHandler : CommandHandler<PublisherEaAggregate, PublisherEaId, RegisterPublisherEaCommand>
+    public class PublisherEaRegisterCommandHandler : CommandHandler<PublisherEaAggregate, PublisherEaId, PublisherEaRegisterCommand>
     {
-        public override Task ExecuteAsync(PublisherEaAggregate aggregate, RegisterPublisherEaCommand command, CancellationToken cancellationToken)
+        public override Task ExecuteAsync(PublisherEaAggregate aggregate, PublisherEaRegisterCommand command, CancellationToken cancellationToken)
         {
             aggregate.Register(command.Key, command.DistributionGroupId, command.PublisherId);
             return Task.CompletedTask;

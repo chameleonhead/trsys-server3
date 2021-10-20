@@ -6,10 +6,10 @@ using Trsys.CopyTrading.Domain;
 namespace Trsys.CopyTrading.Application.Read.Models
 {
     public class DistributionGroupReadModel : IReadModel,
-        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, PublisherAddedEvent>,
-        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, SubscriberAddedEvent>,
-        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, TradeOpenDistributionStartedEvent>,
-        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, TradeCloseDistributionStartedEvent>
+        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, DistributionGroupPublisherAddedEvent>,
+        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, DistributionGroupSubscriberAddedEvent>,
+        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, DistributionGroupPublishedOpenEvent>,
+        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, DistributionGroupPublishedCloseEvent>
     {
         public class CopyTradeDto
         {
@@ -24,17 +24,17 @@ namespace Trsys.CopyTrading.Application.Read.Models
         public HashSet<string> Publishers { get; } = new();
         public HashSet<string> Subscribers { get; } = new();
 
-        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, PublisherAddedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupPublisherAddedEvent> domainEvent)
         {
             Publishers.Add(domainEvent.AggregateEvent.PublisherId.Value);
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, SubscriberAddedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupSubscriberAddedEvent> domainEvent)
         {
             Subscribers.Add(domainEvent.AggregateEvent.AccountId.Value);
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, TradeOpenDistributionStartedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupPublishedOpenEvent> domainEvent)
         {
             var dto = new CopyTradeDto()
             {
@@ -47,7 +47,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             CopyTradesById.Add(dto.Id, dto);
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, TradeCloseDistributionStartedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupPublishedCloseEvent> domainEvent)
         {
             if (CopyTradesById.TryGetValue(domainEvent.AggregateEvent.CopyTradeId.Value, out var item))
             {

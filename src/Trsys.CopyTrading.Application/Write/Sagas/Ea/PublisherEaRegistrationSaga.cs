@@ -19,7 +19,7 @@ namespace Trsys.CopyTrading.Application.Write.Sagas.Ea
         public Task HandleAsync(IDomainEvent<PublisherEaAggregate, PublisherEaId, PublisherEaRegisteredEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
         {
             var aggregateEvent = domainEvent.AggregateEvent;
-            Publish(new AddPublisherCommand(aggregateEvent.DistributionGroupId, aggregateEvent.PublisherId));
+            Publish(new DistributionGroupAddPublisherCommand(aggregateEvent.DistributionGroupId, aggregateEvent.PublisherId));
             return Task.CompletedTask;
         }
     }

@@ -24,7 +24,7 @@ namespace Trsys.CopyTrading.Application.Tests
             var distributionGroupId = DistributionGroupId.New;
             var publisherId = PublisherId.New;
 
-            var result = await commandBus.PublishAsync(new RegisterPublisherEaCommand(publisherEaId, new SecretKey("PublisherKey"), distributionGroupId, publisherId), CancellationToken.None);
+            var result = await commandBus.PublishAsync(new PublisherEaRegisterCommand(publisherEaId, new SecretKey("PublisherKey"), distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
 
             var queryProcessor = resolver.Resolve<IQueryProcessor>();

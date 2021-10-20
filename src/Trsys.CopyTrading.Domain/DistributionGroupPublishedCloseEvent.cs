@@ -2,9 +2,9 @@
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class TradeCloseDistributionStartedEvent : AggregateEvent<DistributionGroupAggregate, DistributionGroupId>
+    public class DistributionGroupPublishedCloseEvent : AggregateEvent<DistributionGroupAggregate, DistributionGroupId>
     {
-        public TradeCloseDistributionStartedEvent(CopyTradeId copyTradeId, PublisherId publisherId)
+        public DistributionGroupPublishedCloseEvent(CopyTradeId copyTradeId, PublisherId publisherId)
         {
             CopyTradeId = copyTradeId;
             PublisherId = publisherId;
