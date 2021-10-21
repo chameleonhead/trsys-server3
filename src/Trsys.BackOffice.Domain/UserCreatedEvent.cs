@@ -4,13 +4,13 @@ namespace Trsys.BackOffice.Domain
 {
     public class UserCreatedEvent : AggregateEvent<UserAggregate, UserId>
     {
-        public UserCreatedEvent(Username username, HashedPassword password)
+        public UserCreatedEvent(Username username, UserNickname nickname)
         {
             Username = username;
-            Password = password;
+            Nickname = nickname;
         }
 
         public Username Username { get; }
-        public HashedPassword Password { get; }
+        public UserNickname Nickname { get; }
     }
 }

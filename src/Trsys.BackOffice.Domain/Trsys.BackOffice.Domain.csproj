@@ -8,4 +8,8 @@
     <PackageReference Include="EventFlow" Version="0.83.4713" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Trsys.Ea.Application\Trsys.Ea.Application.csproj" />
+  </ItemGroup>
+
 </Project>
