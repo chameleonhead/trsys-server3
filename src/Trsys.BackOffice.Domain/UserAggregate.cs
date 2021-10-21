@@ -9,6 +9,7 @@ namespace Trsys.BackOffice.Domain
         IEmit<UserPasswordChangedEvent>,
         IEmit<UserInChargeDistributionGroupAddedEvent>
     {
+        public Username Username { get; private set; }
         public HashedPassword Password { get; private set; }
         public List<DistributionGroupId> InChargeDistributionGroups { get; } = new();
         public List<Role> Roles { get; } = new();
@@ -19,19 +20,19 @@ namespace Trsys.BackOffice.Domain
 
         public void Create(Username username, UserNickname nickname)
         {
-            Emit(new UserCreatedEvent(username, nickname));
+            Emit(new UserCreatedEvent(username, nickname), new Metadata(KeyValuePair.Create("username", username.Value)));
         }
 
         public void AddRole(Role role)
         {
-            Emit(new UserRoleAddedEvent(role));
+            Emit(new UserRoleAddedEvent(role), new Metadata(KeyValuePair.Create("username", Username.Value)));
         }
 
         public void SetPassword(HashedPassword password)
         {
             if (this.Password != password)
             {
-                Emit(new UserPasswordChangedEvent(password));
+                Emit(new UserPasswordChangedEvent(password), new Metadata(KeyValuePair.Create("username", Username.Value)));
             }
         }
 
@@ -41,20 +42,21 @@ namespace Trsys.BackOffice.Domain
             {
                 if (!inChargeDistributionGroups.Contains(distributionGroupId))
                 {
-                    Emit(new UserInChargeDistributionGroupRemovedEvent(distributionGroupId));
+                    Emit(new UserInChargeDistributionGroupRemovedEvent(distributionGroupId), new Metadata(KeyValuePair.Create("username", Username.Value)));
                 }
             }
             foreach (var distributionGroupId in inChargeDistributionGroups)
             {
                 if (!InChargeDistributionGroups.Contains(distributionGroupId))
                 {
-                    Emit(new UserInChargeDistributionGroupAddedEvent(distributionGroupId));
+                    Emit(new UserInChargeDistributionGroupAddedEvent(distributionGroupId), new Metadata(KeyValuePair.Create("username", Username.Value)));
                 }
             }
         }
 
         public void Apply(UserCreatedEvent aggregateEvent)
         {
+            Username = aggregateEvent.Username;
         }
 
         public void Apply(UserRoleAddedEvent aggregateEvent)

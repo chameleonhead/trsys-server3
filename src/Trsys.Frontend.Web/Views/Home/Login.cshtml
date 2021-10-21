@@ -1,0 +1,17 @@
+﻿@model Trsys.Frontend.Web.Models.Home.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<form asp-action="LoginConfirm">
+    <div>
+        <input type="text" asp-for="Username" />
+    </div>
+    <div>
+        <input type="password" asp-for="Password" />
+    </div>
+    <div>
+        <button>ログイン</button>
+    </div>
+</form>

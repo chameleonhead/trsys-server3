@@ -1,31 +1,59 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EventFlow.Queries;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Trsys.BackOffice.Application.Read.Models;
 using Trsys.Frontend.Web.Models;
+using Trsys.Frontend.Web.Models.Home;
 
 namespace Trsys.Frontend.Web.Controllers
 {
+    [Route("")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> logger;
+        private readonly IQueryProcessor queryProcessor;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IQueryProcessor queryProcessor)
         {
-            _logger = logger;
+            this.logger = logger;
+            this.queryProcessor = queryProcessor;
         }
 
+        [HttpGet("")]
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet("login")]
+        public IActionResult Login([FromQuery] string returnUrl)
         {
-            return View();
+            var vm = new LoginViewModel()
+            {
+                ReturnUrl = returnUrl
+            };
+            return View(vm);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginConfirm([FromQuery] string returnUrl, [FromForm] LoginViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Login", vm);
+            }
+            var user = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<LoginReadModel>(vm.Username.ToUpperInvariant()), cancellationToken);
+            if (user == null)
+            {
+                ViewData["ErrorMessage"] = "ユーザー名またはパスワードが違います。";
+                return View("Login", vm);
+            }
+            return Redirect(returnUrl ?? "/");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
