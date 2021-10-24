@@ -32,6 +32,7 @@ namespace Trsys.BackOffice.Application
                 {
                     sr.RegisterType(typeof(LoginReadModelLocator));
                 })
+                .UseInMemoryReadStoreFor<UserReadModel>()
                 .UseInMemoryReadStoreFor<LoginReadModel, LoginReadModelLocator>();
             return options;
         }

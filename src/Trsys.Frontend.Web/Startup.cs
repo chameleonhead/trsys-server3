@@ -50,7 +50,6 @@ namespace Trsys.Frontend.Web
             {
                 ef.UseCopyTradeApplication();
                 ef.UseEaApplication();
-                ef.UseBackOfficeApplication();
                 ef.AddAspNetCore();
             });
             services.AddCopyTrading();
@@ -87,17 +86,19 @@ namespace Trsys.Frontend.Web
             }
             using (var scope = app.ApplicationServices.CreateScope())
             {
-                var queryProcessor = scope.ServiceProvider.GetRequiredService<IQueryProcessor>();
+                var resolver = scope.ServiceProvider.GetRequiredService<BackOfficeEventFlowRootResolver>();
+                var queryProcessor = resolver.Resolve<IQueryProcessor>();
                 var user = queryProcessor.ProcessAsync(new ReadModelByIdQuery<LoginReadModel>("ADMIN"), CancellationToken.None).Result;
                 if (user == null)
                 {
-                    var commandBus = scope.ServiceProvider.GetRequiredService<ICommandBus>();
+                    var commandBus = resolver.Resolve<ICommandBus>();
                     commandBus.PublishAsync(new UserCreateAdministratorCommand(UserId.New, new Username("admin"), new HashedPassword("P@ssw0rd"), new UserNickname("管理者"), new() { DistributionGroupId.New }), CancellationToken.None).Wait();
                 }
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

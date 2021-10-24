@@ -6,6 +6,7 @@ namespace Trsys.BackOffice
     {
         public static IServiceCollection AddBackOffice(this IServiceCollection services)
         {
+            services.AddSingleton<BackOfficeEventFlowRootResolver>();
             return services;
         }
     }
