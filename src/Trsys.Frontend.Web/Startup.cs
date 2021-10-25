@@ -36,6 +36,7 @@ namespace Trsys.Frontend.Web
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(config =>
                 {
+                    config.ReturnUrlParameter = "returnUrl";
                     config.LoginPath = "/login";
                     config.LogoutPath = "/logout";
                 });

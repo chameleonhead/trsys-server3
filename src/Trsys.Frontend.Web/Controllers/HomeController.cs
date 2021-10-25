@@ -37,6 +37,11 @@ namespace Trsys.Frontend.Web.Controllers
         [HttpGet("login")]
         public IActionResult Login([FromQuery] string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect(returnUrl ?? "/");
+            }
+
             var vm = new LoginViewModel()
             {
                 ReturnUrl = returnUrl
@@ -52,7 +57,7 @@ namespace Trsys.Frontend.Web.Controllers
                 return View("Login", vm);
             }
             var user = await service.FindUserByUsernameAsync(vm.Username, cancellationToken);
-            if (user == null || user.PasswordHash == vm.Password)
+            if (user == null || user.PasswordHash != vm.Password)
             {
                 ViewData["ErrorMessage"] = "ユーザー名またはパスワードが違います。";
                 return View("Login", vm);
@@ -82,6 +87,20 @@ namespace Trsys.Frontend.Web.Controllers
                 authProperties);
 
             return Redirect(returnUrl ?? "/");
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Redirect("/");
+        }
+
+        [HttpGet("changePassword")]
+        public IActionResult ChangePassword([FromQuery] string returnUrl)
+        {
+            var vm = new ChangePasswordViewModel();
+            return View(vm);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
