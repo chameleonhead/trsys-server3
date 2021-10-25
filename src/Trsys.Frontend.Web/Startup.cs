@@ -1,8 +1,6 @@
 using System.Threading;
-using EventFlow;
 using EventFlow.AspNetCore.Extensions;
 using EventFlow.DependencyInjection.Extensions;
-using EventFlow.Queries;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,10 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Trsys.BackOffice;
-using Trsys.BackOffice.Application;
-using Trsys.BackOffice.Application.Read.Models;
-using Trsys.BackOffice.Application.Write.Commands;
-using Trsys.BackOffice.Domain;
 using Trsys.CopyTrading;
 using Trsys.CopyTrading.Application;
 using Trsys.CopyTrading.Domain;
@@ -86,14 +80,8 @@ namespace Trsys.Frontend.Web
             }
             using (var scope = app.ApplicationServices.CreateScope())
             {
-                var resolver = scope.ServiceProvider.GetRequiredService<BackOfficeEventFlowRootResolver>();
-                var queryProcessor = resolver.Resolve<IQueryProcessor>();
-                var user = queryProcessor.ProcessAsync(new ReadModelByIdQuery<LoginReadModel>("ADMIN"), CancellationToken.None).Result;
-                if (user == null)
-                {
-                    var commandBus = resolver.Resolve<ICommandBus>();
-                    commandBus.PublishAsync(new UserCreateAdministratorCommand(UserId.New, new Username("admin"), new HashedPassword("P@ssw0rd"), new UserNickname("管理者"), new() { DistributionGroupId.New }), CancellationToken.None).Wait();
-                }
+                var service = scope.ServiceProvider.GetRequiredService<IBackOfficeService>();
+                service.RegisterUserIfNotExistsAsync("admin", "P@ssw0rd", "Administrator", "管理者", new[] { DistributionGroupId.New.ToString() }, CancellationToken.None).Wait();
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();

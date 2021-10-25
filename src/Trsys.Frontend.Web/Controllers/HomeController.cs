@@ -21,12 +21,12 @@ namespace Trsys.Frontend.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> logger;
-        private readonly BackOfficeEventFlowRootResolver resolver;
+        private readonly IBackOfficeService service;
 
-        public HomeController(ILogger<HomeController> logger, BackOfficeEventFlowRootResolver resolver)
+        public HomeController(ILogger<HomeController> logger, IBackOfficeService service)
         {
             this.logger = logger;
-            this.resolver = resolver;
+            this.service = service;
         }
 
         [HttpGet("")]
@@ -53,15 +53,8 @@ namespace Trsys.Frontend.Web.Controllers
             {
                 return View("Login", vm);
             }
-            var queryProcessor = resolver.Resolve<IQueryProcessor>();
-            var login = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<LoginReadModel>(vm.Username.ToUpperInvariant()), cancellationToken);
-            if (login == null || login.PasswordHash != vm.Password)
-            {
-                ViewData["ErrorMessage"] = "ユーザー名またはパスワードが違います。";
-                return View("Login", vm);
-            }
-            var user = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<UserReadModel>(login.Id), cancellationToken);
-            if (user == null)
+            var user = await service.FindUserByUsernameAsync(vm.Username, cancellationToken);
+            if (user == null || user.PasswordHash == vm.Password)
             {
                 ViewData["ErrorMessage"] = "ユーザー名またはパスワードが違います。";
                 return View("Login", vm);
