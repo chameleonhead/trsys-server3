@@ -8,5 +8,6 @@ namespace Trsys.BackOffice
     {
         Task RegisterUserIfNotExistsAsync(string username, string passwordHash, string role, string nickname, IEnumerable<string> distributionGroupIds, CancellationToken none);
         Task<UserDto> FindUserByUsernameAsync(string username, CancellationToken cancellationToken);
+        Task ChangePasswordAsync(string userId, string newPassword, CancellationToken cancellationToken);
     }
 }

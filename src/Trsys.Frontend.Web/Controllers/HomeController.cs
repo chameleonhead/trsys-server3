@@ -16,6 +16,7 @@ using Trsys.Frontend.Web.Models.Home;
 namespace Trsys.Frontend.Web.Controllers
 {
     [Route("")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> logger;
@@ -28,13 +29,13 @@ namespace Trsys.Frontend.Web.Controllers
         }
 
         [HttpGet("")]
-        [Authorize]
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Admin");
         }
 
         [HttpGet("login")]
+        [AllowAnonymous]
         public IActionResult Login([FromQuery] string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
@@ -50,6 +51,7 @@ namespace Trsys.Frontend.Web.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginConfirm([FromQuery] string returnUrl, [FromForm] LoginViewModel vm, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
@@ -97,13 +99,40 @@ namespace Trsys.Frontend.Web.Controllers
         }
 
         [HttpGet("changePassword")]
-        public IActionResult ChangePassword([FromQuery] string returnUrl)
+        public IActionResult ChangePassword()
         {
+            ViewData["SuccessMessage"] = TempData["SuccessMessage"];
             var vm = new ChangePasswordViewModel();
             return View(vm);
         }
 
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangePasswordConfirm([FromForm] ChangePasswordViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ChangePassword", vm);
+            }
+            if (vm.NewPassword != vm.NewPasswordConfirm)
+            {
+                ModelState.AddModelError("NewPasswordConfirm", "確認用パスワードが一致しません。");
+                return View("ChangePassword", vm);
+            }
+            try
+            {
+                await service.ChangePasswordAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), vm.NewPassword, cancellationToken);
+                TempData["SuccessMessage"] = "更新しました。";
+                return RedirectToAction("ChangePassword");
+            }
+            catch
+            {
+                ViewData["ErrorMessage"] = "更新に失敗しました。";
+                return View("ChangePassword", vm);
+            }
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

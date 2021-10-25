@@ -52,5 +52,11 @@ namespace Trsys.BackOffice
                 await commandBus.PublishAsync(new UserCreateAdministratorCommand(UserId.New, new Username("admin"), new HashedPassword("P@ssw0rd"), new UserNickname("管理者"), new() { DistributionGroupId.New }), CancellationToken.None);
             }
         }
+
+        public async Task ChangePasswordAsync(string userId, string newPassword, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new UserChangePasswordCommand(UserId.With(userId), new HashedPassword(newPassword)), CancellationToken.None);
+        }
     }
 }
