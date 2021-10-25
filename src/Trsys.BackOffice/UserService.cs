@@ -1,12 +1,11 @@
+using EventFlow;
+using EventFlow.Queries;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using EventFlow;
-using EventFlow.Queries;
 using Trsys.BackOffice.Application.Read.Models;
 using Trsys.BackOffice.Application.Write.Commands;
 using Trsys.BackOffice.Domain;
-using Trsys.CopyTrading.Domain;
 
 namespace Trsys.BackOffice
 {
@@ -54,7 +53,7 @@ namespace Trsys.BackOffice
             if (user == null)
             {
                 var commandBus = resolver.Resolve<ICommandBus>();
-                await commandBus.PublishAsync(new UserCreateAdministratorCommand(UserId.New, new Username("admin"), new HashedPassword("P@ssw0rd"), new UserNickname("管理者"), new() { DistributionGroupId.New }), CancellationToken.None);
+                await commandBus.PublishAsync(new UserCreateAdministratorCommand(UserId.New, new Username("admin"), new HashedPassword("P@ssw0rd"), new UserNickname("管理者"), new() { }), CancellationToken.None);
             }
         }
 

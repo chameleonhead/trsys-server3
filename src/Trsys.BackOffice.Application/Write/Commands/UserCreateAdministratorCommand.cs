@@ -1,9 +1,8 @@
+using EventFlow.Commands;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using EventFlow.Commands;
 using Trsys.BackOffice.Domain;
-using Trsys.CopyTrading.Domain;
 
 namespace Trsys.BackOffice.Application.Write.Commands
 {
