@@ -13,11 +13,24 @@ namespace Trsys.Frontend.Web.Controllers
     {
         private readonly ILogger<HomeController> logger;
         private readonly IUserService userService;
+        private readonly IDistributionGroupService distributionGroupService;
+        private readonly IPublisherService publisherService;
+        private readonly ISubscriberService subscriberService;
+        private readonly ICopyTradeService copyTradeService;
 
-        public AdminController(ILogger<HomeController> logger, IUserService userService)
+        public AdminController(ILogger<HomeController> logger, IUserService userService, IDistributionGroupService distributionGroupService)
         {
             this.logger = logger;
             this.userService = userService;
+            this.distributionGroupService = distributionGroupService;
+            this.publisherService = publisherService;
+            this.subscriberService = subscriberService;
+            this.copyTradeService = copyTradeService;
+        }
+
+        private Task<DistributionGroupsViewModel> GetDistributionGroupsAsync()
+        {
+            return Task.FromResult(new DistributionGroupsViewModel());
         }
 
         private Task<UsersViewModel> GetUsersAsync()
@@ -45,6 +58,7 @@ namespace Trsys.Frontend.Web.Controllers
         {
             var vm = new IndexViewModel();
             vm.Users = await GetUsersAsync();
+            vm.DistributionGroups = await GetDistributionGroupsAsync();
             vm.Publishers = await GetPublishersAsync();
             vm.Subscribers = await GetSubscribersAsync();
             vm.CopyTrades = await GetCopyTradesAsync();
@@ -56,6 +70,13 @@ namespace Trsys.Frontend.Web.Controllers
         {
             var vm = await GetUsersAsync();
             return PartialView("_Users", vm);
+        }
+
+        [HttpGet("groups")]
+        public async Task<IActionResult> DistributionGroups()
+        {
+            var vm = await GetDistributionGroupsAsync();
+            return PartialView("_DistributionGroups", vm);
         }
 
         [HttpGet("pubs")]

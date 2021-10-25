@@ -2,18 +2,21 @@
 
 @{
     ViewBag.Title = "管理";
+    var successMessage = ViewData["SuccessMessage"] as string;
+    var errorMessage = ViewData["ErrorMessage"] as string;
 }
 
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <div class="alert alert-danger mb-4">
-        @Model.ErrorMessage
-    </div>
-}
-@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+@if (!string.IsNullOrEmpty(successMessage))
 {
     <div class="alert alert-success mb-4">
-        @Model.SuccessMessage
+        @successMessage
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mb-4">
+        @errorMessage
     </div>
 }
 
@@ -33,6 +36,9 @@
                 <a href="#users" class="nav-link active" data-bs-toggle="tab" data-bs-target="#users">ユーザー</a>
             </li>
             <li class="flex-fill text-center text-md-start nav-item">
+                <a href="#users" class="nav-link" data-bs-toggle="tab" data-bs-target="#groups">配信グループ</a>
+            </li>
+            <li class="flex-fill text-center text-md-start nav-item">
                 <a href="#pubs" class="nav-link" data-bs-toggle="tab" data-bs-target="#pubs">配信者</a>
             </li>
             <li class="flex-fill text-center text-md-start nav-item">
@@ -47,6 +53,9 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="users">
                 <partial name="_Users" model="@Model.Users" />
+            </div>
+            <div class="tab-pane fade" id="groups">
+                <partial name="_DistributionGroups" model="@Model.DistributionGroups" />
             </div>
             <div class="tab-pane fade" id="pubs">
                 <partial name="_Publishers" model="@Model.Publishers" />

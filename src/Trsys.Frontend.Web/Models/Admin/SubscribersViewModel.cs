@@ -4,6 +4,6 @@ namespace Trsys.Frontend.Web.Models.Admin
 {
     public class SubscribersViewModel
     {
-        public List<SubscriberEaDto> Subscribers { get; set; }
+        public List<SubscriberDto> Subscribers { get; set; }
     }
 }
