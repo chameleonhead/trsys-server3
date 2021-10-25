@@ -1,5 +1,4 @@
-﻿using EventFlow.Queries;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.BackOffice;
-using Trsys.BackOffice.Application.Read.Models;
 using Trsys.Frontend.Web.Models;
 using Trsys.Frontend.Web.Models.Home;
 
@@ -21,9 +19,9 @@ namespace Trsys.Frontend.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> logger;
-        private readonly IBackOfficeService service;
+        private readonly IUserService service;
 
-        public HomeController(ILogger<HomeController> logger, IBackOfficeService service)
+        public HomeController(ILogger<HomeController> logger, IUserService service)
         {
             this.logger = logger;
             this.service = service;
@@ -61,10 +59,14 @@ namespace Trsys.Frontend.Web.Controllers
             }
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim("Nickname", user.Nickname),
-                new Claim(ClaimTypes.Role, user.Role),
             };
+            foreach (var role in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 

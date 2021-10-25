@@ -10,11 +10,11 @@ using Trsys.CopyTrading.Domain;
 
 namespace Trsys.BackOffice
 {
-    public class BackOfficeService : IBackOfficeService
+    public class UserService : IUserService
     {
         private readonly BackOfficeEventFlowRootResolver resolver;
 
-        public BackOfficeService(BackOfficeEventFlowRootResolver resolver)
+        public UserService(BackOfficeEventFlowRootResolver resolver)
         {
             this.resolver = resolver;
         }
@@ -38,7 +38,7 @@ namespace Trsys.BackOffice
                 Username = user.Username,
                 PasswordHash = login.PasswordHash,
                 Nickname = user.Nickname,
-                Role = user.Role,
+                Roles = user.Roles,
             };
         }
 

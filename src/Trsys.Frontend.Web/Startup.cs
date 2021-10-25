@@ -80,7 +80,7 @@ namespace Trsys.Frontend.Web
             }
             using (var scope = app.ApplicationServices.CreateScope())
             {
-                var service = scope.ServiceProvider.GetRequiredService<IBackOfficeService>();
+                var service = scope.ServiceProvider.GetRequiredService<IUserService>();
                 service.RegisterUserIfNotExistsAsync("admin", "P@ssw0rd", "Administrator", "管理者", new[] { DistributionGroupId.New.ToString() }, CancellationToken.None).Wait();
             }
             app.UseHttpsRedirection();

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Trsys.BackOffice
 {
     public class UserDto
@@ -6,6 +8,6 @@ namespace Trsys.BackOffice
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public string Nickname { get; set; }
-        public string Role { get; set; }
+        public List<string> Roles { get; set; }
     }
 }
