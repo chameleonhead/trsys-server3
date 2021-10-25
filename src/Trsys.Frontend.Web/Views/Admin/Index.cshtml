@@ -25,3 +25,38 @@
 </div>
 
 <h1 class="h2 mb-3">@ViewBag.Title</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <ul class="nav nav-pills flex-md-column flex-row">
+            <li class="flex-fill text-center text-md-start nav-item">
+                <a href="#users" class="nav-link active" data-bs-toggle="tab" data-bs-target="#users">ユーザー</a>
+            </li>
+            <li class="flex-fill text-center text-md-start nav-item">
+                <a href="#pubs" class="nav-link" data-bs-toggle="tab" data-bs-target="#pubs">配信者</a>
+            </li>
+            <li class="flex-fill text-center text-md-start nav-item">
+                <a href="#subs" class="nav-link" data-bs-toggle="tab" data-bs-target="#subs">受信者</a>
+            </li>
+            <li class="flex-fill text-center text-md-start nav-item">
+                <a href="#trades" class="nav-link" data-bs-toggle="tab" data-bs-target="#trades">トレード</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="users">
+                <partial name="_Users" model="@Model.Users" />
+            </div>
+            <div class="tab-pane fade" id="pubs">
+                <partial name="_Publishers" model="@Model.Publishers" />
+            </div>
+            <div class="tab-pane fade" id="subs">
+                <partial name="_Subscribers" model="@Model.Subscribers" />
+            </div>
+            <div class="tab-pane fade" id="trades">
+                <partial name="_CopyTrades" model="@Model.CopyTrades" />
+            </div>
+        </div>
+    </div>
+</div>
