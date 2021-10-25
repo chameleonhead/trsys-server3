@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace Trsys.BackOffice
 {
     public class DistributionGroupService : IDistributionGroupService

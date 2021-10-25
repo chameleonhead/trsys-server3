@@ -19,6 +19,11 @@ namespace Trsys.BackOffice
             this.resolver = resolver;
         }
 
+        public Task<PagedResult<UserDto>> SearchAsync(int page, int perPage)
+        {
+            return Task.FromResult(new PagedResult<UserDto>(page, perPage, 0, new()));
+        }
+
         public async Task<UserDto> FindUserByUsernameAsync(string username, CancellationToken cancellationToken)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();

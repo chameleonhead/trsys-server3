@@ -18,7 +18,12 @@ namespace Trsys.Frontend.Web.Controllers
         private readonly ISubscriberService subscriberService;
         private readonly ICopyTradeService copyTradeService;
 
-        public AdminController(ILogger<HomeController> logger, IUserService userService, IDistributionGroupService distributionGroupService)
+        public AdminController(ILogger<HomeController> logger,
+            IUserService userService,
+            IDistributionGroupService distributionGroupService,
+            IPublisherService publisherService,
+            ISubscriberService subscriberService,
+            ICopyTradeService copyTradeService)
         {
             this.logger = logger;
             this.userService = userService;
@@ -28,27 +33,34 @@ namespace Trsys.Frontend.Web.Controllers
             this.copyTradeService = copyTradeService;
         }
 
-        private Task<DistributionGroupsViewModel> GetDistributionGroupsAsync()
+        private async Task<UsersViewModel> GetUsersAsync(int page = 1, int perPage = 10)
+        {
+            var users = await userService.SearchAsync(page, perPage);
+            return new UsersViewModel()
+            {
+                Page = users.Page,
+                PerPage = users.PerPage,
+                TotalCount = users.TotalCount,
+                Items = users.Items,
+            };
+        }
+
+        private Task<DistributionGroupsViewModel> GetDistributionGroupsAsync(int page = 1, int perPage = 10)
         {
             return Task.FromResult(new DistributionGroupsViewModel());
         }
 
-        private Task<UsersViewModel> GetUsersAsync()
-        {
-            return Task.FromResult(new UsersViewModel());
-        }
-
-        private Task<PublishersViewModel> GetPublishersAsync()
+        private Task<PublishersViewModel> GetPublishersAsync(int page = 1, int perPage = 10)
         {
             return Task.FromResult(new PublishersViewModel());
         }
 
-        private Task<SubscribersViewModel> GetSubscribersAsync()
+        private Task<SubscribersViewModel> GetSubscribersAsync(int page = 1, int perPage = 10)
         {
             return Task.FromResult(new SubscribersViewModel());
         }
 
-        private Task<CopyTradesViewModel> GetCopyTradesAsync()
+        private Task<CopyTradesViewModel> GetCopyTradesAsync(int page = 1, int perPage = 10)
         {
             return Task.FromResult(new CopyTradesViewModel());
         }

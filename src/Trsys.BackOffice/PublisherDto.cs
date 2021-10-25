@@ -1,4 +1,4 @@
-﻿namespace Trsys.Frontend.Web.Models.Admin
+﻿namespace Trsys.BackOffice
 {
     public class PublisherDto
     {
