@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading;
 using System.Threading.Tasks;
 using Trsys.BackOffice;
 using Trsys.Frontend.Web.Models.Admin;
@@ -33,9 +34,9 @@ namespace Trsys.Frontend.Web.Controllers
             this.copyTradeService = copyTradeService;
         }
 
-        private async Task<UsersViewModel> GetUsersAsync(int page = 1, int perPage = 10)
+        private async Task<UsersViewModel> GetUsersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
-            var users = await userService.SearchAsync(page, perPage);
+            var users = await userService.SearchAsync(page, perPage, cancellationToken);
             return new UsersViewModel()
             {
                 Page = users.Page,
@@ -45,22 +46,22 @@ namespace Trsys.Frontend.Web.Controllers
             };
         }
 
-        private Task<DistributionGroupsViewModel> GetDistributionGroupsAsync(int page = 1, int perPage = 10)
+        private Task<DistributionGroupsViewModel> GetDistributionGroupsAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(new DistributionGroupsViewModel());
         }
 
-        private Task<PublishersViewModel> GetPublishersAsync(int page = 1, int perPage = 10)
+        private Task<PublishersViewModel> GetPublishersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(new PublishersViewModel());
         }
 
-        private Task<SubscribersViewModel> GetSubscribersAsync(int page = 1, int perPage = 10)
+        private Task<SubscribersViewModel> GetSubscribersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(new SubscribersViewModel());
         }
 
-        private Task<CopyTradesViewModel> GetCopyTradesAsync(int page = 1, int perPage = 10)
+        private Task<CopyTradesViewModel> GetCopyTradesAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(new CopyTradesViewModel());
         }

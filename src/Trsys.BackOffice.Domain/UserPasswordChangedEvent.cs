@@ -4,11 +4,11 @@ namespace Trsys.BackOffice.Domain
 {
     public class UserPasswordChangedEvent : AggregateEvent<UserAggregate, UserId>
     {
-        public UserPasswordChangedEvent(HashedPassword password)
+        public UserPasswordChangedEvent(HashedPassword passwordHash)
         {
-            Password = password;
+            PasswordHash = passwordHash;
         }
 
-        public HashedPassword Password { get; }
+        public HashedPassword PasswordHash { get; }
     }
 }

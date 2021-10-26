@@ -9,7 +9,7 @@ namespace Trsys.BackOffice.Domain
         IEmit<UserInChargeDistributionGroupAddedEvent>
     {
         public Username Username { get; private set; }
-        public HashedPassword Password { get; private set; }
+        public HashedPassword PasswordHash { get; private set; }
         public List<DistributionGroupId> InChargeDistributionGroups { get; } = new();
         public List<Role> Roles { get; } = new();
 
@@ -27,11 +27,11 @@ namespace Trsys.BackOffice.Domain
             Emit(new UserRoleAddedEvent(role), new Metadata(KeyValuePair.Create("username", Username.Value)));
         }
 
-        public void SetPassword(HashedPassword password)
+        public void SetPasswordHash(HashedPassword passwordHash)
         {
-            if (this.Password != password)
+            if (this.PasswordHash != passwordHash)
             {
-                Emit(new UserPasswordChangedEvent(password), new Metadata(KeyValuePair.Create("username", Username.Value)));
+                Emit(new UserPasswordChangedEvent(passwordHash), new Metadata(KeyValuePair.Create("username", Username.Value)));
             }
         }
 
@@ -65,7 +65,7 @@ namespace Trsys.BackOffice.Domain
 
         public void Apply(UserPasswordChangedEvent aggregateEvent)
         {
-            Password = aggregateEvent.Password;
+            PasswordHash = aggregateEvent.PasswordHash;
         }
 
         public void Apply(UserInChargeDistributionGroupAddedEvent aggregateEvent)

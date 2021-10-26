@@ -2,6 +2,7 @@
 using EventFlow.Extensions;
 using System.Collections.Generic;
 using Trsys.BackOffice.Application.Read.Models;
+using Trsys.BackOffice.Application.Read.Queries;
 using Trsys.BackOffice.Application.Write.Commands;
 using Trsys.BackOffice.Domain;
 
@@ -33,7 +34,9 @@ namespace Trsys.BackOffice.Application
                     sr.RegisterType(typeof(LoginReadModelLocator));
                 })
                 .UseInMemoryReadStoreFor<UserReadModel>()
-                .UseInMemoryReadStoreFor<LoginReadModel, LoginReadModelLocator>();
+                .UseInMemoryReadStoreFor<LoginReadModel, LoginReadModelLocator>()
+                .AddQueryHandler<UserReadModelSearchCountQueryHandler, UserReadModelSearchCountQuery, int>()
+                .AddQueryHandler<UserReadModelSearchItemsQueryHandler, UserReadModelSearchItemsQuery, List<UserReadModel>>();
             return options;
         }
     }

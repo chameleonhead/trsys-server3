@@ -7,15 +7,15 @@ namespace Trsys.BackOffice.Application.Write.Commands
 {
     public class UserCreateAdministratorCommand : Command<UserAggregate, UserId>
     {
-        public UserCreateAdministratorCommand(UserId aggregateId, Username username, HashedPassword password, UserNickname nickname) : base(aggregateId)
+        public UserCreateAdministratorCommand(UserId aggregateId, Username username, HashedPassword passwordHash, UserNickname nickname) : base(aggregateId)
         {
             Username = username;
-            Password = password;
+            PasswordHash = passwordHash;
             Nickname = nickname;
         }
 
         public Username Username { get; }
-        public HashedPassword Password { get; }
+        public HashedPassword PasswordHash { get; }
         public UserNickname Nickname { get; }
     }
 
@@ -25,7 +25,7 @@ namespace Trsys.BackOffice.Application.Write.Commands
         {
             aggregate.Create(command.Username, command.Nickname);
             aggregate.AddRole(Role.Administrator);
-            aggregate.SetPassword(command.Password);
+            aggregate.SetPasswordHash(command.PasswordHash);
             return Task.CompletedTask;
         }
     }

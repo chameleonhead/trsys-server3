@@ -19,7 +19,7 @@ namespace Trsys.BackOffice.Application.Write.Commands
     {
         public override Task ExecuteAsync(UserAggregate aggregate, UserChangePasswordCommand command, CancellationToken cancellationToken)
         {
-            aggregate.SetPassword(command.Password);
+            aggregate.SetPasswordHash(command.Password);
             return Task.CompletedTask;
         }
     }
