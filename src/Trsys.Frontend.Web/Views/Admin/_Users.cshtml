@@ -1,8 +1,118 @@
 ﻿@model Trsys.Frontend.Web.Models.Admin.UsersViewModel
 
+@{
+    ViewBag.Title = "ユーザー一覧";
+    var errorMessage = ViewData["ErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mb-4">
+        @errorMessage
+    </div>
+}
+
+
+<div class="my-3 d-flex justify-content-between">
+    <h1 class="h2 mb-3">@ViewBag.Title</h1>
+    <div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-create">新規登録</button>
+    </div>
+</div>
+
 <div class="list-group">
     @foreach (var item in Model.Items)
     {
-        <a asp-action="UserDetails" asp-route-id="@item.Id" class="list-group-item list-group-item-action">@item.Nickname</a>
+        <div class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#modal-detail-@(item.Id)">
+            @item.Nickname
+        </div>
     }
 </div>
+
+<div class="modal fade" id="modal-create" tabindex="-1">
+    <form asp-action="UserCreateConfirm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">新規登録</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label class="form-label">ユーザー名</label>
+                        <input class="form-control" type="text" name="Username" autocomplete="off" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">パスワード</label>
+                        <input class="form-control" type="password" name="Password" autocomplete="off" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">名前</label>
+                        <input class="form-control" type="text" name="Nickname" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                    <button type="submit" class="btn btn-primary">登録</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@foreach (var item in Model.Items)
+{
+    <div class="modal fade" id="modal-detail-@(item.Id)" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">詳細</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-2">
+                            <label class="form-label">ユーザー名</label>
+                            <input class="form-control" type="text" name="Username" value="@item.Username" autocomplete="off" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">パスワード</label>
+                            <input class="form-control" type="password" name="Password" autocomplete="off" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">名前</label>
+                            <input class="form-control" type="text" name="Nickname" value="@item.Nickname" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        <form asp-action="UserDeleteConfirm" asp-route-id="@item.Id">
+                            <button type="submit" class="btn btn-danger">削除</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="modal fade" id="modal-edit-nickname-@(item.Id)" tabindex="-1">
+        <form asp-action="UserEditConfirm" asp-route-id="@item.Id">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">名前編集</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">名前</label>
+                            <input class="form-control" type="text" name="Nickname" value="@item.Nickname" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        <button type="submit" class="btn btn-primary">登録</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}

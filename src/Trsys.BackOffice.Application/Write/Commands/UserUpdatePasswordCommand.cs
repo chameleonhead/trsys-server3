@@ -5,9 +5,9 @@ using Trsys.BackOffice.Domain;
 
 namespace Trsys.BackOffice.Application.Write.Commands
 {
-    public class UserChangePasswordCommand : Command<UserAggregate, UserId>
+    public class UserUpdatePasswordCommand : Command<UserAggregate, UserId>
     {
-        public UserChangePasswordCommand(UserId aggregateId, HashedPassword password) : base(aggregateId)
+        public UserUpdatePasswordCommand(UserId aggregateId, HashedPassword password) : base(aggregateId)
         {
             Password = password;
         }
@@ -15,9 +15,9 @@ namespace Trsys.BackOffice.Application.Write.Commands
         public HashedPassword Password { get; }
     }
 
-    public class UserChangePasswordCommandHandler : CommandHandler<UserAggregate, UserId, UserChangePasswordCommand>
+    public class UserUpdatePasswordCommandHandler : CommandHandler<UserAggregate, UserId, UserUpdatePasswordCommand>
     {
-        public override Task ExecuteAsync(UserAggregate aggregate, UserChangePasswordCommand command, CancellationToken cancellationToken)
+        public override Task ExecuteAsync(UserAggregate aggregate, UserUpdatePasswordCommand command, CancellationToken cancellationToken)
         {
             aggregate.SetPasswordHash(command.Password);
             return Task.CompletedTask;

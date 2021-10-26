@@ -52,6 +52,7 @@ namespace Trsys.Frontend.Web.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginConfirm([FromQuery] string returnUrl, [FromForm] LoginViewModel vm, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
@@ -92,6 +93,7 @@ namespace Trsys.Frontend.Web.Controllers
         }
 
         [HttpPost("logout")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -107,6 +109,7 @@ namespace Trsys.Frontend.Web.Controllers
         }
 
         [HttpPost("changePassword")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePasswordConfirm([FromForm] ChangePasswordViewModel vm, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)

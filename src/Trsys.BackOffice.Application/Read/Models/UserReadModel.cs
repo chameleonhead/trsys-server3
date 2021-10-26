@@ -6,10 +6,12 @@ using Trsys.BackOffice.Domain;
 namespace Trsys.BackOffice.Application.Read.Models
 {
     public class UserReadModel : IReadModel,
-        IAmReadModelFor<UserAggregate, UserId, UserCreatedEvent>,
+        IAmReadModelFor<UserAggregate, UserId, UserUsernameChangedEvent>,
         IAmReadModelFor<UserAggregate, UserId, UserPasswordChangedEvent>,
+        IAmReadModelFor<UserAggregate, UserId, UserNicknameChangedEvent>,
         IAmReadModelFor<UserAggregate, UserId, UserRoleAddedEvent>,
-        IAmReadModelFor<UserAggregate, UserId, UserInChargeDistributionGroupAddedEvent>
+        IAmReadModelFor<UserAggregate, UserId, UserInChargeDistributionGroupAddedEvent>,
+        IAmReadModelFor<UserAggregate, UserId, UserDeletedEvent>
     {
         public string Id { get; private set; }
         public string Username { get; private set; }
@@ -18,10 +20,14 @@ namespace Trsys.BackOffice.Application.Read.Models
         public List<string> Roles { get; } = new();
         public List<string> DistributionGroups { get; } = new();
 
-        public void Apply(IReadModelContext context, IDomainEvent<UserAggregate, UserId, UserCreatedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<UserAggregate, UserId, UserUsernameChangedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
             Username = domainEvent.AggregateEvent.Username.Value;
+        }
+
+        public void Apply(IReadModelContext context, IDomainEvent<UserAggregate, UserId, UserNicknameChangedEvent> domainEvent)
+        {
             Nickname = domainEvent.AggregateEvent.Nickname.Value;
         }
 
@@ -38,6 +44,11 @@ namespace Trsys.BackOffice.Application.Read.Models
         public void Apply(IReadModelContext context, IDomainEvent<UserAggregate, UserId, UserInChargeDistributionGroupAddedEvent> domainEvent)
         {
             DistributionGroups.Add(domainEvent.AggregateEvent.DistributionGroupId.Value);
+        }
+
+        public void Apply(IReadModelContext context, IDomainEvent<UserAggregate, UserId, UserDeletedEvent> domainEvent)
+        {
+            context.MarkForDeletion();
         }
     }
 }

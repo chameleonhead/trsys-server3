@@ -15,18 +15,27 @@ namespace Trsys.BackOffice.Application
             options
                 .AddCommands(
                     typeof(UserCreateAdministratorCommand),
-                    typeof(UserChangePasswordCommand)
+                    typeof(UserCreateCommand),
+                    typeof(UserUpdateNicknameCommand),
+                    typeof(UserUpdatePasswordCommand),
+                    typeof(UserDeleteCommand)
                 )
                 .AddCommandHandlers(
                     typeof(UserCreateAdministratorCommandHandler),
-                    typeof(UserChangePasswordCommandHandler)
+                    typeof(UserCreateCommandHandler),
+                    typeof(UserUpdateNicknameCommandHandler),
+                    typeof(UserUpdatePasswordCommandHandler),
+                    typeof(UserDeleteCommandHandler)
                 )
                 .AddEvents(
-                    typeof(UserCreatedEvent),
+                    typeof(UserUsernameChangedEvent),
                     typeof(UserPasswordChangedEvent),
+                    typeof(UserNicknameChangedEvent),
                     typeof(UserRoleAddedEvent),
+                    typeof(UserRoleRemovedEvent),
                     typeof(UserInChargeDistributionGroupAddedEvent),
-                    typeof(UserInChargeDistributionGroupRemovedEvent)
+                    typeof(UserInChargeDistributionGroupRemovedEvent),
+                    typeof(UserDeletedEvent)
                 );
             options
                 .RegisterServices(sr =>

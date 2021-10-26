@@ -85,6 +85,50 @@ namespace Trsys.Frontend.Web.Controllers
             return PartialView("_Users", vm);
         }
 
+        [HttpPost("users")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserCreateConfirm([FromForm] UserCreateViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            await userService.RegisterUserAsync(vm.Username, vm.Password, vm.Nickname, cancellationToken);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost("users/{id}/password/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEditPasswordConfirm(string id, [FromForm] UserEditPasswordViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            await userService.ChangePasswordAsync(id, vm.Password, cancellationToken);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost("users/{id}/nickname/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEditNicknameConfirm(string id, [FromForm] UserEditNicknameViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            await userService.ChangeNicknameAsync(id, vm.Nickname, cancellationToken);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost("users/{id}/delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserDeleteConfirm(string id, CancellationToken cancellationToken)
+        {
+            await userService.DeleteUserAsync(id, cancellationToken);
+            return RedirectToAction("Index");
+        }
+
         [HttpGet("groups")]
         public async Task<IActionResult> DistributionGroups()
         {

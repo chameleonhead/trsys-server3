@@ -1,13 +1,13 @@
-using EventFlow.Commands;
+﻿using EventFlow.Commands;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.BackOffice.Domain;
 
 namespace Trsys.BackOffice.Application.Write.Commands
 {
-    public class UserCreateAdministratorCommand : Command<UserAggregate, UserId>
+    public class UserCreateCommand : Command<UserAggregate, UserId>
     {
-        public UserCreateAdministratorCommand(UserId aggregateId, Username username, HashedPassword passwordHash, UserNickname nickname) : base(aggregateId)
+        public UserCreateCommand(UserId aggregateId, Username username, HashedPassword passwordHash, UserNickname nickname) : base(aggregateId)
         {
             Username = username;
             PasswordHash = passwordHash;
@@ -19,16 +19,14 @@ namespace Trsys.BackOffice.Application.Write.Commands
         public UserNickname Nickname { get; }
     }
 
-    public class UserCreateAdministratorCommandHandler : CommandHandler<UserAggregate, UserId, UserCreateAdministratorCommand>
+    public class UserCreateCommandHandler : CommandHandler<UserAggregate, UserId, UserCreateCommand>
     {
-        public override Task ExecuteAsync(UserAggregate aggregate, UserCreateAdministratorCommand command, CancellationToken cancellationToken)
+        public override Task ExecuteAsync(UserAggregate aggregate, UserCreateCommand command, CancellationToken cancellationToken)
         {
             aggregate.SetUsername(command.Username);
             aggregate.SetPasswordHash(command.PasswordHash);
             aggregate.SetNickname(command.Nickname);
-            aggregate.AddRole(Role.Administrator);
             return Task.CompletedTask;
         }
     }
-
 }

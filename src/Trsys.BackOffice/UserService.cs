@@ -77,10 +77,33 @@ namespace Trsys.BackOffice
             }
         }
 
-        public async Task ChangePasswordAsync(string userId, string newPassword, CancellationToken cancellationToken)
+        public async Task ChangePasswordAsync(string userId, string newPasswordHash, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
-            await commandBus.PublishAsync(new UserChangePasswordCommand(UserId.With(userId), new HashedPassword(newPassword)), CancellationToken.None);
+            await commandBus.PublishAsync(new UserUpdatePasswordCommand(UserId.With(userId), new HashedPassword(newPasswordHash)), CancellationToken.None);
+        }
+
+        public async Task RegisterUserAsync(string username, string passwordHash, string nickname, CancellationToken cancellationToken = default)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new UserCreateCommand(
+                UserId.New,
+                new Username(username),
+                new HashedPassword(passwordHash),
+                new UserNickname(nickname)
+                ), CancellationToken.None);
+        }
+
+        public async Task ChangeNicknameAsync(string userId, string nickname, CancellationToken cancellationToken = default)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new UserUpdateNicknameCommand(UserId.With(userId), new UserNickname(nickname)), CancellationToken.None);
+        }
+
+        public async Task DeleteUserAsync(string userId, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new UserDeleteCommand(UserId.With(userId)), CancellationToken.None);
         }
     }
 }
