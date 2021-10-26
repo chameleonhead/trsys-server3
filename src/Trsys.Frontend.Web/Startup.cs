@@ -1,4 +1,3 @@
-using System.Threading;
 using EventFlow.AspNetCore.Extensions;
 using EventFlow.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -7,10 +6,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Threading;
 using Trsys.BackOffice;
 using Trsys.CopyTrading;
 using Trsys.CopyTrading.Application;
-using Trsys.CopyTrading.Domain;
 using Trsys.Ea;
 using Trsys.Ea.Application;
 using Trsys.Frontend.Web.Formatters;
@@ -82,7 +81,7 @@ namespace Trsys.Frontend.Web
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var service = scope.ServiceProvider.GetRequiredService<IUserService>();
-                service.RegisterUserIfNotExistsAsync("admin", "P@ssw0rd", "Administrator", "管理者", new[] { DistributionGroupId.New.ToString() }, CancellationToken.None).Wait();
+                service.RegisterAdministratorIfNotExistsAsync("admin", "P@ssw0rd", "管理者", CancellationToken.None).Wait();
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();

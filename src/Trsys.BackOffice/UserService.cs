@@ -1,6 +1,5 @@
 using EventFlow;
 using EventFlow.Queries;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.BackOffice.Application.Read.Models;
@@ -46,14 +45,19 @@ namespace Trsys.BackOffice
             };
         }
 
-        public async Task RegisterUserIfNotExistsAsync(string username, string passwordHash, string role, string nickname, IEnumerable<string> distributionGroupIds, CancellationToken cancellationToken = default)
+        public async Task RegisterAdministratorIfNotExistsAsync(string username, string passwordHash, string nickname, CancellationToken cancellationToken = default)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var user = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<LoginReadModel>(username.ToUpperInvariant()), cancellationToken);
             if (user == null)
             {
                 var commandBus = resolver.Resolve<ICommandBus>();
-                await commandBus.PublishAsync(new UserCreateAdministratorCommand(UserId.New, new Username("admin"), new HashedPassword("P@ssw0rd"), new UserNickname("管理者"), new() { }), CancellationToken.None);
+                await commandBus.PublishAsync(new UserCreateAdministratorCommand(
+                    UserId.New, 
+                    new Username(username), 
+                    new HashedPassword(passwordHash), 
+                    new UserNickname(nickname)
+                    ), CancellationToken.None);
             }
         }
 
