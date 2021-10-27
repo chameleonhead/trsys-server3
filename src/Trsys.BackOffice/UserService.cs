@@ -110,6 +110,12 @@ namespace Trsys.BackOffice
             await commandBus.PublishAsync(new UserUpdateNicknameCommand(UserId.With(userId), new UserNickname(nickname)), CancellationToken.None);
         }
 
+        public async Task UpdateRolesAsync(string userId, IEnumerable<string> roles, CancellationToken cancellationToken = default)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new UserUpdateRolesCommand(UserId.With(userId), roles.Select(role => Role.Of(role))), CancellationToken.None);
+        }
+
         public async Task DeleteAsync(string userId, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();

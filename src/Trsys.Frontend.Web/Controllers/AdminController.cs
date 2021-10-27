@@ -121,6 +121,18 @@ namespace Trsys.Frontend.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost("users/{id}/roles/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEditRolesConfirm(string id, [FromForm] UserEditRolesViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            await userService.UpdateRolesAsync(id, vm.Roles, cancellationToken);
+            return RedirectToAction("Index");
+        }
+
         [HttpPost("users/{id}/delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserDeleteConfirm(string id, CancellationToken cancellationToken)

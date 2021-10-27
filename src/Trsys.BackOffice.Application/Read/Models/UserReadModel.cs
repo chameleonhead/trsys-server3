@@ -10,6 +10,7 @@ namespace Trsys.BackOffice.Application.Read.Models
         IAmReadModelFor<UserAggregate, UserId, UserPasswordChangedEvent>,
         IAmReadModelFor<UserAggregate, UserId, UserNicknameChangedEvent>,
         IAmReadModelFor<UserAggregate, UserId, UserRoleAddedEvent>,
+        IAmReadModelFor<UserAggregate, UserId, UserRoleRemovedEvent>,
         IAmReadModelFor<UserAggregate, UserId, UserInChargeDistributionGroupAddedEvent>,
         IAmReadModelFor<UserAggregate, UserId, UserDeletedEvent>
     {
@@ -39,6 +40,11 @@ namespace Trsys.BackOffice.Application.Read.Models
         public void Apply(IReadModelContext context, IDomainEvent<UserAggregate, UserId, UserRoleAddedEvent> domainEvent)
         {
             Roles.Add(domainEvent.AggregateEvent.Role.Value);
+        }
+
+        public void Apply(IReadModelContext context, IDomainEvent<UserAggregate, UserId, UserRoleRemovedEvent> domainEvent)
+        {
+            Roles.Remove(domainEvent.AggregateEvent.Role.Value);
         }
 
         public void Apply(IReadModelContext context, IDomainEvent<UserAggregate, UserId, UserInChargeDistributionGroupAddedEvent> domainEvent)

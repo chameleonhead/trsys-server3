@@ -1,6 +1,7 @@
 using EventFlow.Aggregates;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Trsys.BackOffice.Domain
 {
@@ -18,11 +19,6 @@ namespace Trsys.BackOffice.Domain
         public HashedPassword PasswordHash { get; private set; }
         public UserNickname Nickname { get; private set; }
         public List<DistributionGroupId> InChargeDistributionGroups { get; } = new();
-
-        public void Delete()
-        {
-            Emit(new UserDeletedEvent());
-        }
 
         public List<Role> Roles { get; } = new();
         public bool IsDeleted { get; private set; }
@@ -48,24 +44,6 @@ namespace Trsys.BackOffice.Domain
             }
         }
 
-        public void AddRole(Role role)
-        {
-            EnsureNotDeleted();
-            if (!Roles.Contains(role))
-            {
-                Emit(new UserRoleAddedEvent(role));
-            }
-        }
-
-        public void RemoveRole(Role role)
-        {
-            EnsureNotDeleted();
-            if (Roles.Contains(role))
-            {
-                Emit(new UserRoleAddedEvent(role));
-            }
-        }
-
         public void SetPasswordHash(HashedPassword passwordHash)
         {
             EnsureNotDeleted();
@@ -81,6 +59,48 @@ namespace Trsys.BackOffice.Domain
             if (Nickname != nickname)
             {
                 Emit(new UserNicknameChangedEvent(nickname));
+            }
+        }
+
+        public void SetRoles(IEnumerable<Role> roles)
+        {
+            EnsureNotDeleted();
+            foreach (var role in Roles.ToArray())
+            {
+                if (!roles.Contains(role))
+                {
+                    Emit(new UserRoleRemovedEvent(role));
+                }
+            }
+            foreach (var role in roles)
+            {
+                if (!Roles.Contains(role))
+                {
+                    Emit(new UserRoleAddedEvent(role));
+                }
+            }
+        }
+
+        public void Delete()
+        {
+            Emit(new UserDeletedEvent());
+        }
+
+        public void AddRole(Role role)
+        {
+            EnsureNotDeleted();
+            if (!Roles.Contains(role))
+            {
+                Emit(new UserRoleAddedEvent(role));
+            }
+        }
+
+        public void RemoveRole(Role role)
+        {
+            EnsureNotDeleted();
+            if (Roles.Contains(role))
+            {
+                Emit(new UserRoleAddedEvent(role));
             }
         }
 

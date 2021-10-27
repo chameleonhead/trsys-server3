@@ -17,12 +17,14 @@ namespace Trsys.BackOffice.Application
                     typeof(UserCreateCommand),
                     typeof(UserUpdateNicknameCommand),
                     typeof(UserUpdatePasswordCommand),
+                    typeof(UserUpdateRolesCommand),
                     typeof(UserDeleteCommand)
                 )
                 .AddCommandHandlers(
                     typeof(UserCreateCommandHandler),
                     typeof(UserUpdateNicknameCommandHandler),
                     typeof(UserUpdatePasswordCommandHandler),
+                    typeof(UserUpdateRolesCommandHandler),
                     typeof(UserDeleteCommandHandler)
                 )
                 .AddEvents(

@@ -12,6 +12,7 @@ namespace Trsys.BackOffice
         Task CreateAsync(string username, string passwordHash, string nickname, IEnumerable<string> roles, CancellationToken cancellationToken);
         Task UpdateNicknameAsync(string userId, string nickname, CancellationToken cancellationToken);
         Task UpdatePasswordAsync(string userId, string newPasswordHash, CancellationToken cancellationToken);
+        Task UpdateRolesAsync(string userId, IEnumerable<string> roles, CancellationToken cancellationToken);
         Task DeleteAsync(string id, CancellationToken cancellationToken);
     }
 }
