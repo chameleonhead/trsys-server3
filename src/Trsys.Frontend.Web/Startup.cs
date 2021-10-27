@@ -81,7 +81,7 @@ namespace Trsys.Frontend.Web
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var service = scope.ServiceProvider.GetRequiredService<IUserService>();
-                service.RegisterAdministratorIfNotExistsAsync("admin", "P@ssw0rd", "管理者", CancellationToken.None).Wait();
+                service.CreateAdministratorIfNotExistsAsync("admin", "P@ssw0rd", "管理者", CancellationToken.None).Wait();
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();

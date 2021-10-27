@@ -1,5 +1,7 @@
 using EventFlow;
 using EventFlow.Queries;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +40,7 @@ namespace Trsys.BackOffice
             }).ToList());
         }
 
-        public async Task<UserDto> FindUserByUsernameAsync(string username, CancellationToken cancellationToken)
+        public async Task<UserDto> FindByUsernameAsync(string username, CancellationToken cancellationToken)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var login = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<LoginReadModel>(username.ToUpperInvariant()), cancellationToken);
@@ -61,46 +63,54 @@ namespace Trsys.BackOffice
             };
         }
 
-        public async Task RegisterAdministratorIfNotExistsAsync(string username, string passwordHash, string nickname, CancellationToken cancellationToken = default)
+        public async Task CreateAdministratorIfNotExistsAsync(string username, string passwordHash, string nickname, CancellationToken cancellationToken = default)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var user = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<LoginReadModel>(username.ToUpperInvariant()), cancellationToken);
             if (user == null)
             {
                 var commandBus = resolver.Resolve<ICommandBus>();
-                await commandBus.PublishAsync(new UserCreateAdministratorCommand(
+                await commandBus.PublishAsync(new UserCreateCommand(
                     UserId.New,
                     new Username(username),
                     new HashedPassword(passwordHash),
-                    new UserNickname(nickname)
+                    new UserNickname(nickname),
+                    new[] { Role.Administrator }
                     ), CancellationToken.None);
             }
         }
 
-        public async Task ChangePasswordAsync(string userId, string newPasswordHash, CancellationToken cancellationToken)
+        public async Task CreateAsync(string username, string passwordHash, string nickname, IEnumerable<string> roles, CancellationToken cancellationToken = default)
         {
-            var commandBus = resolver.Resolve<ICommandBus>();
-            await commandBus.PublishAsync(new UserUpdatePasswordCommand(UserId.With(userId), new HashedPassword(newPasswordHash)), CancellationToken.None);
-        }
-
-        public async Task RegisterUserAsync(string username, string passwordHash, string nickname, CancellationToken cancellationToken = default)
-        {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var user = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<LoginReadModel>(username.ToUpperInvariant()), cancellationToken);
+            if (user != null)
+            {
+                throw new InvalidOperationException();
+            }
             var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new UserCreateCommand(
                 UserId.New,
                 new Username(username),
                 new HashedPassword(passwordHash),
-                new UserNickname(nickname)
+                new UserNickname(nickname),
+                roles.Select(role => Role.Of(role))
                 ), CancellationToken.None);
         }
 
-        public async Task ChangeNicknameAsync(string userId, string nickname, CancellationToken cancellationToken = default)
+        public async Task UpdatePasswordAsync(string userId, string newPasswordHash, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new UserUpdatePasswordCommand(UserId.With(userId), new HashedPassword(newPasswordHash)), CancellationToken.None);
+        }
+
+        public async Task UpdateNicknameAsync(string userId, string nickname, CancellationToken cancellationToken = default)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new UserUpdateNicknameCommand(UserId.With(userId), new UserNickname(nickname)), CancellationToken.None);
         }
 
-        public async Task DeleteUserAsync(string userId, CancellationToken cancellationToken)
+        public async Task DeleteAsync(string userId, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new UserDeleteCommand(UserId.With(userId)), CancellationToken.None);

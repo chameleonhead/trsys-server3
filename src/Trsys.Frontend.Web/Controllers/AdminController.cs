@@ -93,7 +93,7 @@ namespace Trsys.Frontend.Web.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-            await userService.RegisterUserAsync(vm.Username, vm.Password, vm.Nickname, cancellationToken);
+            await userService.CreateAsync(vm.Username, vm.Password, vm.Nickname, vm.Roles, cancellationToken);
             return RedirectToAction("Index");
         }
 
@@ -105,7 +105,7 @@ namespace Trsys.Frontend.Web.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-            await userService.ChangePasswordAsync(id, vm.Password, cancellationToken);
+            await userService.UpdatePasswordAsync(id, vm.Password, cancellationToken);
             return RedirectToAction("Index");
         }
 
@@ -117,7 +117,7 @@ namespace Trsys.Frontend.Web.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-            await userService.ChangeNicknameAsync(id, vm.Nickname, cancellationToken);
+            await userService.UpdateNicknameAsync(id, vm.Nickname, cancellationToken);
             return RedirectToAction("Index");
         }
 
@@ -125,7 +125,7 @@ namespace Trsys.Frontend.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserDeleteConfirm(string id, CancellationToken cancellationToken)
         {
-            await userService.DeleteUserAsync(id, cancellationToken);
+            await userService.DeleteAsync(id, cancellationToken);
             return RedirectToAction("Index");
         }
 

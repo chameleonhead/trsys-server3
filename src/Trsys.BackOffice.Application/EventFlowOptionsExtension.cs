@@ -14,14 +14,12 @@ namespace Trsys.BackOffice.Application
         {
             options
                 .AddCommands(
-                    typeof(UserCreateAdministratorCommand),
                     typeof(UserCreateCommand),
                     typeof(UserUpdateNicknameCommand),
                     typeof(UserUpdatePasswordCommand),
                     typeof(UserDeleteCommand)
                 )
                 .AddCommandHandlers(
-                    typeof(UserCreateAdministratorCommandHandler),
                     typeof(UserCreateCommandHandler),
                     typeof(UserUpdateNicknameCommandHandler),
                     typeof(UserUpdatePasswordCommandHandler),

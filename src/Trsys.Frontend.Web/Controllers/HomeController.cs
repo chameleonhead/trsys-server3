@@ -59,7 +59,7 @@ namespace Trsys.Frontend.Web.Controllers
             {
                 return View("Login", vm);
             }
-            var user = await service.FindUserByUsernameAsync(vm.Username, cancellationToken);
+            var user = await service.FindByUsernameAsync(vm.Username, cancellationToken);
             if (user == null || user.PasswordHash != vm.Password)
             {
                 ViewData["ErrorMessage"] = "ユーザー名またはパスワードが違います。";
@@ -123,7 +123,7 @@ namespace Trsys.Frontend.Web.Controllers
             }
             try
             {
-                await service.ChangePasswordAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), vm.NewPassword, cancellationToken);
+                await service.UpdatePasswordAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), vm.NewPassword, cancellationToken);
                 TempData["SuccessMessage"] = "更新しました。";
                 return RedirectToAction("ChangePassword");
             }
