@@ -69,3 +69,12 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $('#users').on('success.trsys.ajax', '.modal form', function () {
+            bootstrap.Modal.getInstance($(this).parents('.modal')[0]).hide();
+            $('#users').load('@Url.Action("Users", "Admin")');
+        });
+    </script>
+}

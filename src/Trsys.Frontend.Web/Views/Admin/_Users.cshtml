@@ -34,7 +34,7 @@
 </div>
 
 <div class="modal fade" id="modal-create" tabindex="-1">
-    <form asp-action="UserCreateConfirm">
+    <form asp-action="UserCreateConfirm" data-trsys-ajax="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -110,7 +110,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form asp-action="UserDeleteConfirm" asp-route-id="@item.Id">
+                    <form asp-action="UserDeleteConfirm" asp-route-id="@item.Id" data-trsys-ajax="true">
                         <button type="submit" class="btn btn-danger">削除</button>
                     </form>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
@@ -120,7 +120,7 @@
     </div>
 
     <div class="modal fade" id="modal-edit-password-@(item.Id)" tabindex="-1">
-        <form asp-action="UserEditPasswordConfirm" asp-route-id="@item.Id">
+        <form asp-action="UserEditPasswordConfirm" asp-route-id="@item.Id" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -143,7 +143,7 @@
     </div>
 
     <div class="modal fade" id="modal-edit-nickname-@(item.Id)" tabindex="-1">
-        <form asp-action="UserEditNicknameConfirm" asp-route-id="@item.Id">
+        <form asp-action="UserEditNicknameConfirm" asp-route-id="@item.Id" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -166,7 +166,7 @@
     </div>
 
     <div class="modal fade" id="modal-edit-roles-@(item.Id)" tabindex="-1">
-        <form asp-action="UserEditRolesConfirm" asp-route-id="@item.Id">
+        <form asp-action="UserEditRolesConfirm" asp-route-id="@item.Id" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

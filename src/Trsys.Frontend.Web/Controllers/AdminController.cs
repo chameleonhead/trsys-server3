@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.BackOffice;
+using Trsys.Frontend.Web.Extensions;
 using Trsys.Frontend.Web.Models.Admin;
 
 namespace Trsys.Frontend.Web.Controllers
@@ -91,9 +92,17 @@ namespace Trsys.Frontend.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                if (HttpContext.Request.IsAjaxRequest())
+                {
+                    return BadRequest(ModelState);
+                }
                 return RedirectToAction("Error", "Home");
             }
             await userService.CreateAsync(vm.Username, vm.Password, vm.Nickname, vm.Roles, cancellationToken);
+            if (HttpContext.Request.IsAjaxRequest())
+            {
+                return NoContent();
+            }
             return RedirectToAction("Index");
         }
 
@@ -103,9 +112,17 @@ namespace Trsys.Frontend.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                if (HttpContext.Request.IsAjaxRequest())
+                {
+                    return BadRequest(ModelState);
+                }
                 return RedirectToAction("Error", "Home");
             }
             await userService.UpdatePasswordAsync(id, vm.Password, cancellationToken);
+            if (HttpContext.Request.IsAjaxRequest())
+            {
+                return NoContent();
+            }
             return RedirectToAction("Index");
         }
 
@@ -115,9 +132,17 @@ namespace Trsys.Frontend.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                if (HttpContext.Request.IsAjaxRequest())
+                {
+                    return BadRequest(ModelState);
+                }
                 return RedirectToAction("Error", "Home");
             }
             await userService.UpdateNicknameAsync(id, vm.Nickname, cancellationToken);
+            if (HttpContext.Request.IsAjaxRequest())
+            {
+                return NoContent();
+            }
             return RedirectToAction("Index");
         }
 
@@ -127,9 +152,17 @@ namespace Trsys.Frontend.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                if (HttpContext.Request.IsAjaxRequest())
+                {
+                    return BadRequest(ModelState);
+                }
                 return RedirectToAction("Error", "Home");
             }
             await userService.UpdateRolesAsync(id, vm.Roles, cancellationToken);
+            if (HttpContext.Request.IsAjaxRequest())
+            {
+                return NoContent();
+            }
             return RedirectToAction("Index");
         }
 
