@@ -13,6 +13,10 @@ namespace Trsys.BackOffice.Application.Read.Models
             {
                 yield return usernameChanged.AggregateEvent.Username.Value.ToUpperInvariant();
             }
+            if (domainEvent is IDomainEvent<UserAggregate, UserId, UserDeletedEvent> deletedEvent)
+            {
+                yield return deletedEvent.AggregateEvent.Username.Value.ToUpperInvariant();
+            }
         }
     }
 }

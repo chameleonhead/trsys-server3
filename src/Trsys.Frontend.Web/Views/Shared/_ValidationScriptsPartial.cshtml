@@ -1,2 +1,87 @@
-﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+﻿<environment include="Development">
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</environment>
+<script>
+    $.validator.setDefaults({
+        errorClass: 'invalid-feedback',
+        errorElement: 'div',
+        submitHandler: function (form) {
+            var $form = $(form);
+            if ($form.is('[data-trsys-ajax=true]')) {
+                var validator = $form.validate();
+                if (validator.valid()) {
+                    $.ajax({
+                        type: $form.attr('method') || 'get',
+                        url: $form.attr('action'),
+                        data: new FormData($form[0]),
+                        contentType: false,
+                        processData: false
+                    }).done(function (data) {
+                        $form.trigger('success.trsys.ajax', data);
+                    }).fail(function (err) {
+                        if (err.status == 400) {
+                            var error = err.responseJSON;
+                            if (error.message) {
+                                $form.trigger('fail.trsys.ajax', err.responseJSON);
+                            } else {
+                                validator.showErrors(error);
+                            }
+                        } else {
+                            console.error(err);
+                            $form.trigger('error.trsys.ajax', err.responseJSON);
+                        }
+                    });
+                }
+                return false;
+            }
+            return true;
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass("is-invalid");
+        },
+    });
+
+    $(document).on('show.bs.modal', '.modal', function () {
+        var $this = $(this);
+        var $form = $this.find('form');
+        $form.each(function () {
+            this.reset();
+        });
+        $form.validate().resetForm();
+        $form.find('.is-invalid').removeClass('is-invalid');
+        $this.find(".alert").remove();
+    });
+
+    $(document).on('success.trsys.ajax', '.modal', function () {
+        bootstrap.Modal.getInstance(this).hide();
+    });
+
+    $(document).on('fail.trsys.ajax', '.modal', function (e, data) {
+        var $body = $(this).find(".modal-body");
+        var $alert = $body.find(".alert");
+        $alert.remove();
+        var $firstChild = $body.children().first();
+        $('<div />')
+            .addClass('alert alert-danger alert-dismissible fade show')
+            .text(data.message)
+            .append(
+                $('<button />')
+                    .attr('type', 'button')
+                    .addClass('btn-close')
+                    .attr('data-bs-dismiss', 'alert')
+            )
+            .insertBefore($firstChild);
+    });
+
+    $(document).on('error.trsys.ajax', 'form', function () {
+        alert('予期せぬエラーが発生しました。もう一度やり直してください。')
+    });
+</script>

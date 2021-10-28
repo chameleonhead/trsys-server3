@@ -2,7 +2,15 @@
 
 @{
     ViewBag.Title = "ユーザー一覧";
-    var errorMessage = ViewData["ErrorMessage"] as string;
+    var successMessage = ViewData["UsersSuccessMessage"] as string;
+    var errorMessage = ViewData["UsersErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mb-4">
+        @successMessage
+    </div>
 }
 
 @if (!string.IsNullOrEmpty(errorMessage))
@@ -11,7 +19,6 @@
         @errorMessage
     </div>
 }
-
 
 <div class="my-3 d-flex justify-content-between">
     <h1 class="h2 mb-3">@ViewBag.Title</h1>
@@ -34,7 +41,7 @@
 </div>
 
 <div class="modal fade" id="modal-create" tabindex="-1">
-    <form asp-action="UserCreateConfirm" data-trsys-ajax="true">
+    <form asp-action="UserCreateConfirm" data-val="true" data-trsys-ajax="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -120,7 +127,7 @@
     </div>
 
     <div class="modal fade" id="modal-edit-password-@(item.Id)" tabindex="-1">
-        <form asp-action="UserEditPasswordConfirm" asp-route-id="@item.Id" data-trsys-ajax="true">
+        <form asp-action="UserEditPasswordConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -143,7 +150,7 @@
     </div>
 
     <div class="modal fade" id="modal-edit-nickname-@(item.Id)" tabindex="-1">
-        <form asp-action="UserEditNicknameConfirm" asp-route-id="@item.Id" data-trsys-ajax="true">
+        <form asp-action="UserEditNicknameConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -166,7 +173,7 @@
     </div>
 
     <div class="modal fade" id="modal-edit-roles-@(item.Id)" tabindex="-1">
-        <form asp-action="UserEditRolesConfirm" asp-route-id="@item.Id" data-trsys-ajax="true">
+        <form asp-action="UserEditRolesConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

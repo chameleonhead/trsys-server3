@@ -27,6 +27,11 @@ namespace Trsys.BackOffice.Domain
         {
         }
 
+        public void Delete()
+        {
+            Emit(new UserDeletedEvent(Username));
+        }
+
         private void EnsureNotDeleted()
         {
             if (IsDeleted)
@@ -79,11 +84,6 @@ namespace Trsys.BackOffice.Domain
                     Emit(new UserRoleAddedEvent(role));
                 }
             }
-        }
-
-        public void Delete()
-        {
-            Emit(new UserDeletedEvent());
         }
 
         public void AddRole(Role role)

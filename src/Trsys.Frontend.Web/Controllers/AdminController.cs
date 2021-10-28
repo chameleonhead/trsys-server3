@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.BackOffice;
@@ -35,6 +37,155 @@ namespace Trsys.Frontend.Web.Controllers
             this.copyTradeService = copyTradeService;
         }
 
+        [HttpGet("")]
+        public async Task<IActionResult> Index()
+        {
+            ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+
+            var vm = new IndexViewModel();
+            vm.Users = await GetUsersAsync();
+            vm.DistributionGroups = await GetDistributionGroupsAsync();
+            vm.Publishers = await GetPublishersAsync();
+            vm.Subscribers = await GetSubscribersAsync();
+            vm.CopyTrades = await GetCopyTradesAsync();
+
+            return View(vm);
+        }
+
+        [HttpGet("users")]
+        public async Task<IActionResult> Users()
+        {
+            ViewData["UsersSuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["UsersErrorMessage"] = TempData["ErrorMessage"];
+
+            var vm = await GetUsersAsync();
+            return PartialView("_Users", vm);
+        }
+
+        [HttpPost("users")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserCreateConfirm([FromForm] UserCreateViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await userService.CreateAsync(vm.Username, vm.Password, vm.Nickname, vm.Roles, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("users/{id}/password/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEditPasswordConfirm(string id, [FromForm] UserEditPasswordViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await userService.UpdatePasswordAsync(id, vm.Password, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("users/{id}/nickname/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEditNicknameConfirm(string id, [FromForm] UserEditNicknameViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await userService.UpdateNicknameAsync(id, vm.Nickname, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("users/{id}/roles/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEditRolesConfirm(string id, [FromForm] UserEditRolesViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await userService.UpdateRolesAsync(id, vm.Roles, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("users/{id}/delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserDeleteConfirm(string id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await userService.DeleteAsync(id, cancellationToken);
+                return Success("正常に削除されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpGet("groups")]
+        public async Task<IActionResult> DistributionGroups()
+        {
+            var vm = await GetDistributionGroupsAsync();
+            return PartialView("_DistributionGroups", vm);
+        }
+
+        [HttpGet("pubs")]
+        public async Task<IActionResult> Publishers()
+        {
+            var vm = await GetPublishersAsync();
+            return PartialView("_Publishers", vm);
+        }
+
+        [HttpGet("subs")]
+        public async Task<IActionResult> Subscribers()
+        {
+            var vm = await GetSubscribersAsync();
+            return PartialView("_Subscribers", vm);
+        }
+
+        [HttpGet("trades")]
+        public async Task<IActionResult> CopyTrades()
+        {
+            var vm = await GetCopyTradesAsync();
+            return PartialView("_CopyTrades", vm);
+        }
+
         private async Task<UsersViewModel> GetUsersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
             var users = await userService.SearchAsync(page, perPage, cancellationToken);
@@ -67,139 +218,34 @@ namespace Trsys.Frontend.Web.Controllers
             return Task.FromResult(new CopyTradesViewModel());
         }
 
-        [HttpGet("")]
-        public async Task<IActionResult> Index()
+        private IActionResult ValidationError(ModelStateDictionary modelState)
         {
-            var vm = new IndexViewModel();
-            vm.Users = await GetUsersAsync();
-            vm.DistributionGroups = await GetDistributionGroupsAsync();
-            vm.Publishers = await GetPublishersAsync();
-            vm.Subscribers = await GetSubscribersAsync();
-            vm.CopyTrades = await GetCopyTradesAsync();
-            return View(vm);
-        }
-
-        [HttpGet("users")]
-        public async Task<IActionResult> Users()
-        {
-            var vm = await GetUsersAsync();
-            return PartialView("_Users", vm);
-        }
-
-        [HttpPost("users")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserCreateConfirm([FromForm] UserCreateViewModel vm, CancellationToken cancellationToken)
-        {
-            if (!ModelState.IsValid)
-            {
-                if (HttpContext.Request.IsAjaxRequest())
-                {
-                    return BadRequest(ModelState);
-                }
-                return RedirectToAction("Error", "Home");
-            }
-            await userService.CreateAsync(vm.Username, vm.Password, vm.Nickname, vm.Roles, cancellationToken);
             if (HttpContext.Request.IsAjaxRequest())
             {
-                return NoContent();
+                return BadRequest(modelState);
             }
+            TempData["ErrorMessage"] = "入力に誤りがあります。";
             return RedirectToAction("Index");
         }
 
-        [HttpPost("users/{id}/password/edit")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserEditPasswordConfirm(string id, [FromForm] UserEditPasswordViewModel vm, CancellationToken cancellationToken)
+        private IActionResult Success(string message)
         {
-            if (!ModelState.IsValid)
-            {
-                if (HttpContext.Request.IsAjaxRequest())
-                {
-                    return BadRequest(ModelState);
-                }
-                return RedirectToAction("Error", "Home");
-            }
-            await userService.UpdatePasswordAsync(id, vm.Password, cancellationToken);
+            TempData["SuccessMessage"] = message;
             if (HttpContext.Request.IsAjaxRequest())
             {
-                return NoContent();
+                return Ok(new { Success = true, Message = message });
             }
             return RedirectToAction("Index");
         }
 
-        [HttpPost("users/{id}/nickname/edit")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserEditNicknameConfirm(string id, [FromForm] UserEditNicknameViewModel vm, CancellationToken cancellationToken)
+        private IActionResult Fail(string message)
         {
-            if (!ModelState.IsValid)
-            {
-                if (HttpContext.Request.IsAjaxRequest())
-                {
-                    return BadRequest(ModelState);
-                }
-                return RedirectToAction("Error", "Home");
-            }
-            await userService.UpdateNicknameAsync(id, vm.Nickname, cancellationToken);
             if (HttpContext.Request.IsAjaxRequest())
             {
-                return NoContent();
+                return BadRequest(new { Message = message });
             }
+            TempData["ErrorMessage"] = message;
             return RedirectToAction("Index");
-        }
-
-        [HttpPost("users/{id}/roles/edit")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserEditRolesConfirm(string id, [FromForm] UserEditRolesViewModel vm, CancellationToken cancellationToken)
-        {
-            if (!ModelState.IsValid)
-            {
-                if (HttpContext.Request.IsAjaxRequest())
-                {
-                    return BadRequest(ModelState);
-                }
-                return RedirectToAction("Error", "Home");
-            }
-            await userService.UpdateRolesAsync(id, vm.Roles, cancellationToken);
-            if (HttpContext.Request.IsAjaxRequest())
-            {
-                return NoContent();
-            }
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost("users/{id}/delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserDeleteConfirm(string id, CancellationToken cancellationToken)
-        {
-            await userService.DeleteAsync(id, cancellationToken);
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet("groups")]
-        public async Task<IActionResult> DistributionGroups()
-        {
-            var vm = await GetDistributionGroupsAsync();
-            return PartialView("_DistributionGroups", vm);
-        }
-
-        [HttpGet("pubs")]
-        public async Task<IActionResult> Publishers()
-        {
-            var vm = await GetPublishersAsync();
-            return PartialView("_Publishers", vm);
-        }
-
-        [HttpGet("subs")]
-        public async Task<IActionResult> Subscribers()
-        {
-            var vm = await GetSubscribersAsync();
-            return PartialView("_Subscribers", vm);
-        }
-
-        [HttpGet("trades")]
-        public async Task<IActionResult> CopyTrades()
-        {
-            var vm = await GetCopyTradesAsync();
-            return PartialView("_CopyTrades", vm);
         }
     }
 }
