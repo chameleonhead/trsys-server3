@@ -1,13 +1,13 @@
-﻿using EventFlow.Core;
+using EventFlow.Core;
 using EventFlow.ValueObjects;
 using System.Text.Json.Serialization;
 
 namespace Trsys.BackOffice.Domain
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
-    public class DistributionGroupId : Identity<DistributionGroupId>
+    public class PublisherId : Identity<SubscriberId>
     {
-        public DistributionGroupId(string value) : base(value)
+        public PublisherId(string value) : base(value)
         {
         }
     }
