@@ -21,19 +21,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend.Web.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadTesting", "tests\LoadTesting\LoadTesting.csproj", "{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Ea", "src\Trsys.Ea\Trsys.Ea.csproj", "{0351FADA-0C2D-40DB-984E-A118F916AAC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea", "src\Trsys.Ea\Trsys.Ea.csproj", "{0351FADA-0C2D-40DB-984E-A118F916AAC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Ea.Application", "src\Trsys.Ea.Application\Trsys.Ea.Application.csproj", "{7632D4CA-726A-4833-8061-4B7AD5879021}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Application", "src\Trsys.Ea.Application\Trsys.Ea.Application.csproj", "{7632D4CA-726A-4833-8061-4B7AD5879021}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Ea.Domain", "src\Trsys.Ea.Domain\Trsys.Ea.Domain.csproj", "{1B4C277D-C999-4C01-A34D-5C38603BB693}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Domain", "src\Trsys.Ea.Domain\Trsys.Ea.Domain.csproj", "{1B4C277D-C999-4C01-A34D-5C38603BB693}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Ea.Application.Tests", "tests\Trsys.Ea.Application.Tests\Trsys.Ea.Application.Tests.csproj", "{2DAB77DE-8EB3-45E3-8CF7-22B520BBC9EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Application.Tests", "tests\Trsys.Ea.Application.Tests\Trsys.Ea.Application.Tests.csproj", "{2DAB77DE-8EB3-45E3-8CF7-22B520BBC9EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.BackOffice", "src\Trsys.BackOffice\Trsys.BackOffice.csproj", "{AC580410-321B-442C-B0D4-75EC45D28299}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.BackOffice", "src\Trsys.BackOffice\Trsys.BackOffice.csproj", "{AC580410-321B-442C-B0D4-75EC45D28299}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.BackOffice.Application", "src\Trsys.BackOffice.Application\Trsys.BackOffice.Application.csproj", "{DD20BFD5-9CB6-4CF0-B71D-9574C83212DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.BackOffice.Application", "src\Trsys.BackOffice.Application\Trsys.BackOffice.Application.csproj", "{DD20BFD5-9CB6-4CF0-B71D-9574C83212DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.BackOffice.Domain", "src\Trsys.BackOffice.Domain\Trsys.BackOffice.Domain.csproj", "{E78FDC97-FC24-4A0D-B5CD-16A9A6835C10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.BackOffice.Domain", "src\Trsys.BackOffice.Domain\Trsys.BackOffice.Domain.csproj", "{E78FDC97-FC24-4A0D-B5CD-16A9A6835C10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.BackOffice.Tests", "tests\Trsys.BackOffice.Tests\Trsys.BackOffice.Tests.csproj", "{EF3157C2-9AAD-4B28-9234-77F279DE137C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -213,6 +215,18 @@ Global
 		{E78FDC97-FC24-4A0D-B5CD-16A9A6835C10}.Release|x64.Build.0 = Release|Any CPU
 		{E78FDC97-FC24-4A0D-B5CD-16A9A6835C10}.Release|x86.ActiveCfg = Release|Any CPU
 		{E78FDC97-FC24-4A0D-B5CD-16A9A6835C10}.Release|x86.Build.0 = Release|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Debug|x64.Build.0 = Debug|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Debug|x86.Build.0 = Debug|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Release|x64.ActiveCfg = Release|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Release|x64.Build.0 = Release|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Release|x86.ActiveCfg = Release|Any CPU
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -232,6 +246,7 @@ Global
 		{AC580410-321B-442C-B0D4-75EC45D28299} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 		{DD20BFD5-9CB6-4CF0-B71D-9574C83212DF} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 		{E78FDC97-FC24-4A0D-B5CD-16A9A6835C10} = {BE62412F-403C-4A84-9398-1F7C297115EA}
+		{EF3157C2-9AAD-4B28-9234-77F279DE137C} = {C9DD5F9B-264B-4777-8320-82E30769FEC2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {080E749E-E248-4B95-B548-61854474AB22}

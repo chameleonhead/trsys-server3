@@ -94,7 +94,7 @@ namespace Trsys.Frontend.Web.Controllers
 
             try
             {
-                await userService.UpdatePasswordAsync(id, vm.Password, cancellationToken);
+                await userService.UpdatePasswordHashAsync(id, vm.Password, cancellationToken);
                 return Success("正常に登録されました。");
             }
             catch (InvalidOperationException ex)

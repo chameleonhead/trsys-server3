@@ -123,7 +123,7 @@ namespace Trsys.Frontend.Web.Controllers
             }
             try
             {
-                await service.UpdatePasswordAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), vm.NewPassword, cancellationToken);
+                await service.UpdatePasswordHashAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), vm.NewPassword, cancellationToken);
                 TempData["SuccessMessage"] = "更新しました。";
                 return RedirectToAction("ChangePassword");
             }

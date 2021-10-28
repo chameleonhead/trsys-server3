@@ -80,7 +80,7 @@ namespace Trsys.BackOffice
             }
         }
 
-        public async Task CreateAsync(string username, string passwordHash, string nickname, IEnumerable<string> roles, CancellationToken cancellationToken = default)
+        public async Task<string> CreateAsync(string username, string passwordHash, string nickname, IEnumerable<string> roles, CancellationToken cancellationToken = default)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var user = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<LoginReadModel>(username.ToUpperInvariant()), cancellationToken);
@@ -88,17 +88,19 @@ namespace Trsys.BackOffice
             {
                 throw new InvalidOperationException();
             }
+            var userId = UserId.New;
             var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new UserCreateCommand(
-                UserId.New,
+                userId,
                 new Username(username),
                 new HashedPassword(passwordHash),
                 new UserNickname(nickname),
                 roles.Select(role => Role.Of(role))
                 ), CancellationToken.None);
+            return userId.Value;
         }
 
-        public async Task UpdatePasswordAsync(string userId, string newPasswordHash, CancellationToken cancellationToken)
+        public async Task UpdatePasswordHashAsync(string userId, string newPasswordHash, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new UserUpdatePasswordCommand(UserId.With(userId), new HashedPassword(newPasswordHash)), CancellationToken.None);
