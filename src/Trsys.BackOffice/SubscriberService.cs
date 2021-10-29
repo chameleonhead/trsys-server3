@@ -60,6 +60,18 @@ namespace Trsys.BackOffice
             return subscriberId.Value;
         }
 
+        public async Task UpdateNameAsync(string subscriberId, string name, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new SubscriberUpdateNameCommand(SubscriberId.With(subscriberId), new SubscriberName(name)), cancellationToken);
+        }
+
+        public async Task UpdateDescriptionAsync(string subscriberId, string description, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new SubscriberUpdateDescriptionCommand(SubscriberId.With(subscriberId), new SubscriberDescription(description)), cancellationToken);
+        }
+
         public async Task DeleteAsync(string subscriberId, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();

@@ -74,11 +74,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-2">
-                        <span class="form-label">名前</span>
+                        <span class="form-label">名前 <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#subscriber-modal-edit-name-@(item.Id)">編集</button></span>
                         <span class="form-control-plaintext">@item.Name</span>
                     </div>
                     <div class="mb-2">
-                        <span class="form-label">説明</span>
+                        <span class="form-label">説明 <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#subscriber-modal-edit-description-@(item.Id)">編集</button></span>
                         <span class="form-control-plaintext">@item.Description</span>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="subscriber-modal-edit-password-@(item.Id)" tabindex="-1">
+    <div class="modal fade" id="subscriber-modal-edit-name-@(item.Id)" tabindex="-1">
         <form asp-action="SubscriberEditNameConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -115,7 +115,7 @@
         </form>
     </div>
 
-    <div class="modal fade" id="subscriber-modal-edit-password-@(item.Id)" tabindex="-1">
+    <div class="modal fade" id="subscriber-modal-edit-description-@(item.Id)" tabindex="-1">
         <form asp-action="SubscriberEditDescriptionConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">

@@ -328,6 +328,86 @@ namespace Trsys.Frontend.Web.Controllers
             return PartialView("_Subscribers", vm);
         }
 
+        [HttpPost("subs/create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubscriberCreateConfirm([FromForm] SubscriberCreateViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await subscriberService.CreateAsync(vm.Name, vm.Description, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("subs/{id}/name/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubscriberEditNameConfirm(string id, [FromForm] SubscriberEditNameViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await subscriberService.UpdateNameAsync(id, vm.Name, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("subs/{id}/description/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubscriberEditDescriptionConfirm(string id, [FromForm] SubscriberEditDescriptionViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await subscriberService.UpdateDescriptionAsync(id, vm.Description, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("subs/{id}/delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubscriberDeleteConfirm(string id, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await subscriberService.DeleteAsync(id, cancellationToken);
+                return Success("正常に削除されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
         [HttpGet("trades")]
         public async Task<IActionResult> CopyTrades()
         {

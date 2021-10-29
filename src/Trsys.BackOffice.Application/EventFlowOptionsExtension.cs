@@ -27,6 +27,8 @@ namespace Trsys.BackOffice.Application
                     typeof(PublisherUpdateDescriptionCommand),
                     typeof(PublisherDeleteCommand),
                     typeof(SubscriberCreateCommand),
+                    typeof(SubscriberUpdateNameCommand),
+                    typeof(SubscriberUpdateDescriptionCommand),
                     typeof(SubscriberDeleteCommand),
                     typeof(CopyTradeOpenCommand),
                     typeof(CopyTradeCloseCommand)
@@ -45,6 +47,8 @@ namespace Trsys.BackOffice.Application
                     typeof(PublisherUpdateDescriptionCommandHandler),
                     typeof(PublisherDeleteCommandHandler),
                     typeof(SubscriberCreateCommandHandler),
+                    typeof(SubscriberUpdateNameCommandHandler),
+                    typeof(SubscriberUpdateDescriptionCommandHandler),
                     typeof(SubscriberDeleteCommandHandler),
                     typeof(CopyTradeOpenCommandHandler),
                     typeof(CopyTradeCloseCommandHandler)
