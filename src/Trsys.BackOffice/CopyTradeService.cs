@@ -12,7 +12,7 @@ namespace Trsys.BackOffice
             this.resolver = resolver;
         }
 
-        public Task<PagedResult<CopyTradeDto>> SearchAsync(int page, int perPage, CancellationToken cancellationToken)
+        public Task<PagedResult<CopyTradeDto>> SearchAsync(bool openOnly, int page, int perPage, CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
         }
