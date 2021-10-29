@@ -1,8 +1,8 @@
+using EventFlow;
+using EventFlow.Queries;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EventFlow;
-using EventFlow.Queries;
 using Trsys.BackOffice.Application.Read.Models;
 using Trsys.BackOffice.Application.Read.Queries;
 using Trsys.BackOffice.Application.Write.Commands;
@@ -60,10 +60,22 @@ namespace Trsys.BackOffice
             return publisherId.Value;
         }
 
+        public async Task UpdateNameAsync(string publisherId, string name, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new PublisherUpdateNameCommand(PublisherId.With(publisherId), new PublisherName(name)), cancellationToken);
+        }
+
+        public async Task UpdateDescriptionAsync(string publisherId, string description, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new PublisherUpdateDescriptionCommand(PublisherId.With(publisherId), new PublisherDescription(description)), cancellationToken);
+        }
+
         public async Task DeleteAsync(string publisherId, CancellationToken cancellationToken)
         {
-           var commandBus = resolver.Resolve<ICommandBus>();
+            var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new PublisherDeleteCommand(PublisherId.With(publisherId)), cancellationToken);
-         }
+        }
     }
 }

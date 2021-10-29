@@ -238,6 +238,86 @@ namespace Trsys.Frontend.Web.Controllers
             return PartialView("_Publishers", vm);
         }
 
+        [HttpPost("pubs/create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PublisherCreateConfirm([FromForm] PublisherCreateViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await publisherService.CreateAsync(vm.Name, vm.Description, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("pubs/{id}/name/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PublisherEditNameConfirm(string id, [FromForm] PublisherEditNameViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await publisherService.UpdateNameAsync(id, vm.Name, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("pubs/{id}/description/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PublisherEditDescriptionConfirm(string id, [FromForm] PublisherEditDescriptionViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await publisherService.UpdateDescriptionAsync(id, vm.Description, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("pubs/{id}/delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PublisherDeleteConfirm(string id, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await publisherService.DeleteAsync(id, cancellationToken);
+                return Success("正常に削除されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
         [HttpGet("subs")]
         public async Task<IActionResult> Subscribers()
         {
