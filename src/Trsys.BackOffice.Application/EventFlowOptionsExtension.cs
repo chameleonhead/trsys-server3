@@ -20,7 +20,13 @@ namespace Trsys.BackOffice.Application
                     typeof(UserUpdateRolesCommand),
                     typeof(UserDeleteCommand),
                     typeof(DistributionGroupCreateCommand),
-                    typeof(DistributionGroupDeleteCommand)
+                    typeof(DistributionGroupDeleteCommand),
+                    typeof(PublisherCreateCommand),
+                    typeof(PublisherDeleteCommand),
+                    typeof(SubscriberCreateCommand),
+                    typeof(SubscriberDeleteCommand),
+                    typeof(CopyTradeOpenCommand),
+                    typeof(CopyTradeCloseCommand)
                 )
                 .AddCommandHandlers(
                     typeof(UserCreateCommandHandler),
@@ -29,7 +35,13 @@ namespace Trsys.BackOffice.Application
                     typeof(UserUpdateRolesCommandHandler),
                     typeof(UserDeleteCommandHandler),
                     typeof(DistributionGroupCreateCommandHandler),
-                    typeof(DistributionGroupDeleteCommandHandler)
+                    typeof(DistributionGroupDeleteCommandHandler),
+                    typeof(PublisherCreateCommandHandler),
+                    typeof(PublisherDeleteCommandHandler),
+                    typeof(SubscriberCreateCommandHandler),
+                    typeof(SubscriberDeleteCommandHandler),
+                    typeof(CopyTradeOpenCommandHandler),
+                    typeof(CopyTradeCloseCommandHandler)
                 )
                 .AddEvents(
                     typeof(UserUsernameChangedEvent),
@@ -41,7 +53,15 @@ namespace Trsys.BackOffice.Application
                     typeof(UserInChargeDistributionGroupRemovedEvent),
                     typeof(UserDeletedEvent),
                     typeof(DistributionGroupNameChangedEvent),
-                    typeof(DistributionGroupDeletedEvent)
+                    typeof(DistributionGroupDeletedEvent),
+                    typeof(PublisherNameChangedEvent),
+                    typeof(PublisherDescriptionChangedEvent),
+                    typeof(PublisherDeletedEvent),
+                    typeof(SubscriberNameChangedEvent),
+                    typeof(SubscriberDescriptionChangedEvent),
+                    typeof(SubscriberDeletedEvent),
+                    typeof(CopyTradeOpenedEvent),
+                    typeof(CopyTradeClosedEvent)
                 );
             options
                 .RegisterServices(sr =>
@@ -51,10 +71,19 @@ namespace Trsys.BackOffice.Application
                 .UseInMemoryReadStoreFor<UserReadModel>()
                 .UseInMemoryReadStoreFor<LoginReadModel, LoginReadModelLocator>()
                 .UseInMemoryReadStoreFor<DistributionGroupReadModel>()
+                .UseInMemoryReadStoreFor<PublisherReadModel>()
+                .UseInMemoryReadStoreFor<SubscriberReadModel>()
+                .UseInMemoryReadStoreFor<CopyTradeReadModel>()
                 .AddQueryHandler<UserReadModelSearchCountQueryHandler, UserReadModelSearchCountQuery, int>()
                 .AddQueryHandler<UserReadModelSearchItemsQueryHandler, UserReadModelSearchItemsQuery, List<UserReadModel>>()
                 .AddQueryHandler<DistributionGroupReadModelSearchCountQueryHandler, DistributionGroupReadModelSearchCountQuery, int>()
-                .AddQueryHandler<DistributionGroupReadModelSearchItemsQueryHandler, DistributionGroupReadModelSearchItemsQuery, List<DistributionGroupReadModel>>();
+                .AddQueryHandler<DistributionGroupReadModelSearchItemsQueryHandler, DistributionGroupReadModelSearchItemsQuery, List<DistributionGroupReadModel>>()
+                .AddQueryHandler<PublisherReadModelSearchCountQueryHandler, PublisherReadModelSearchCountQuery, int>()
+                .AddQueryHandler<PublisherReadModelSearchItemsQueryHandler, PublisherReadModelSearchItemsQuery, List<PublisherReadModel>>()
+                .AddQueryHandler<SubscriberReadModelSearchCountQueryHandler, SubscriberReadModelSearchCountQuery, int>()
+                .AddQueryHandler<SubscriberReadModelSearchItemsQueryHandler, SubscriberReadModelSearchItemsQuery, List<SubscriberReadModel>>()
+                .AddQueryHandler<CopyTradeReadModelSearchCountQueryHandler, CopyTradeReadModelSearchCountQuery, int>()
+                .AddQueryHandler<CopyTradeReadModelSearchItemsQueryHandler, CopyTradeReadModelSearchItemsQuery, List<CopyTradeReadModel>>();
             return options;
         }
     }

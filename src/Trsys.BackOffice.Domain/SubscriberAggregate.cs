@@ -5,9 +5,11 @@ namespace Trsys.BackOffice.Domain
 {
     public class SubscriberAggregate : AggregateRoot<SubscriberAggregate, SubscriberId>,
         IEmit<SubscriberNameChangedEvent>,
+        IEmit<SubscriberDescriptionChangedEvent>,
         IEmit<SubscriberDeletedEvent>
     {
         public SubscriberName SubscriberName { get; private set; }
+        public SubscriberDescription Description { get; private set; }
         public bool IsDeleted { get; private set; }
 
         public SubscriberAggregate(SubscriberId id) : base(id)
@@ -31,6 +33,15 @@ namespace Trsys.BackOffice.Domain
             }
         }
 
+        public void SetDescription(SubscriberDescription description)
+        {
+            EnsureNotDeleted();
+            if (Description != description)
+            {
+                Emit(new SubscriberDescriptionChangedEvent(description));
+            }
+        }
+
         public void Delete()
         {
             Emit(new SubscriberDeletedEvent());
@@ -39,6 +50,11 @@ namespace Trsys.BackOffice.Domain
         public void Apply(SubscriberNameChangedEvent aggregateEvent)
         {
             SubscriberName = aggregateEvent.Name;
+        }
+
+        public void Apply(SubscriberDescriptionChangedEvent aggregateEvent)
+        {
+            Description = aggregateEvent.Description;
         }
 
         public void Apply(SubscriberDeletedEvent aggregateEvent)

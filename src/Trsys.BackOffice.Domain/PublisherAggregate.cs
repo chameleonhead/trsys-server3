@@ -5,9 +5,11 @@ namespace Trsys.BackOffice.Domain
 {
     public class PublisherAggregate : AggregateRoot<PublisherAggregate, PublisherId>,
         IEmit<PublisherNameChangedEvent>,
+        IEmit<PublisherDescriptionChangedEvent>,
         IEmit<PublisherDeletedEvent>
     {
         public PublisherName PublisherName { get; private set; }
+        public PublisherDescription Description { get; private set; }
         public bool IsDeleted { get; private set; }
 
         public PublisherAggregate(PublisherId id) : base(id)
@@ -31,6 +33,15 @@ namespace Trsys.BackOffice.Domain
             }
         }
 
+        public void SetDescription(PublisherDescription description)
+        {
+            EnsureNotDeleted();
+            if (Description != description)
+            {
+                Emit(new PublisherDescriptionChangedEvent(description));
+            }
+        }
+
         public void Delete()
         {
             Emit(new PublisherDeletedEvent());
@@ -39,6 +50,11 @@ namespace Trsys.BackOffice.Domain
         public void Apply(PublisherNameChangedEvent aggregateEvent)
         {
             PublisherName = aggregateEvent.Name;
+        }
+
+        public void Apply(PublisherDescriptionChangedEvent aggregateEvent)
+        {
+            Description = aggregateEvent.Description;
         }
 
         public void Apply(PublisherDeletedEvent aggregateEvent)

@@ -1,5 +1,12 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EventFlow;
+using EventFlow.Queries;
+using Trsys.BackOffice.Application.Read.Models;
+using Trsys.BackOffice.Application.Read.Queries;
+using Trsys.BackOffice.Application.Write.Commands;
+using Trsys.BackOffice.Domain;
 
 namespace Trsys.BackOffice
 {
@@ -12,24 +19,55 @@ namespace Trsys.BackOffice
             this.resolver = resolver;
         }
 
-        public Task<PagedResult<CopyTradeDto>> SearchAsync(bool openOnly, int page, int perPage, CancellationToken cancellationToken)
+        public async Task<PagedResult<CopyTradeDto>> SearchAsync(bool openOnly, int page, int perPage, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var totalCount = await queryProcessor.ProcessAsync(new CopyTradeReadModelSearchCountQuery(), cancellationToken);
+            if (totalCount == 0)
+            {
+                return new PagedResult<CopyTradeDto>(page, perPage, 0, new());
+            }
+            var items = await queryProcessor.ProcessAsync(new CopyTradeReadModelSearchItemsQuery(page, perPage), cancellationToken);
+            return new PagedResult<CopyTradeDto>(page, perPage, totalCount, items.Select(item => new CopyTradeDto()
+            {
+                Id = item.Id,
+                DistributionGroupId = item.DistributionGroupId,
+                Symbol = item.Symbol,
+                OrderType = item.OrderType,
+                IsClosed = item.IsClosed,
+            }).ToList());
         }
 
-        public Task<CopyTradeDto> FindByIdAsync(string copyTradeId, CancellationToken cancellationToken)
+        public async Task<CopyTradeDto> FindByIdAsync(string copyTradeId, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var item = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<CopyTradeReadModel>(copyTradeId), cancellationToken);
+            if (item == null)
+            {
+                return null;
+            }
+            return new CopyTradeDto()
+            {
+                Id = item.Id,
+                DistributionGroupId = item.DistributionGroupId,
+                Symbol = item.Symbol,
+                OrderType = item.OrderType,
+                IsClosed = item.IsClosed,
+            };
         }
 
-        public Task CloseAsync(string copyTradeId, CancellationToken cancellationToken)
+        public async Task<string> OpenAsync(string distributionGroupId, string symbol, string orderType, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var commandBus = resolver.Resolve<ICommandBus>();
+            var copyTradeId = CopyTradeId.New;
+            await commandBus.PublishAsync(new CopyTradeOpenCommand(copyTradeId, DistributionGroupId.With(distributionGroupId), new CopyTradeSymbol(symbol), new CopyTradeOrderType(orderType)), cancellationToken);
+            return copyTradeId.Value;
         }
 
-        public Task<string> OpenAsync(string distributionGroupId, string symbol, string orderType, CancellationToken cancellationToken)
+        public async Task CloseAsync(string copyTradeId, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new CopyTradeCloseCommand(CopyTradeId.With(copyTradeId)), cancellationToken);
         }
     }
 }

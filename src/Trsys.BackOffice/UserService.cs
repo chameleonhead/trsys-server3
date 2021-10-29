@@ -30,13 +30,13 @@ namespace Trsys.BackOffice
                 return new PagedResult<UserDto>(page, perPage, 0, new());
             }
             var items = await queryProcessor.ProcessAsync(new UserReadModelSearchItemsQuery(page, perPage), cancellationToken);
-            return new PagedResult<UserDto>(page, perPage, totalCount, items.Select(e => new UserDto()
+            return new PagedResult<UserDto>(page, perPage, totalCount, items.Select(item => new UserDto()
             {
-                Id = e.Id,
-                Username = e.Username,
-                PasswordHash = e.PasswordHash,
-                Nickname = e.Nickname,
-                Roles = e.Roles,
+                Id = item.Id,
+                Username = item.Username,
+                PasswordHash = item.PasswordHash,
+                Nickname = item.Nickname,
+                Roles = item.Roles,
             }).ToList());
         }
 

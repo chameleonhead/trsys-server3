@@ -28,25 +28,25 @@ namespace Trsys.BackOffice
                 return new PagedResult<DistributionGroupDto>(page, perPage, 0, new());
             }
             var items = await queryProcessor.ProcessAsync(new DistributionGroupReadModelSearchItemsQuery(page, perPage), cancellationToken);
-            return new PagedResult<DistributionGroupDto>(page, perPage, totalCount, items.Select(e => new DistributionGroupDto()
+            return new PagedResult<DistributionGroupDto>(page, perPage, totalCount, items.Select(item => new DistributionGroupDto()
             {
-                Id = e.Id,
-                Name = e.Name,
+                Id = item.Id,
+                Name = item.Name,
             }).ToList());
         }
 
         public async Task<DistributionGroupDto> FindByIdAsync(string distributionGroupId, CancellationToken cancellationToken)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
-            var distributionGroup = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<DistributionGroupReadModel>(distributionGroupId), cancellationToken);
-            if (distributionGroup == null)
+            var item = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<DistributionGroupReadModel>(distributionGroupId), cancellationToken);
+            if (item == null)
             {
                 return null;
             }
             return new DistributionGroupDto()
             {
-                Id = distributionGroup.Id,
-                Name = distributionGroup.Name
+                Id = item.Id,
+                Name = item.Name
             };
         }
 
