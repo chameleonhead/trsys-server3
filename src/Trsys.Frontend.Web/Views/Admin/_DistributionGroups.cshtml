@@ -70,7 +70,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-2">
-                        <span class="form-label">名前</span>
+                        <span class="form-label">名前 <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#distribution-group-modal-edit-name-@(item.Id)">編集</button></span>
                         <span class="form-control-plaintext">@item.Name</span>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="distribution-group-modal-edit-password-@(item.Id)" tabindex="-1">
+    <div class="modal fade" id="distribution-group-modal-edit-name-@(item.Id)" tabindex="-1">
         <form asp-action="DistributionGroupEditNameConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">

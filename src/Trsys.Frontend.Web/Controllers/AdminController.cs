@@ -63,7 +63,7 @@ namespace Trsys.Frontend.Web.Controllers
             return PartialView("_Users", vm);
         }
 
-        [HttpPost("users")]
+        [HttpPost("users/create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserCreateConfirm([FromForm] UserCreateViewModel vm, CancellationToken cancellationToken)
         {
@@ -161,13 +161,79 @@ namespace Trsys.Frontend.Web.Controllers
         [HttpGet("groups")]
         public async Task<IActionResult> DistributionGroups()
         {
+            ViewData["DistributionGroupsSuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["DistributionGroupsErrorMessage"] = TempData["ErrorMessage"];
+            
             var vm = await GetDistributionGroupsAsync();
             return PartialView("_DistributionGroups", vm);
+        }
+
+        [HttpPost("groups/create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DistributionGroupCreateConfirm([FromForm] DistributionGroupCreateViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await distributionGroupService.CreateAsync(vm.Name, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("groups/{id}/name/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DistributionGroupEditNameConfirm(string id, [FromForm] DistributionGroupEditNameViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await distributionGroupService.UpdateNameAsync(id, vm.Name, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("groups/{id}/delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DistributionGroupDeleteConfirm(string id, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await distributionGroupService.DeleteAsync(id, cancellationToken);
+                return Success("正常に削除されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
         }
 
         [HttpGet("pubs")]
         public async Task<IActionResult> Publishers()
         {
+            ViewData["PublishersSuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["PublishersErrorMessage"] = TempData["ErrorMessage"];
+
             var vm = await GetPublishersAsync();
             return PartialView("_Publishers", vm);
         }
@@ -175,6 +241,9 @@ namespace Trsys.Frontend.Web.Controllers
         [HttpGet("subs")]
         public async Task<IActionResult> Subscribers()
         {
+            ViewData["SubscribersSuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["SubscribersErrorMessage"] = TempData["ErrorMessage"];
+
             var vm = await GetSubscribersAsync();
             return PartialView("_Subscribers", vm);
         }
@@ -182,6 +251,9 @@ namespace Trsys.Frontend.Web.Controllers
         [HttpGet("trades")]
         public async Task<IActionResult> CopyTrades()
         {
+            ViewData["CopyTradesSuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["CopyTradesErrorMessage"] = TempData["ErrorMessage"];
+
             var vm = await GetCopyTradesAsync();
             return PartialView("_CopyTrades", vm);
         }

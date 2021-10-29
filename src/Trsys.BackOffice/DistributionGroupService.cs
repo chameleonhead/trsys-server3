@@ -1,8 +1,8 @@
+using EventFlow;
+using EventFlow.Queries;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EventFlow;
-using EventFlow.Queries;
 using Trsys.BackOffice.Application.Read.Models;
 using Trsys.BackOffice.Application.Read.Queries;
 using Trsys.BackOffice.Application.Write.Commands;
@@ -56,6 +56,12 @@ namespace Trsys.BackOffice
             var distributionGroupId = DistributionGroupId.New;
             await commandBus.PublishAsync(new DistributionGroupCreateCommand(distributionGroupId, new DistributionGroupName(name)), cancellationToken);
             return distributionGroupId.Value;
+        }
+
+        public async Task UpdateNameAsync(string distributionGroupId, string name, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new DistributionGroupUpdateNameCommand(DistributionGroupId.With(distributionGroupId), new DistributionGroupName(name)), cancellationToken);
         }
 
         public async Task DeleteAsync(string distributionGroupId, CancellationToken cancellationToken)
