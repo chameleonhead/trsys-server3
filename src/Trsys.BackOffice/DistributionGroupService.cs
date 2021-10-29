@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EventFlow;
 using EventFlow.Queries;
 using Trsys.BackOffice.Application.Read.Models;
+using Trsys.BackOffice.Application.Read.Queries;
 using Trsys.BackOffice.Application.Write.Commands;
 using Trsys.BackOffice.Domain;
 
@@ -15,6 +17,22 @@ namespace Trsys.BackOffice
         public DistributionGroupService(BackOfficeEventFlowRootResolver resolver)
         {
             this.resolver = resolver;
+        }
+
+        public async Task<PagedResult<DistributionGroupDto>> SearchAsync(int page, int perPage, CancellationToken cancellationToken)
+        {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var totalCount = await queryProcessor.ProcessAsync(new DistributionGroupReadModelSearchCountQuery(), cancellationToken);
+            if (totalCount == 0)
+            {
+                return new PagedResult<DistributionGroupDto>(page, perPage, 0, new());
+            }
+            var items = await queryProcessor.ProcessAsync(new DistributionGroupReadModelSearchItemsQuery(page, perPage), cancellationToken);
+            return new PagedResult<DistributionGroupDto>(page, perPage, totalCount, items.Select(e => new DistributionGroupDto()
+            {
+                Id = e.Id,
+                DisplayName = e.DisplayName,
+            }).ToList());
         }
 
         public async Task<DistributionGroupDto> FindByIdAsync(string distributionGroupId, CancellationToken cancellationToken)

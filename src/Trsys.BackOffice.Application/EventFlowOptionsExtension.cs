@@ -52,7 +52,9 @@ namespace Trsys.BackOffice.Application
                 .UseInMemoryReadStoreFor<LoginReadModel, LoginReadModelLocator>()
                 .UseInMemoryReadStoreFor<DistributionGroupReadModel>()
                 .AddQueryHandler<UserReadModelSearchCountQueryHandler, UserReadModelSearchCountQuery, int>()
-                .AddQueryHandler<UserReadModelSearchItemsQueryHandler, UserReadModelSearchItemsQuery, List<UserReadModel>>();
+                .AddQueryHandler<UserReadModelSearchItemsQueryHandler, UserReadModelSearchItemsQuery, List<UserReadModel>>()
+                .AddQueryHandler<DistributionGroupReadModelSearchCountQueryHandler, DistributionGroupReadModelSearchCountQuery, int>()
+                .AddQueryHandler<DistributionGroupReadModelSearchItemsQueryHandler, DistributionGroupReadModelSearchItemsQuery, List<DistributionGroupReadModel>>();
             return options;
         }
     }
