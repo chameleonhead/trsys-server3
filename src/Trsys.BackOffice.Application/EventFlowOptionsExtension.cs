@@ -18,14 +18,18 @@ namespace Trsys.BackOffice.Application
                     typeof(UserUpdateNicknameCommand),
                     typeof(UserUpdatePasswordCommand),
                     typeof(UserUpdateRolesCommand),
-                    typeof(UserDeleteCommand)
+                    typeof(UserDeleteCommand),
+                    typeof(DistributionGroupCreateCommand),
+                    typeof(DistributionGroupDeleteCommand)
                 )
                 .AddCommandHandlers(
                     typeof(UserCreateCommandHandler),
                     typeof(UserUpdateNicknameCommandHandler),
                     typeof(UserUpdatePasswordCommandHandler),
                     typeof(UserUpdateRolesCommandHandler),
-                    typeof(UserDeleteCommandHandler)
+                    typeof(UserDeleteCommandHandler),
+                    typeof(DistributionGroupCreateCommandHandler),
+                    typeof(DistributionGroupDeleteCommandHandler)
                 )
                 .AddEvents(
                     typeof(UserUsernameChangedEvent),
@@ -35,7 +39,9 @@ namespace Trsys.BackOffice.Application
                     typeof(UserRoleRemovedEvent),
                     typeof(UserInChargeDistributionGroupAddedEvent),
                     typeof(UserInChargeDistributionGroupRemovedEvent),
-                    typeof(UserDeletedEvent)
+                    typeof(UserDeletedEvent),
+                    typeof(DistributionGroupDisplayNameChangedEvent),
+                    typeof(DistributionGroupDeletedEvent)
                 );
             options
                 .RegisterServices(sr =>
@@ -44,6 +50,7 @@ namespace Trsys.BackOffice.Application
                 })
                 .UseInMemoryReadStoreFor<UserReadModel>()
                 .UseInMemoryReadStoreFor<LoginReadModel, LoginReadModelLocator>()
+                .UseInMemoryReadStoreFor<DistributionGroupReadModel>()
                 .AddQueryHandler<UserReadModelSearchCountQueryHandler, UserReadModelSearchCountQuery, int>()
                 .AddQueryHandler<UserReadModelSearchItemsQueryHandler, UserReadModelSearchItemsQuery, List<UserReadModel>>();
             return options;
