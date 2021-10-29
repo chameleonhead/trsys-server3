@@ -188,34 +188,62 @@ namespace Trsys.Frontend.Web.Controllers
 
         private async Task<UsersViewModel> GetUsersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
-            var users = await userService.SearchAsync(page, perPage, cancellationToken);
+            var result = await userService.SearchAsync(page, perPage, cancellationToken);
             return new UsersViewModel()
             {
-                Page = users.Page,
-                PerPage = users.PerPage,
-                TotalCount = users.TotalCount,
-                Items = users.Items,
+                Page = result.Page,
+                PerPage = result.PerPage,
+                TotalCount = result.TotalCount,
+                Items = result.Items,
             };
         }
 
-        private Task<DistributionGroupsViewModel> GetDistributionGroupsAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
+        private async Task<DistributionGroupsViewModel> GetDistributionGroupsAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(new DistributionGroupsViewModel());
+            var result = await distributionGroupService.SearchAsync(page, perPage, cancellationToken);
+            return new DistributionGroupsViewModel()
+            {
+                Page = result.Page,
+                PerPage = result.PerPage,
+                TotalCount = result.TotalCount,
+                Items = result.Items,
+            };
         }
 
-        private Task<PublishersViewModel> GetPublishersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
+        private async Task<PublishersViewModel> GetPublishersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(new PublishersViewModel());
+            var result = await publisherService.SearchAsync(page, perPage, cancellationToken);
+            return new PublishersViewModel()
+            {
+                Page = result.Page,
+                PerPage = result.PerPage,
+                TotalCount = result.TotalCount,
+                Items = result.Items,
+            };
         }
 
-        private Task<SubscribersViewModel> GetSubscribersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
+        private async Task<SubscribersViewModel> GetSubscribersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(new SubscribersViewModel());
+            var result = await subscriberService.SearchAsync(page, perPage, cancellationToken);
+            return new SubscribersViewModel()
+            {
+                Page = result.Page,
+                PerPage = result.PerPage,
+                TotalCount = result.TotalCount,
+                Items = result.Items,
+            };
         }
 
-        private Task<CopyTradesViewModel> GetCopyTradesAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
+        private async Task<CopyTradesViewModel> GetCopyTradesAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(new CopyTradesViewModel());
+            var result = await copyTradeService.SearchAsync(false, page, perPage, cancellationToken);
+            return new CopyTradesViewModel()
+            {
+                Page = result.Page,
+                PerPage = result.PerPage,
+                TotalCount = result.TotalCount,
+                Items = result.Items,
+            };
         }
 
         private IActionResult ValidationError(ModelStateDictionary modelState)

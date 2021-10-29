@@ -1,3 +1,140 @@
 ﻿@model Trsys.Frontend.Web.Models.Admin.PublishersViewModel
 
-配信者
+@{
+    ViewBag.Title = "配信者一覧";
+    var successMessage = ViewData["PublishersSuccessMessage"] as string;
+    var errorMessage = ViewData["PublishersErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mb-4">
+        @successMessage
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mb-4">
+        @errorMessage
+    </div>
+}
+
+<div class="my-3 d-flex justify-content-between">
+    <h1 class="h2 mb-3">@ViewBag.Title</h1>
+    <div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#publisher-modal-create">新規登録</button>
+    </div>
+</div>
+
+<div class="list-group">
+    @foreach (var item in Model.Items)
+    {
+        <div class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#publisher-modal-detail-@(item.Id)">
+            @item.Name
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="publisher-modal-create" tabindex="-1">
+    <form asp-action="PublisherCreateConfirm" data-val="true" data-trsys-ajax="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新規登録</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label class="form-label">名前</label>
+                        <input class="form-control" type="text" name="Name" autocomplete="off" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">説明</label>
+                        <input class="form-control" type="text" name="Description" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                    <button type="submit" class="btn btn-primary">登録</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@foreach (var item in Model.Items)
+{
+    <div class="modal fade" id="publisher-modal-detail-@(item.Id)" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">詳細</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <span class="form-label">名前</span>
+                        <span class="form-control-plaintext">@item.Name</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="form-label">説明</span>
+                        <span class="form-control-plaintext">@item.Description</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="PublisherDeleteConfirm" asp-route-id="@item.Id" data-trsys-ajax="true">
+                        <button type="submit" class="btn btn-danger">削除</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="publisher-modal-edit-password-@(item.Id)" tabindex="-1">
+        <form asp-action="PublisherEditNameConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">名前変更</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">名前</label>
+                            <input class="form-control" type="text" name="Name" value="@item.Name" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        <button type="submit" class="btn btn-primary">登録</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="publisher-modal-edit-password-@(item.Id)" tabindex="-1">
+        <form asp-action="PublisherEditDescriptionConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">説明変更</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">説明</label>
+                            <input class="form-control" type="text" name="Description" value="@item.Description" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        <button type="submit" class="btn btn-primary">登録</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}

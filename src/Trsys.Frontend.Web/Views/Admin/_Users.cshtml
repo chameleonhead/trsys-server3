@@ -23,14 +23,14 @@
 <div class="my-3 d-flex justify-content-between">
     <h1 class="h2 mb-3">@ViewBag.Title</h1>
     <div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-create">新規登録</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#user-modal-create">新規登録</button>
     </div>
 </div>
 
 <div class="list-group">
     @foreach (var item in Model.Items)
     {
-        <div class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#modal-detail-@(item.Id)">
+        <div class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#user-modal-detail-@(item.Id)">
             @item.Nickname
             @if (item.Roles.Any())
             {
@@ -40,7 +40,7 @@
     }
 </div>
 
-<div class="modal fade" id="modal-create" tabindex="-1">
+<div class="modal fade" id="user-modal-create" tabindex="-1">
     <form asp-action="UserCreateConfirm" data-val="true" data-trsys-ajax="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -82,7 +82,7 @@
 
 @foreach (var item in Model.Items)
 {
-    <div class="modal fade" id="modal-detail-@(item.Id)" tabindex="-1">
+    <div class="modal fade" id="user-modal-detail-@(item.Id)" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -95,15 +95,15 @@
                         <span class="form-control-plaintext">@item.Username</span>
                     </div>
                     <div class="mb-3">
-                        <span class="form-label">パスワード <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#modal-edit-password-@(item.Id)">編集</button></span>
+                        <span class="form-label">パスワード <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#user-modal-edit-password-@(item.Id)">編集</button></span>
                         <span class="form-control-plaintext">********</span>
                     </div>
                     <div class="mb-3">
-                        <span class="form-label">名前 <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#modal-edit-nickname-@(item.Id)">編集</button></span>
+                        <span class="form-label">名前 <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#user-modal-edit-nickname-@(item.Id)">編集</button></span>
                         <span class="form-control-plaintext">@item.Nickname</span>
                     </div>
                     <div class="mb-3">
-                        <span class="form-label">役割 <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#modal-edit-roles-@(item.Id)">編集</button></span>
+                        <span class="form-label">役割 <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#user-modal-edit-roles-@(item.Id)">編集</button></span>
                         <span class="form-control-plaintext">
                             @if (item.Roles.Any())
                             {
@@ -126,7 +126,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal-edit-password-@(item.Id)" tabindex="-1">
+    <div class="modal fade" id="user-modal-edit-password-@(item.Id)" tabindex="-1">
         <form asp-action="UserEditPasswordConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -149,7 +149,7 @@
         </form>
     </div>
 
-    <div class="modal fade" id="modal-edit-nickname-@(item.Id)" tabindex="-1">
+    <div class="modal fade" id="user-modal-edit-nickname-@(item.Id)" tabindex="-1">
         <form asp-action="UserEditNicknameConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -172,7 +172,7 @@
         </form>
     </div>
 
-    <div class="modal fade" id="modal-edit-roles-@(item.Id)" tabindex="-1">
+    <div class="modal fade" id="user-modal-edit-roles-@(item.Id)" tabindex="-1">
         <form asp-action="UserEditRolesConfirm" asp-route-id="@item.Id" data-val="true" data-trsys-ajax="true">
             <div class="modal-dialog">
                 <div class="modal-content">

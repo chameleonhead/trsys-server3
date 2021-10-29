@@ -1,3 +1,114 @@
 ﻿@model Trsys.Frontend.Web.Models.Admin.CopyTradesViewModel
 
-トレード
+@{
+    ViewBag.Title = "コピートレード一覧";
+    var successMessage = ViewData["CopyTradesSuccessMessage"] as string;
+    var errorMessage = ViewData["CopyTradesErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mb-4">
+        @successMessage
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mb-4">
+        @errorMessage
+    </div>
+}
+
+<div class="my-3 d-flex justify-content-between">
+    <h1 class="h2 mb-3">@ViewBag.Title</h1>
+    <div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#copy-trade-modal-create">新規登録</button>
+    </div>
+</div>
+
+<div class="list-group">
+    @foreach (var item in Model.Items)
+    {
+        <div class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#copy-trade-modal-detail-@(item.Id)">
+            @item.DistributionGroupId @item.Symbol
+            <small>@item.OrderType</small>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="copy-trade-modal-create" tabindex="-1">
+    <form asp-action="CopyTradeOpenConfirm" data-val="true" data-trsys-ajax="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新規注文</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label class="form-label">配信グループ</label>
+                        <select class="form-select">
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">銘柄</label>
+                        <select class="form-select" name="Symbol">
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">説明</label>
+                        <div>
+                            <label>
+                                <input class="form-check" type="checkbox" name="OrderType" value="BUY" autocomplete="off" />
+                                買い
+                            </label>
+                            <label>
+                                <input class="form-check" type="checkbox" name="OrderType" value="SELL" autocomplete="off" />
+                                売り
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                    <button type="submit" class="btn btn-primary">登録</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@foreach (var item in Model.Items)
+{
+    <div class="modal fade" id="copy-trade-modal-detail-@(item.Id)" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">詳細</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <span class="form-label">配信グループ</span>
+                        <span class="form-control-plaintext">@item.DistributionGroupId</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="form-label">銘柄</span>
+                        <span class="form-control-plaintext">@item.Symbol</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="form-label">注文タイプ</span>
+                        <span class="form-control-plaintext">@item.OrderType</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="CopyTradeCloseConfirm" asp-route-id="@item.Id" data-trsys-ajax="true">
+                        <button type="submit" class="btn btn-danger">取引終了</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
