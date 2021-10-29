@@ -40,7 +40,7 @@ namespace Trsys.BackOffice.Application
                     typeof(UserInChargeDistributionGroupAddedEvent),
                     typeof(UserInChargeDistributionGroupRemovedEvent),
                     typeof(UserDeletedEvent),
-                    typeof(DistributionGroupDisplayNameChangedEvent),
+                    typeof(DistributionGroupNameChangedEvent),
                     typeof(DistributionGroupDeletedEvent)
                 );
             options

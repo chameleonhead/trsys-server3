@@ -13,9 +13,9 @@ namespace Trsys.BackOffice.Tests
         {
             using var services = new ServiceCollection().AddBackOffice().BuildServiceProvider();
             var service = services.GetRequiredService<IDistributionGroupService>();
-            var distributionGroupId = await service.CreateAsync("displayName", CancellationToken.None);
+            var distributionGroupId = await service.CreateAsync("name", CancellationToken.None);
             var distributionGroup = await service.FindByIdAsync(distributionGroupId, CancellationToken.None);
-            Assert.AreEqual("displayName", distributionGroup.DisplayName);
+            Assert.AreEqual("name", distributionGroup.Name);
         }
 
         [TestMethod]
@@ -23,7 +23,7 @@ namespace Trsys.BackOffice.Tests
         {
             using var services = new ServiceCollection().AddBackOffice().BuildServiceProvider();
             var service = services.GetRequiredService<IDistributionGroupService>();
-            var distributionGroupId = await service.CreateAsync("displayName", CancellationToken.None);
+            var distributionGroupId = await service.CreateAsync("name", CancellationToken.None);
             await service.DeleteAsync(distributionGroupId, CancellationToken.None);
             var distributionGroup = await service.FindByIdAsync(distributionGroupId, CancellationToken.None);
             Assert.IsNull(distributionGroup);

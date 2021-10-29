@@ -7,19 +7,19 @@ namespace Trsys.BackOffice.Application.Write.Commands
 {
     public class DistributionGroupCreateCommand : Command<DistributionGroupAggregate, DistributionGroupId>
     {
-        public DistributionGroupCreateCommand(DistributionGroupId aggregateId, DistributionGroupDisplayName displayName) : base(aggregateId)
+        public DistributionGroupCreateCommand(DistributionGroupId aggregateId, DistributionGroupName distributionGroupName) : base(aggregateId)
         {
-            DisplayName = displayName;
+            DistributionGroupName = distributionGroupName;
         }
 
-        public DistributionGroupDisplayName DisplayName { get; }
+        public DistributionGroupName DistributionGroupName { get; }
     }
 
     public class DistributionGroupCreateCommandHandler : CommandHandler<DistributionGroupAggregate, DistributionGroupId, DistributionGroupCreateCommand>
     {
         public override Task ExecuteAsync(DistributionGroupAggregate aggregate, DistributionGroupCreateCommand command, CancellationToken cancellationToken)
         {
-            aggregate.SetDisplayName(command.DisplayName);
+            aggregate.SetName(command.DistributionGroupName);
             return Task.CompletedTask;
         }
     }

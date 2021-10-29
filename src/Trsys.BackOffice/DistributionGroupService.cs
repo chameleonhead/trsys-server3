@@ -31,7 +31,7 @@ namespace Trsys.BackOffice
             return new PagedResult<DistributionGroupDto>(page, perPage, totalCount, items.Select(e => new DistributionGroupDto()
             {
                 Id = e.Id,
-                DisplayName = e.DisplayName,
+                Name = e.Name,
             }).ToList());
         }
 
@@ -46,15 +46,15 @@ namespace Trsys.BackOffice
             return new DistributionGroupDto()
             {
                 Id = distributionGroup.Id,
-                DisplayName = distributionGroup.DisplayName
+                Name = distributionGroup.Name
             };
         }
 
-        public async Task<string> CreateAsync(string displayName, CancellationToken cancellationToken)
+        public async Task<string> CreateAsync(string name, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
             var distributionGroupId = DistributionGroupId.New;
-            await commandBus.PublishAsync(new DistributionGroupCreateCommand(distributionGroupId, new DistributionGroupDisplayName(displayName)), cancellationToken);
+            await commandBus.PublishAsync(new DistributionGroupCreateCommand(distributionGroupId, new DistributionGroupName(name)), cancellationToken);
             return distributionGroupId.Value;
         }
 

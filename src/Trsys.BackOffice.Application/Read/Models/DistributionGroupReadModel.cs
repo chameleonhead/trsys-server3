@@ -5,16 +5,16 @@ using Trsys.BackOffice.Domain;
 namespace Trsys.BackOffice.Application.Read.Models
 {
     public class DistributionGroupReadModel : IReadModel,
-        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, DistributionGroupDisplayNameChangedEvent>,
+        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, DistributionGroupNameChangedEvent>,
         IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, DistributionGroupDeletedEvent>
     {
         public string Id { get; set; }
-        public string DisplayName { get; set; }
+        public string Name { get; set; }
 
-        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupDisplayNameChangedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupNameChangedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
-            DisplayName = domainEvent.AggregateEvent.DisplayName.Value;
+            Name = domainEvent.AggregateEvent.Name.Value;
         }
 
         public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupDeletedEvent> domainEvent)

@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 namespace Trsys.BackOffice.Domain
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
-    public class DistributionGroupDisplayName : SingleValueObject<string>
+    public class DistributionGroupName : SingleValueObject<string>
     {
-        public DistributionGroupDisplayName(string value) : base(value)
+        public DistributionGroupName(string value) : base(value)
         {
         }
     }

@@ -4,14 +4,14 @@ using System;
 namespace Trsys.BackOffice.Domain
 {
     public class DistributionGroupAggregate : AggregateRoot<DistributionGroupAggregate, DistributionGroupId>,
-        IEmit<DistributionGroupDisplayNameChangedEvent>,
+        IEmit<DistributionGroupNameChangedEvent>,
         IEmit<DistributionGroupPublisherAddedEvent>,
         IEmit<DistributionGroupPublisherRemovedEvent>,
         IEmit<DistributionGroupSubscriberAddedEvent>,
         IEmit<DistributionGroupSubscriberRemovedEvent>,
         IEmit<DistributionGroupDeletedEvent>
     {
-        public DistributionGroupDisplayName DisplayName { get; private set; }
+        public DistributionGroupName DistributionGroupName { get; private set; }
         public bool IsDeleted { get; private set; }
 
         public DistributionGroupAggregate(DistributionGroupId id) : base(id)
@@ -26,12 +26,12 @@ namespace Trsys.BackOffice.Domain
             }
         }
 
-        public void SetDisplayName(DistributionGroupDisplayName displayName)
+        public void SetName(DistributionGroupName name)
         {
             EnsureNotDeleted();
-            if (DisplayName != displayName)
+            if (DistributionGroupName != name)
             {
-                Emit(new DistributionGroupDisplayNameChangedEvent(displayName));
+                Emit(new DistributionGroupNameChangedEvent(name));
             }
         }
 
@@ -40,9 +40,9 @@ namespace Trsys.BackOffice.Domain
             Emit(new DistributionGroupDeletedEvent());
         }
 
-        public void Apply(DistributionGroupDisplayNameChangedEvent aggregateEvent)
+        public void Apply(DistributionGroupNameChangedEvent aggregateEvent)
         {
-            DisplayName = aggregateEvent.DisplayName;
+            DistributionGroupName = aggregateEvent.Name;
         }
 
         public void Apply(DistributionGroupPublisherAddedEvent aggregateEvent)
