@@ -10,8 +10,8 @@ namespace Trsys.CopyTrading.Application.Read.Models
     public class CopyTradeReadModel : IReadModel,
         IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,
         IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent>,
-        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantAddedEvent>,
-        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantRemovedEvent>
+        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeDistributedSubscriberAddedEvent>,
+        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeDistributedSubscriberRemovedEvent>
     {
         public class TradeOrderDto
         {
@@ -47,7 +47,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             IsOpen = false;
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantAddedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeDistributedSubscriberAddedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
             var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.SubscriberId.Value);
@@ -62,7 +62,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             }
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantRemovedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeDistributedSubscriberRemovedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
             var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.SubscriberId.Value);

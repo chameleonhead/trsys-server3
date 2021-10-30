@@ -7,15 +7,15 @@ namespace Trsys.CopyTrading.Domain
 {
     public class CopyTradeAggregate : AggregateRoot<CopyTradeAggregate, CopyTradeId>,
         IEmit<CopyTradeOpenedEvent>,
-        IEmit<CopyTradeApplicantAddedEvent>,
+        IEmit<CopyTradeDistributedSubscriberAddedEvent>,
         IEmit<CopyTradeClosedEvent>,
-        IEmit<CopyTradeApplicantRemovedEvent>,
+        IEmit<CopyTradeDistributedSubscriberRemovedEvent>,
         IEmit<CopyTradeFinishedEvent>
     {
         public bool IsOpen { get; private set; }
         public bool IsFinished { get; private set; }
         public List<SubscriberId> Subscribers { get; private set; } = new();
-        public HashSet<SubscriberId> TradeApplicants { get; } = new();
+        public HashSet<SubscriberId> DistributedSubscribers { get; } = new();
 
         public CopyTradeAggregate(CopyTradeId id) : base(id)
         {
@@ -38,18 +38,18 @@ namespace Trsys.CopyTrading.Domain
             Emit(new CopyTradeOpenedEvent(distributionGroupId, publisherId, symbol, orderType, subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
         }
 
-        public void AddApplicant(SubscriberId subscriberId)
+        public void AddDistributedSubscriber(SubscriberId subscriberId)
         {
             EnsureNotFinished();
-            Emit(new CopyTradeApplicantAddedEvent(subscriberId), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
+            Emit(new CopyTradeDistributedSubscriberAddedEvent(subscriberId), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
         }
 
-        public void RemoveApplicant(SubscriberId subscriberId)
+        public void RemoveDistributedSubscriber(SubscriberId subscriberId)
         {
-            if (TradeApplicants.Contains(subscriberId))
+            if (DistributedSubscribers.Contains(subscriberId))
             {
-                Emit(new CopyTradeApplicantRemovedEvent(subscriberId), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
-                if (!TradeApplicants.Any())
+                Emit(new CopyTradeDistributedSubscriberRemovedEvent(subscriberId), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
+                if (!DistributedSubscribers.Any())
                 {
                     Emit(new CopyTradeFinishedEvent(), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
                 }
@@ -62,7 +62,7 @@ namespace Trsys.CopyTrading.Domain
             if (IsOpen)
             {
                 Emit(new CopyTradeClosedEvent(publisherId, Subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
-                if (!TradeApplicants.Any())
+                if (!DistributedSubscribers.Any())
                 {
                     Emit(new CopyTradeFinishedEvent(), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
                 }
@@ -75,9 +75,9 @@ namespace Trsys.CopyTrading.Domain
             Subscribers = aggregateEvent.Subscribers.ToList();
         }
 
-        public void Apply(CopyTradeApplicantAddedEvent aggregateEvent)
+        public void Apply(CopyTradeDistributedSubscriberAddedEvent aggregateEvent)
         {
-            TradeApplicants.Add(aggregateEvent.SubscriberId);
+            DistributedSubscribers.Add(aggregateEvent.SubscriberId);
         }
 
         public void Apply(CopyTradeClosedEvent aggregateEvent)
@@ -85,9 +85,9 @@ namespace Trsys.CopyTrading.Domain
             IsOpen = false;
         }
 
-        public void Apply(CopyTradeApplicantRemovedEvent aggregateEvent)
+        public void Apply(CopyTradeDistributedSubscriberRemovedEvent aggregateEvent)
         {
-            TradeApplicants.Remove(aggregateEvent.SubscriberId);
+            DistributedSubscribers.Remove(aggregateEvent.SubscriberId);
         }
 
         public void Apply(CopyTradeFinishedEvent aggregateEvent)
