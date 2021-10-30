@@ -1,6 +1,7 @@
 ﻿using EventFlow;
 using EventFlow.Aggregates;
 using EventFlow.Subscribers;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Application.Write.Commands;
@@ -22,19 +23,13 @@ namespace Trsys.Ea.Application.Write.Subscribers
         public async Task HandleAsync(IDomainEvent<PublisherEaAggregate, PublisherEaId, PublisherEaOpenedOrderEvent> domainEvent, CancellationToken cancellationToken)
         {
             var aggregateEvent = domainEvent.AggregateEvent;
-            foreach (var target in aggregateEvent.Order.Targets)
-            {
-                await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(target.DistributionGroupId, target.Id, aggregateEvent.Order.Symbol, aggregateEvent.Order.OrderType), cancellationToken);
-            }
+            await Task.WhenAll(aggregateEvent.Order.Targets.Select(target => commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(target.DistributionGroupId, target.Id, aggregateEvent.Order.Symbol, aggregateEvent.Order.OrderType), cancellationToken)));
         }
 
         public async Task HandleAsync(IDomainEvent<PublisherEaAggregate, PublisherEaId, PublisherEaClosedOrderEvent> domainEvent, CancellationToken cancellationToken)
         {
             var aggregateEvent = domainEvent.AggregateEvent;
-            foreach (var target in aggregateEvent.Order.Targets)
-            {
-                await commandBus.PublishAsync(new DistributionGroupPublishCloseCommand(target.DistributionGroupId, target.Id), cancellationToken);
-            }
+            await Task.WhenAll(aggregateEvent.Order.Targets.Select(target => commandBus.PublishAsync(new DistributionGroupPublishCloseCommand(target.DistributionGroupId, target.Id), cancellationToken)));
         }
     }
 }
