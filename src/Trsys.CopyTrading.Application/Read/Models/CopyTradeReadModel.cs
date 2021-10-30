@@ -25,6 +25,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
         public string DistributionGroupId { get; set; }
         public string Symbol { get; set; }
         public string OrderType { get; set; }
+        public List<string> Subscribers { get; set; }
         public DateTimeOffset OpenPublishedTimestamp { get; set; }
         public DateTimeOffset? ClosePublishedTimestamp { get; set; }
         public List<TradeOrderDto> TradeOrders { get; } = new();
@@ -38,6 +39,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             OrderType = domainEvent.AggregateEvent.OrderType.Value;
             OpenPublishedTimestamp = domainEvent.Timestamp;
             IsOpen = true;
+            Subscribers = domainEvent.AggregateEvent.Subscribers.Select(e => e.Value).ToList();
         }
 
         public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> domainEvent)

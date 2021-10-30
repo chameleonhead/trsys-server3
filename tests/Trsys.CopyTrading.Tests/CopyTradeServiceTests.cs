@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Domain;
@@ -56,6 +58,24 @@ namespace Trsys.CopyTrading.Tests
             var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
             Assert.AreEqual("USDJPY", copyTrade.Symbol);
             Assert.AreEqual("BUY", copyTrade.OrderType);
+        }
+
+        [TestMethod]
+        public async Task PublishOpenTradeAsync_Success_MultipleSubscribers()
+        {
+            using var services = new ServiceCollection().AddCopyTrading().BuildServiceProvider();
+            var service = services.GetRequiredService<ICopyTradingService>();
+            var distributionGroupId = DistributionGroupId.New.ToString();
+            var subscribers = new List<string>();
+            for (var i = 0; i < 100; i++)
+            {
+                subscribers.Add(await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None));
+            }
+            var copyTradeId = await service.PublishOpenTradeAsync(distributionGroupId, "USDJPY", "BUY", CancellationToken.None);
+            var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
+            Assert.AreEqual("USDJPY", copyTrade.Symbol);
+            Assert.AreEqual("BUY", copyTrade.OrderType);
+            CollectionAssert.AreEquivalent(subscribers, copyTrade.Subscribers);
         }
     }
 }

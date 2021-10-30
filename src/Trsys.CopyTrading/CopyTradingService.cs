@@ -49,6 +49,7 @@ namespace Trsys.CopyTrading
                 OrderType = copyTrade.OrderType,
                 OpenPublishedTimestamp = copyTrade.OpenPublishedTimestamp,
                 ClosePublishedTimestamp = copyTrade.ClosePublishedTimestamp,
+                Subscribers = copyTrade.Subscribers,
                 TradeOrders = copyTrade.TradeOrders.Select(e => new CopyTradeDto.TradeOrderDto()
                 {
                     Id = e.Id,
