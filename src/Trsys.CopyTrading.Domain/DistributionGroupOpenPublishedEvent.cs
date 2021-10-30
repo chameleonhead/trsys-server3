@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class DistributionGroupPublishedOpenEvent : IAggregateEvent<DistributionGroupAggregate, DistributionGroupId>
+    public class DistributionGroupOpenPublishedEvent : IAggregateEvent<DistributionGroupAggregate, DistributionGroupId>
     {
-        public DistributionGroupPublishedOpenEvent(CopyTradeId copyTradeId, int sequence, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
+        public DistributionGroupOpenPublishedEvent(CopyTradeId copyTradeId, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
         {
             CopyTradeId = copyTradeId;
-            Sequence = sequence;
             PublisherId = publisherId;
             Symbol = symbol;
             OrderType = orderType;
@@ -16,7 +15,6 @@ namespace Trsys.CopyTrading.Domain
         }
 
         public CopyTradeId CopyTradeId { get; }
-        public int Sequence { get; }
         public PublisherId PublisherId { get; }
         public ForexTradeSymbol Symbol { get; }
         public OrderType OrderType { get; }

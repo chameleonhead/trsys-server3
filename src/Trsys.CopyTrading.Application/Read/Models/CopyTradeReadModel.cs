@@ -22,7 +22,6 @@ namespace Trsys.CopyTrading.Application.Read.Models
         }
 
         public string DistributionGroupId { get; set; }
-        public int Sequence { get; set; }
         public string Symbol { get; set; }
         public string OrderType { get; set; }
         public DateTimeOffset OpenPublishedTimestamp { get; set; }
@@ -33,7 +32,6 @@ namespace Trsys.CopyTrading.Application.Read.Models
         public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> domainEvent)
         {
             DistributionGroupId = domainEvent.AggregateEvent.DistributionGroupId.Value;
-            Sequence = domainEvent.AggregateEvent.Sequence;
             Symbol = domainEvent.AggregateEvent.Symbol.Value;
             OrderType = domainEvent.AggregateEvent.OrderType.Value;
             OpenPublishedTimestamp = domainEvent.Timestamp;

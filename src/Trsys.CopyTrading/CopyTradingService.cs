@@ -41,17 +41,18 @@ namespace Trsys.CopyTrading
             return subscriptionId.Value;
         }
 
+        public async Task RemoveSubscriberAsync(string distributionGroupId, string subscriptionId, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new DistributionGroupRemoveSubscriberCommand(DistributionGroupId.With(distributionGroupId), AccountId.With(subscriptionId)), cancellationToken);
+        }
+
         public Task PublishCloseTradeAsync(string distributionGroupId, string copyTradeId, CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
         }
 
         public Task<string> PublishOpenTradeAsync(string distributionGroupId, string symbol, string orderType, CancellationToken cancellationToken)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task RemoveSubscriberAsync(string distributionGroupId, string subscriptionId, CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
         }

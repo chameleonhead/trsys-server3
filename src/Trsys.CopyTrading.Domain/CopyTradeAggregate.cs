@@ -32,10 +32,10 @@ namespace Trsys.CopyTrading.Domain
             if (!IsNew) throw new InvalidOperationException();
         }
 
-        public void Open(DistributionGroupId distributionGroupId, PublisherId publisherId, int sequence, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
+        public void Open(DistributionGroupId distributionGroupId, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
         {
             EnsureIsNew();
-            Emit(new CopyTradeOpenedEvent(distributionGroupId, publisherId, sequence, symbol, orderType, subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
+            Emit(new CopyTradeOpenedEvent(distributionGroupId, publisherId, symbol, orderType, subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
         }
 
         public void AddApplicant(AccountId accountId)
