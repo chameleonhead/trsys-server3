@@ -5,7 +5,7 @@ namespace Trsys.Ea.Domain
 {
     public class SubscriberEaRegisteredEvent : AggregateEvent<SubscriberEaAggregate, SubscriberEaId>
     {
-        public SubscriberEaRegisteredEvent(SecretKey key, DistributionGroupId distributionGroupId, AccountId accountId)
+        public SubscriberEaRegisteredEvent(SecretKey key, DistributionGroupId distributionGroupId, SubscriberId accountId)
         {
             Key = key;
             DistributionGroupId = distributionGroupId;
@@ -14,6 +14,6 @@ namespace Trsys.Ea.Domain
 
         public SecretKey Key { get; }
         public DistributionGroupId DistributionGroupId { get; }
-        public AccountId AccountId { get; }
+        public SubscriberId AccountId { get; }
     }
 }

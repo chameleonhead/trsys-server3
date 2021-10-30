@@ -24,7 +24,7 @@ namespace Trsys.Ea.Application.Tests
             var subscriberEaId = SubscriberEaId.New;
 
             var distributionGroupId = DistributionGroupId.New;
-            var subscriberId = AccountId.New;
+            var subscriberId = SubscriberId.New;
 
             var result = await commandBus.PublishAsync(new SubscriberEaRegisterCommand(subscriberEaId, new SecretKey("SubscriberKey"), distributionGroupId, subscriberId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);

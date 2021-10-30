@@ -10,8 +10,8 @@ namespace Trsys.CopyTrading.Application.Read.Models
     public class CopyTradeReadModel : IReadModel,
         IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,
         IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent>,
-        IAmReadModelFor<AccountAggregate, AccountId, AccountTradeOrderOpenRequestDistributedEvent>,
-        IAmReadModelFor<AccountAggregate, AccountId, AccountTradeOrderCloseRequestDistributedEvent>
+        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantAddedEvent>,
+        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantRemovedEvent>
     {
         public class TradeOrderDto
         {
@@ -21,6 +21,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
             public bool IsOpen { get; set; }
         }
 
+        public string Id { get; set; }
         public string DistributionGroupId { get; set; }
         public string Symbol { get; set; }
         public string OrderType { get; set; }
@@ -31,6 +32,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
 
         public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> domainEvent)
         {
+            Id = domainEvent.AggregateIdentity.Value;
             DistributionGroupId = domainEvent.AggregateEvent.DistributionGroupId.Value;
             Symbol = domainEvent.AggregateEvent.Symbol.Value;
             OrderType = domainEvent.AggregateEvent.OrderType.Value;
@@ -40,36 +42,35 @@ namespace Trsys.CopyTrading.Application.Read.Models
 
         public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> domainEvent)
         {
+            Id = domainEvent.AggregateIdentity.Value;
             ClosePublishedTimestamp = domainEvent.Timestamp;
             IsOpen = false;
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, AccountTradeOrderOpenRequestDistributedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantAddedEvent> domainEvent)
         {
-            var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.TradeOrderId.Value);
+            Id = domainEvent.AggregateIdentity.Value;
+            var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.AccountId.Value);
             if (tradeOrder == null)
             {
                 TradeOrders.Add(new TradeOrderDto()
                 {
-                    Id = domainEvent.AggregateEvent.TradeOrderId.Value,
+                    Id = domainEvent.AggregateEvent.AccountId.Value,
                     OpenDistributedTimestamp = domainEvent.Timestamp,
                     IsOpen = true,
                 });
             }
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, AccountTradeOrderCloseRequestDistributedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantRemovedEvent> domainEvent)
         {
-            var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.TradeOrderId.Value);
+            Id = domainEvent.AggregateIdentity.Value;
+            var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.AccountId.Value);
             if (tradeOrder != null)
             {
                 tradeOrder.CloseDistributedTimestamp = domainEvent.Timestamp;
                 tradeOrder.IsOpen = false;
             }
-        }
-
-        public void Apply(IReadModelContext context, IDomainEvent<AccountAggregate, AccountId, AccountTradeOrderInactivatedEvent> domainEvent)
-        {
         }
     }
 }

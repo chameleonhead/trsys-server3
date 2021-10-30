@@ -33,10 +33,37 @@ namespace Trsys.CopyTrading
             };
         }
 
+        public async Task<CopyTradeDto> FindCopyTradeByIdAsync(string copyTradeId, CancellationToken cancellationToken)
+        {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var copyTrade = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<CopyTradeReadModel>(copyTradeId), cancellationToken);
+            if (copyTrade == null)
+            {
+                return null;
+            }
+            return new CopyTradeDto()
+            {
+                Id = copyTrade.Id,
+                DistributionGroupId = copyTrade.DistributionGroupId,
+                Symbol = copyTrade.Symbol,
+                OrderType = copyTrade.OrderType,
+                OpenPublishedTimestamp = copyTrade.OpenPublishedTimestamp,
+                ClosePublishedTimestamp = copyTrade.ClosePublishedTimestamp,
+                TradeOrders = copyTrade.TradeOrders.Select(e => new CopyTradeDto.TradeOrderDto()
+                {
+                    Id = e.Id,
+                    OpenDistributedTimestamp = e.OpenDistributedTimestamp,
+                    CloseDistributedTimestamp = e.CloseDistributedTimestamp,
+                    IsOpen = e.IsOpen,
+                }).ToList(),
+                IsOpen = copyTrade.IsOpen,
+            };
+        }
+
         public async Task<string> AddSubscriberAsync(string distributionGroupId, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
-            var subscriptionId = AccountId.New;
+            var subscriptionId = SubscriberId.New;
             await commandBus.PublishAsync(new DistributionGroupAddSubscriberCommand(DistributionGroupId.With(distributionGroupId), subscriptionId), cancellationToken);
             return subscriptionId.Value;
         }
@@ -44,7 +71,7 @@ namespace Trsys.CopyTrading
         public async Task RemoveSubscriberAsync(string distributionGroupId, string subscriptionId, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
-            await commandBus.PublishAsync(new DistributionGroupRemoveSubscriberCommand(DistributionGroupId.With(distributionGroupId), AccountId.With(subscriptionId)), cancellationToken);
+            await commandBus.PublishAsync(new DistributionGroupRemoveSubscriberCommand(DistributionGroupId.With(distributionGroupId), SubscriberId.With(subscriptionId)), cancellationToken);
         }
 
         public Task PublishCloseTradeAsync(string distributionGroupId, string copyTradeId, CancellationToken cancellationToken)

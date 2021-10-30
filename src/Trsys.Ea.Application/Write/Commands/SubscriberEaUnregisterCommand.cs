@@ -8,14 +8,14 @@ namespace Trsys.Ea.Application.Write.Commands
 {
     public class SubscriberEaUnregisterCommand : Command<SubscriberEaAggregate, SubscriberEaId>
     {
-        public SubscriberEaUnregisterCommand(SubscriberEaId aggregateId, DistributionGroupId distributionGroupId, AccountId accountId) : base(aggregateId)
+        public SubscriberEaUnregisterCommand(SubscriberEaId aggregateId, DistributionGroupId distributionGroupId, SubscriberId accountId) : base(aggregateId)
         {
             DistributionGroupId = distributionGroupId;
             AccountId = accountId;
         }
 
         public DistributionGroupId DistributionGroupId { get; }
-        public AccountId AccountId { get; }
+        public SubscriberId AccountId { get; }
     }
 
     public class SubscriberEaUnregisterCommandHandler : CommandHandler<SubscriberEaAggregate, SubscriberEaId, SubscriberEaUnregisterCommand>

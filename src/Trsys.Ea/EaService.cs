@@ -41,7 +41,7 @@ namespace Trsys.Ea
                     var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
-                        await commandBus.PublishAsync(new SubscriberEaRegisterCommand(SubscriberEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), AccountId.New), CancellationToken.None);
+                        await commandBus.PublishAsync(new SubscriberEaRegisterCommand(SubscriberEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), SubscriberId.New), CancellationToken.None);
                     }
                     break;
                 default:
@@ -78,7 +78,7 @@ namespace Trsys.Ea
                     {
                         return;
                     }
-                    await commandBus.PublishAsync(new SubscriberEaUnregisterCommand(SubscriberEaId.With(subscriber.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), AccountId.With(accountId)), CancellationToken.None);
+                    await commandBus.PublishAsync(new SubscriberEaUnregisterCommand(SubscriberEaId.With(subscriber.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), SubscriberId.With(accountId)), CancellationToken.None);
                     await sessionManager.DestroySessionAsync(subscriber.Id);
                     return;
                 default:

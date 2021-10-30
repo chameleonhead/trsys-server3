@@ -7,12 +7,12 @@ namespace Trsys.CopyTrading.Application.Write.Commands
 {
     public class CopyTradeRemoveDistributedAccountCommand : Command<CopyTradeAggregate, CopyTradeId>
     {
-        public CopyTradeRemoveDistributedAccountCommand(CopyTradeId aggregateId, AccountId accountId) : base(aggregateId)
+        public CopyTradeRemoveDistributedAccountCommand(CopyTradeId aggregateId, SubscriberId accountId) : base(aggregateId)
         {
             AccountId = accountId;
         }
 
-        public AccountId AccountId { get; }
+        public SubscriberId AccountId { get; }
     }
 
     public class CopyTradeRemoveDistributedAccountCommandHandler : CommandHandler<CopyTradeAggregate, CopyTradeId, CopyTradeRemoveDistributedAccountCommand>

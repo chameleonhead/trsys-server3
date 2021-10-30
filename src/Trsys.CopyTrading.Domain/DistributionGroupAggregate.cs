@@ -15,9 +15,9 @@ namespace Trsys.CopyTrading.Domain
         {
         }
 
-        public HashSet<AccountId> Subscribers { get; } = new();
+        public HashSet<SubscriberId> Subscribers { get; } = new();
 
-        public void AddSubscriber(AccountId accountId)
+        public void AddSubscriber(SubscriberId accountId)
         {
             if (!Subscribers.Contains(accountId))
             {
@@ -25,7 +25,7 @@ namespace Trsys.CopyTrading.Domain
             }
         }
 
-        public void RemvoeSubscriber(AccountId accountId)
+        public void RemvoeSubscriber(SubscriberId accountId)
         {
             if (Subscribers.Contains(accountId))
             {

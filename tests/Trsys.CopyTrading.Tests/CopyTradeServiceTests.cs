@@ -44,5 +44,18 @@ namespace Trsys.CopyTrading.Tests
             var distributionGroup = await service.FindDistributionGroupByIdAsync(distributionGroupId, CancellationToken.None);
             CollectionAssert.AreEquivalent(distributionGroup.Subscribers, new[] { subscriptionId2 });
         }
+
+        [TestMethod]
+        public async Task PublishOpenTradeAsync_Success_SingleSubscriber()
+        {
+            using var services = new ServiceCollection().AddCopyTrading().BuildServiceProvider();
+            var service = services.GetRequiredService<ICopyTradingService>();
+            var distributionGroupId = DistributionGroupId.New.ToString();
+            var subscriptionId = await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None);
+            var copyTradeId = await service.PublishOpenTradeAsync(distributionGroupId, "USDJPY", "BUY", CancellationToken.None);
+            var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
+            Assert.AreEqual("USDJPY", copyTrade.Symbol);
+            Assert.AreEqual("BUY", copyTrade.OrderType);
+        }
     }
 }

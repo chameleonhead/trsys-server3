@@ -4,11 +4,11 @@ namespace Trsys.CopyTrading.Domain
 {
     public class CopyTradeApplicantAddedEvent : AggregateEvent<CopyTradeAggregate, CopyTradeId>
     {
-        public CopyTradeApplicantAddedEvent(AccountId accountId)
+        public CopyTradeApplicantAddedEvent(SubscriberId accountId)
         {
             AccountId = accountId;
         }
 
-        public AccountId AccountId { get; }
+        public SubscriberId AccountId { get; }
     }
 }

@@ -7,12 +7,12 @@ namespace Trsys.CopyTrading.Application.Write.Commands
 {
     public class DistributionGroupAddSubscriberCommand : Command<DistributionGroupAggregate, DistributionGroupId>
     {
-        public DistributionGroupAddSubscriberCommand(DistributionGroupId aggregateId, AccountId accountId) : base(aggregateId)
+        public DistributionGroupAddSubscriberCommand(DistributionGroupId aggregateId, SubscriberId accountId) : base(aggregateId)
         {
             AccountId = accountId;
         }
 
-        public AccountId AccountId { get; }
+        public SubscriberId AccountId { get; }
     }
 
     public class DistributionGroupAddSubscriberCommandHandler : CommandHandler<DistributionGroupAggregate, DistributionGroupId, DistributionGroupAddSubscriberCommand>

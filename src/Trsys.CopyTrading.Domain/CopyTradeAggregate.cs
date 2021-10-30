@@ -14,8 +14,8 @@ namespace Trsys.CopyTrading.Domain
     {
         public bool IsOpen { get; private set; }
         public bool IsFinished { get; private set; }
-        public List<AccountId> Subscribers { get; private set; } = new();
-        public HashSet<AccountId> TradeApplicants { get; } = new();
+        public List<SubscriberId> Subscribers { get; private set; } = new();
+        public HashSet<SubscriberId> TradeApplicants { get; } = new();
 
         public CopyTradeAggregate(CopyTradeId id) : base(id)
         {
@@ -32,19 +32,19 @@ namespace Trsys.CopyTrading.Domain
             if (!IsNew) throw new InvalidOperationException();
         }
 
-        public void Open(DistributionGroupId distributionGroupId, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
+        public void Open(DistributionGroupId distributionGroupId, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<SubscriberId> subscribers)
         {
             EnsureIsNew();
             Emit(new CopyTradeOpenedEvent(distributionGroupId, publisherId, symbol, orderType, subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
         }
 
-        public void AddApplicant(AccountId accountId)
+        public void AddApplicant(SubscriberId accountId)
         {
             EnsureNotFinished();
             Emit(new CopyTradeApplicantAddedEvent(accountId), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
         }
 
-        public void RemoveApplicant(AccountId accountId)
+        public void RemoveApplicant(SubscriberId accountId)
         {
             if (TradeApplicants.Contains(accountId))
             {

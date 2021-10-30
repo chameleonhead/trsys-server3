@@ -8,7 +8,7 @@ namespace Trsys.Ea.Application.Write.Commands
 {
     public class SubscriberEaRegisterCommand : Command<SubscriberEaAggregate, SubscriberEaId>
     {
-        public SubscriberEaRegisterCommand(SubscriberEaId aggregateId, SecretKey key, DistributionGroupId distributionGroupId, AccountId accountId) : base(aggregateId)
+        public SubscriberEaRegisterCommand(SubscriberEaId aggregateId, SecretKey key, DistributionGroupId distributionGroupId, SubscriberId accountId) : base(aggregateId)
         {
             Key = key;
             DistributionGroupId = distributionGroupId;
@@ -17,7 +17,7 @@ namespace Trsys.Ea.Application.Write.Commands
 
         public SecretKey Key { get; }
         public DistributionGroupId DistributionGroupId { get; }
-        public AccountId AccountId { get; }
+        public SubscriberId AccountId { get; }
     }
 
     public class SubscriberEaRegisterCommandHandler : CommandHandler<SubscriberEaAggregate, SubscriberEaId, SubscriberEaRegisterCommand>

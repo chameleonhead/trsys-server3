@@ -5,7 +5,7 @@ namespace Trsys.CopyTrading.Domain
 {
     public class CopyTradeOpenedEvent : AggregateEvent<CopyTradeAggregate, CopyTradeId>
     {
-        public CopyTradeOpenedEvent(DistributionGroupId distributionGroupId, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<AccountId> subscribers)
+        public CopyTradeOpenedEvent(DistributionGroupId distributionGroupId, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<SubscriberId> subscribers)
         {
             PublisherId = publisherId;
             DistributionGroupId = distributionGroupId;
@@ -18,6 +18,6 @@ namespace Trsys.CopyTrading.Domain
         public DistributionGroupId DistributionGroupId { get; }
         public ForexTradeSymbol Symbol { get; }
         public OrderType OrderType { get; }
-        public List<AccountId> Subscribers { get; }
+        public List<SubscriberId> Subscribers { get; }
     }
 }

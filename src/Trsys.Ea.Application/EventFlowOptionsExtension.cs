@@ -47,7 +47,7 @@ namespace Trsys.Ea.Application
                     typeof(SubscriberEaDistributedOrderTextChangedEvent)
                 )
                 .AddSubscribers(
-                    typeof(AccountTradeOrderRequestEventSubscriber)
+                    typeof(CopyTradeOrderEventSubscriber)
                 )
                 .AddSagaLocators(
                     typeof(SubscriberEaRegistrationSagaLocator),

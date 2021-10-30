@@ -4,11 +4,11 @@ namespace Trsys.CopyTrading.Domain
 {
     public class DistributionGroupSubscriberAddedEvent: AggregateEvent<DistributionGroupAggregate, DistributionGroupId>
     {
-        public DistributionGroupSubscriberAddedEvent(AccountId accountId)
+        public DistributionGroupSubscriberAddedEvent(SubscriberId accountId)
         {
             AccountId = accountId;
         }
 
-        public AccountId AccountId { get; }
+        public SubscriberId AccountId { get; }
     }
 }
