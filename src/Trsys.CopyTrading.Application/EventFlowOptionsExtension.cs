@@ -1,4 +1,5 @@
 ﻿using EventFlow;
+using EventFlow.Configuration;
 using EventFlow.Extensions;
 using System.Collections.Generic;
 using Trsys.CopyTrading.Application.Read.Models;
@@ -51,7 +52,7 @@ namespace Trsys.CopyTrading.Application
                 )
                 .RegisterServices(sr =>
                 {
-                    sr.RegisterType(typeof(AllEventBus));
+                    sr.RegisterType(typeof(AllEventBus), Lifetime.Singleton);
                 })
                 .AddSubscribers(
                     typeof(AllEventSubscriber)

@@ -4,14 +4,13 @@ namespace Trsys.CopyTrading
 {
     public class CopyTradeClosed : ICopyTradingEvent
     {
-        public CopyTradeClosed(string copyTradeId, string distributionGroupId, List<string> subscribers)
+        public CopyTradeClosed(string copyTradeId, List<string> subscribers)
         {
             CopyTradeId = copyTradeId;
-            DistributionGroupId = distributionGroupId;
+            Subscribers = subscribers;
         }
 
         public string CopyTradeId { get; }
-        public string DistributionGroupId { get; }
         public List<string> Subscribers { get; }
     }
 }

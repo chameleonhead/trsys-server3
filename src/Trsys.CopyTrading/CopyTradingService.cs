@@ -86,18 +86,17 @@ namespace Trsys.CopyTrading
         {
             return Task.Run(() =>
             {
-                while (!cancellationToken.IsCancellationRequested)
+                foreach (var events in eventBus.Events.GetConsumingEnumerable(cancellationToken))
                 {
-                    var events = eventBus.Events.Take(cancellationToken);
                     foreach (var e in events)
                     {
                         if (e is IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> opened)
                         {
                             onCopyTradeEvent.Invoke(new CopyTradeOpened(opened.AggregateIdentity.Value, opened.AggregateEvent.DistributionGroupId.Value, opened.AggregateEvent.Symbol.Value, opened.AggregateEvent.OrderType.Value, opened.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
                         }
-                        if (e is IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> closed)
+                        if (e is IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> closed)
                         {
-                            onCopyTradeEvent.Invoke(new CopyTradeClosed(closed.AggregateIdentity.Value, closed.AggregateEvent.DistributionGroupId.Value, closed.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
+                            onCopyTradeEvent.Invoke(new CopyTradeClosed(closed.AggregateIdentity.Value, closed.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
                         }
                     }
                 }
