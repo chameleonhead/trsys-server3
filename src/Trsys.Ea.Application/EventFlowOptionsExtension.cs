@@ -47,15 +47,14 @@ namespace Trsys.Ea.Application
                     typeof(SubscriberEaDistributedOrderTextChangedEvent)
                 )
                 .AddSubscribers(
-                    typeof(CopyTradeOrderEventSubscriber)
+                    typeof(CopyTradeOrderEventSubscriber),
+                    typeof(PublisherEaOrderEventSubscriber)
                 )
                 .AddSagaLocators(
-                    typeof(SubscriberEaRegistrationSagaLocator),
-                    typeof(OrderPublishingSagaLocator)
+                    typeof(SubscriberEaRegistrationSagaLocator)
                 )
                 .AddSagas(
-                    typeof(SubscriberEaRegistrationSaga),
-                    typeof(OrderPublishingSaga)
+                    typeof(SubscriberEaRegistrationSaga)
                 );
             options
                 .RegisterServices(sr => {

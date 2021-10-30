@@ -47,16 +47,7 @@ namespace Trsys.CopyTrading
                 DistributionGroupId = copyTrade.DistributionGroupId,
                 Symbol = copyTrade.Symbol,
                 OrderType = copyTrade.OrderType,
-                OpenPublishedTimestamp = copyTrade.OpenPublishedTimestamp,
-                ClosePublishedTimestamp = copyTrade.ClosePublishedTimestamp,
                 Subscribers = copyTrade.Subscribers,
-                TradeOrders = copyTrade.TradeOrders.Select(e => new CopyTradeDto.TradeOrderDto()
-                {
-                    Id = e.Id,
-                    OpenDistributedTimestamp = e.OpenDistributedTimestamp,
-                    CloseDistributedTimestamp = e.CloseDistributedTimestamp,
-                    IsOpen = e.IsOpen,
-                }).ToList(),
                 IsOpen = copyTrade.IsOpen,
             };
         }
