@@ -32,10 +32,10 @@ namespace Trsys.CopyTrading.Domain
             if (!IsNew) throw new InvalidOperationException();
         }
 
-        public void Open(DistributionGroupId distributionGroupId, PublisherId publisherId, ForexTradeSymbol symbol, OrderType orderType, List<SubscriberId> subscribers)
+        public void Open(DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType, List<SubscriberId> subscribers)
         {
             EnsureIsNew();
-            Emit(new CopyTradeOpenedEvent(distributionGroupId, publisherId, symbol, orderType, subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
+            Emit(new CopyTradeOpenedEvent(distributionGroupId, symbol, orderType, subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
         }
 
         public void AddDistributedSubscriber(SubscriberId subscriberId)
@@ -56,12 +56,12 @@ namespace Trsys.CopyTrading.Domain
             }
         }
 
-        public void Close(PublisherId publisherId)
+        public void Close()
         {
             EnsureNotFinished();
             if (IsOpen)
             {
-                Emit(new CopyTradeClosedEvent(publisherId, Subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
+                Emit(new CopyTradeClosedEvent(Subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
                 if (!DistributedSubscribers.Any())
                 {
                     Emit(new CopyTradeFinishedEvent(), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));

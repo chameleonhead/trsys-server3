@@ -33,14 +33,14 @@ namespace Trsys.CopyTrading.Domain
             }
         }
 
-        public void PublishOpen(PublisherId publisherId, CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)
+        public void PublishOpen(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)
         {
-            Emit(new DistributionGroupOpenPublishedEvent(copyTradeId, publisherId, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            Emit(new DistributionGroupOpenPublishedEvent(copyTradeId, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
-        public void PublishClose(PublisherId publisherId, CopyTradeId copyTradeId)
+        public void PublishClose(CopyTradeId copyTradeId)
         {
-            Emit(new DistributionGroupClosePublishedEvent(copyTradeId, publisherId), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            Emit(new DistributionGroupClosePublishedEvent(copyTradeId), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
         }
 
         public void Apply(DistributionGroupSubscriberAddedEvent aggregateEvent)

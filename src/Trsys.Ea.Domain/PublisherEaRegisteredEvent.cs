@@ -5,15 +5,13 @@ namespace Trsys.Ea.Domain
 {
     public class PublisherEaRegisteredEvent : AggregateEvent<PublisherEaAggregate, PublisherEaId>
     {
-        public PublisherEaRegisteredEvent(SecretKey key, DistributionGroupId distributionGroupId, PublisherId publisherId)
+        public PublisherEaRegisteredEvent(SecretKey key, DistributionGroupId distributionGroupId)
         {
             Key = key;
             DistributionGroupId = distributionGroupId;
-            PublisherId = publisherId;
         }
 
         public SecretKey Key { get; }
         public DistributionGroupId DistributionGroupId { get; }
-        public PublisherId PublisherId { get; }
     }
 }

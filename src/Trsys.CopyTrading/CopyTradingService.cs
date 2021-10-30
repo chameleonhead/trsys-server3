@@ -74,12 +74,15 @@ namespace Trsys.CopyTrading
             await commandBus.PublishAsync(new DistributionGroupRemoveSubscriberCommand(DistributionGroupId.With(distributionGroupId), SubscriberId.With(subscriptionId)), cancellationToken);
         }
 
-        public Task PublishCloseTradeAsync(string distributionGroupId, string copyTradeId, CancellationToken cancellationToken)
+        public async Task<string> PublishOpenTradeAsync(string distributionGroupId, string symbol, string orderType, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var commandBus = resolver.Resolve<ICommandBus>();
+            var copyTradeId = CopyTradeId.New;
+            await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(DistributionGroupId.With(distributionGroupId), copyTradeId, new ForexTradeSymbol(symbol), OrderType.Of(orderType)), cancellationToken);
+            return copyTradeId.Value;
         }
 
-        public Task<string> PublishOpenTradeAsync(string distributionGroupId, string symbol, string orderType, CancellationToken cancellationToken)
+        public Task PublishCloseTradeAsync(string distributionGroupId, string copyTradeId, CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
         }

@@ -24,9 +24,8 @@ namespace Trsys.Ea.Application.Tests
             var publisherEaId = PublisherEaId.New;
 
             var distributionGroupId = DistributionGroupId.New;
-            var publisherId = PublisherId.New;
 
-            var result = await commandBus.PublishAsync(new PublisherEaRegisterCommand(publisherEaId, new SecretKey("PublisherKey"), distributionGroupId, publisherId), CancellationToken.None);
+            var result = await commandBus.PublishAsync(new PublisherEaRegisterCommand(publisherEaId, new SecretKey("PublisherKey"), distributionGroupId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
         }
 

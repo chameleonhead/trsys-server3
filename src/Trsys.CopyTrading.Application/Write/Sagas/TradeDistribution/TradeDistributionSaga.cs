@@ -29,7 +29,6 @@ namespace Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution
             Publish(new CopyTradeOpenCommand(
                 aggregateEvent.CopyTradeId,
                 domainEvent.AggregateIdentity,
-                aggregateEvent.PublisherId,
                 aggregateEvent.Symbol,
                 aggregateEvent.OrderType,
                 aggregateEvent.Subscribers));
@@ -45,7 +44,7 @@ namespace Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution
         public Task HandleAsync(IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupClosePublishedEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
         {
             var aggregateEvent = domainEvent.AggregateEvent;
-            Publish(new CopyTradeCloseCommand(aggregateEvent.CopyTradeId, domainEvent.AggregateIdentity, aggregateEvent.PublisherId));
+            Publish(new CopyTradeCloseCommand(aggregateEvent.CopyTradeId, domainEvent.AggregateIdentity));
             return Task.CompletedTask;
         }
 

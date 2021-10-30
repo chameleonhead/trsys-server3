@@ -8,23 +8,21 @@ namespace Trsys.Ea.Application.Write.Commands
 {
     public class PublisherEaRegisterCommand : Command<PublisherEaAggregate, PublisherEaId>
     {
-        public PublisherEaRegisterCommand(PublisherEaId aggregateId, SecretKey key, DistributionGroupId distributionGroupId, PublisherId publisherId) : base(aggregateId)
+        public PublisherEaRegisterCommand(PublisherEaId aggregateId, SecretKey key, DistributionGroupId distributionGroupId) : base(aggregateId)
         {
             Key = key;
             DistributionGroupId = distributionGroupId;
-            PublisherId = publisherId;
         }
 
         public SecretKey Key { get; }
         public DistributionGroupId DistributionGroupId { get; }
-        public PublisherId PublisherId { get; }
     }
 
     public class PublisherEaRegisterCommandHandler : CommandHandler<PublisherEaAggregate, PublisherEaId, PublisherEaRegisterCommand>
     {
         public override Task ExecuteAsync(PublisherEaAggregate aggregate, PublisherEaRegisterCommand command, CancellationToken cancellationToken)
         {
-            aggregate.Register(command.Key, command.DistributionGroupId, command.PublisherId);
+            aggregate.Register(command.Key, command.DistributionGroupId);
             return Task.CompletedTask;
         }
     }

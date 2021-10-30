@@ -34,7 +34,7 @@ namespace Trsys.Ea
                     var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
                     if (publisher == null)
                     {
-                        await commandBus.PublishAsync(new PublisherEaRegisterCommand(PublisherEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.New), CancellationToken.None);
+                        await commandBus.PublishAsync(new PublisherEaRegisterCommand(PublisherEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID)), CancellationToken.None);
                     }
                     break;
                 case "Subscriber":
@@ -59,12 +59,7 @@ namespace Trsys.Ea
                     {
                         return;
                     }
-                    var publisherId = publisher.GetPublisherId(DISTRIBUTION_GROUP_ID);
-                    if (publisherId == null)
-                    {
-                        return;
-                    }
-                    await commandBus.PublishAsync(new PublisherEaUnregisterCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), PublisherId.With(publisherId)), CancellationToken.None);
+                    await commandBus.PublishAsync(new PublisherEaUnregisterCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID)), CancellationToken.None);
                     await sessionManager.DestroySessionAsync(publisher.Id);
                     return;
                 case "Subscriber":

@@ -22,7 +22,7 @@ namespace Trsys.Ea.Application.Write.Sagas.Ea
             var aggregateEvent = domainEvent.AggregateEvent;
             foreach (var target in aggregateEvent.Order.Targets)
             {
-                Publish(new DistributionGroupPublishOpenCommand(target.DistributionGroupId, target.PublisherId, target.Id, aggregateEvent.Order.Symbol, aggregateEvent.Order.OrderType));
+                Publish(new DistributionGroupPublishOpenCommand(target.DistributionGroupId, target.Id, aggregateEvent.Order.Symbol, aggregateEvent.Order.OrderType));
             }
             return Task.CompletedTask;
         }
@@ -32,7 +32,7 @@ namespace Trsys.Ea.Application.Write.Sagas.Ea
             var aggregateEvent = domainEvent.AggregateEvent;
             foreach (var target in aggregateEvent.Order.Targets)
             {
-                Publish(new DistributionGroupPublishCloseCommand(target.DistributionGroupId, target.PublisherId, target.Id));
+                Publish(new DistributionGroupPublishCloseCommand(target.DistributionGroupId, target.Id));
             }
             return Task.CompletedTask;
         }

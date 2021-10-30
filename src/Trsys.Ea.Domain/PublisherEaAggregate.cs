@@ -23,14 +23,14 @@ namespace Trsys.Ea.Domain
         {
         }
 
-        public void Register(SecretKey key, DistributionGroupId distributionGroupId, PublisherId publisherId)
+        public void Register(SecretKey key, DistributionGroupId distributionGroupId)
         {
-            Emit(new PublisherEaRegisteredEvent(key, distributionGroupId, publisherId));
+            Emit(new PublisherEaRegisteredEvent(key, distributionGroupId));
         }
 
-        public void Unregister(DistributionGroupId distributionGroupId, PublisherId publisherId)
+        public void Unregister(DistributionGroupId distributionGroupId)
         {
-            Emit(new PublisherEaUnregisteredEvent(Key, distributionGroupId, publisherId));
+            Emit(new PublisherEaUnregisteredEvent(Key, distributionGroupId));
         }
 
         public void UpdateOrderText(EaOrderText text)
@@ -54,7 +54,7 @@ namespace Trsys.Ea.Domain
                 {
                     if (!prevOrderTicketNos.Contains(order.TicketNo))
                     {
-                        Emit(new PublisherEaOpenedOrderEvent(new PublisherEaOrderEntity(EaOrderId.New, order.TicketNo, order.Symbol, order.OrderType, Targets.Select(t => new PublisherEaCopyTradeEntity(CopyTradeId.New, t.DistributionGroupId, t.PublisherId)).ToList())));
+                        Emit(new PublisherEaOpenedOrderEvent(new PublisherEaOrderEntity(EaOrderId.New, order.TicketNo, order.Symbol, order.OrderType, Targets.Select(t => new PublisherEaCopyTradeEntity(CopyTradeId.New, t.DistributionGroupId)).ToList())));
                     }
                 }
             }
@@ -63,12 +63,12 @@ namespace Trsys.Ea.Domain
         public void Apply(PublisherEaRegisteredEvent aggregateEvent)
         {
             Key = aggregateEvent.Key;
-            Targets.Add(new PublisherEaDistributionTarget(aggregateEvent.DistributionGroupId, aggregateEvent.PublisherId));
+            Targets.Add(new PublisherEaDistributionTarget(aggregateEvent.DistributionGroupId));
         }
 
         public void Apply(PublisherEaUnregisteredEvent aggregateEvent)
         {
-            Targets.Remove(new PublisherEaDistributionTarget(aggregateEvent.DistributionGroupId, aggregateEvent.PublisherId));
+            Targets.Remove(new PublisherEaDistributionTarget(aggregateEvent.DistributionGroupId));
         }
 
         public void Apply(PublisherEaOrderTextChangedEvent aggregateEvent)
