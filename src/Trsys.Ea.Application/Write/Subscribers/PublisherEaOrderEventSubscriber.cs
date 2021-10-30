@@ -4,7 +4,6 @@ using EventFlow.Subscribers;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Trsys.CopyTrading.Application.Write.Commands;
 using Trsys.Ea.Domain;
 
 namespace Trsys.Ea.Application.Write.Subscribers
@@ -13,23 +12,23 @@ namespace Trsys.Ea.Application.Write.Subscribers
         ISubscribeSynchronousTo<PublisherEaAggregate, PublisherEaId, PublisherEaOpenedOrderEvent>,
         ISubscribeSynchronousTo<PublisherEaAggregate, PublisherEaId, PublisherEaClosedOrderEvent>
     {
-        private readonly ICommandBus commandBus;
+        private readonly ICopyTradingService service;
 
-        public PublisherEaOrderEventSubscriber(ICommandBus commandBus)
+        public PublisherEaOrderEventSubscriber(ICopyTradingService service)
         {
-            this.commandBus = commandBus;
+            this.service = service;
         }
 
         public async Task HandleAsync(IDomainEvent<PublisherEaAggregate, PublisherEaId, PublisherEaOpenedOrderEvent> domainEvent, CancellationToken cancellationToken)
         {
             var aggregateEvent = domainEvent.AggregateEvent;
-            await Task.WhenAll(aggregateEvent.Order.Targets.Select(target => commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(target.DistributionGroupId, target.Id, aggregateEvent.Order.Symbol, aggregateEvent.Order.OrderType), cancellationToken)));
+            await Task.WhenAll(aggregateEvent.Order.Targets.Select(target => service.PublishOpenTradeAsync(target.DistributionGroupId.Value, target.Id.Value, aggregateEvent.Order.Symbol.Value, aggregateEvent.Order.OrderType.Value, cancellationToken)));
         }
 
         public async Task HandleAsync(IDomainEvent<PublisherEaAggregate, PublisherEaId, PublisherEaClosedOrderEvent> domainEvent, CancellationToken cancellationToken)
         {
             var aggregateEvent = domainEvent.AggregateEvent;
-            await Task.WhenAll(aggregateEvent.Order.Targets.Select(target => commandBus.PublishAsync(new DistributionGroupPublishCloseCommand(target.DistributionGroupId, target.Id), cancellationToken)));
+            await Task.WhenAll(aggregateEvent.Order.Targets.Select(target => service.PublishCloseTradeAsync(target.DistributionGroupId.Value, target.Id.Value, cancellationToken)));
         }
     }
 }

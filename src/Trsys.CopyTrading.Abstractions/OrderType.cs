@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Trsys.CopyTrading.Domain
+namespace Trsys.CopyTrading.Abstractions
 {
     [JsonConverter(typeof(OrderTypeConverter))]
     public class OrderType : SingleValueObject<string>
@@ -11,8 +11,8 @@ namespace Trsys.CopyTrading.Domain
         {
         }
 
-        public static readonly OrderType Buy = new OrderType("BUY");
-        public static readonly OrderType Sell = new OrderType("SELL");
+        public static readonly OrderType Buy = new("BUY");
+        public static readonly OrderType Sell = new("SELL");
 
         public static OrderType Of(string orderType)
         {

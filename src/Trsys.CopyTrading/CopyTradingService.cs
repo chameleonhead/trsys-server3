@@ -1,10 +1,14 @@
 ﻿using EventFlow;
+using EventFlow.Aggregates;
 using EventFlow.Queries;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Trsys.CopyTrading.Abstractions;
 using Trsys.CopyTrading.Application.Read.Models;
 using Trsys.CopyTrading.Application.Write.Commands;
+using Trsys.CopyTrading.Application.Write.Subscribers;
 using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading
@@ -12,10 +16,12 @@ namespace Trsys.CopyTrading
     public class CopyTradingService : ICopyTradingService
     {
         private readonly CopyTradingEventFlowRootResolver resolver;
+        private readonly AllEventBus eventBus;
 
         public CopyTradingService(CopyTradingEventFlowRootResolver resolver)
         {
             this.resolver = resolver;
+            eventBus = resolver.Resolve<AllEventBus>();
         }
 
         public async Task<DistributionGroupDto> FindDistributionGroupByIdAsync(string distributionGroupId, CancellationToken cancellationToken)
@@ -52,12 +58,10 @@ namespace Trsys.CopyTrading
             };
         }
 
-        public async Task<string> AddSubscriberAsync(string distributionGroupId, CancellationToken cancellationToken)
+        public async Task AddSubscriberAsync(string distributionGroupId, string subscriptionId, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
-            var subscriptionId = SubscriberId.New;
-            await commandBus.PublishAsync(new DistributionGroupAddSubscriberCommand(DistributionGroupId.With(distributionGroupId), subscriptionId), cancellationToken);
-            return subscriptionId.Value;
+            await commandBus.PublishAsync(new DistributionGroupAddSubscriberCommand(DistributionGroupId.With(distributionGroupId), SubscriberId.With(subscriptionId)), cancellationToken);
         }
 
         public async Task RemoveSubscriberAsync(string distributionGroupId, string subscriptionId, CancellationToken cancellationToken)
@@ -66,18 +70,38 @@ namespace Trsys.CopyTrading
             await commandBus.PublishAsync(new DistributionGroupRemoveSubscriberCommand(DistributionGroupId.With(distributionGroupId), SubscriberId.With(subscriptionId)), cancellationToken);
         }
 
-        public async Task<string> PublishOpenTradeAsync(string distributionGroupId, string symbol, string orderType, CancellationToken cancellationToken)
+        public async Task PublishOpenTradeAsync(string distributionGroupId, string copyTradeId, string symbol, string orderType, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
-            var copyTradeId = CopyTradeId.New;
-            await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(DistributionGroupId.With(distributionGroupId), copyTradeId, new ForexTradeSymbol(symbol), OrderType.Of(orderType)), cancellationToken);
-            return copyTradeId.Value;
+            await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(DistributionGroupId.With(distributionGroupId), CopyTradeId.With(copyTradeId), new ForexTradeSymbol(symbol), OrderType.Of(orderType)), cancellationToken);
         }
 
         public async Task PublishCloseTradeAsync(string distributionGroupId, string copyTradeId, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new DistributionGroupPublishCloseCommand(DistributionGroupId.With(distributionGroupId), CopyTradeId.With(copyTradeId)), cancellationToken);
+        }
+
+        public Task SubscribeToCopyTradeEventsAsync(Func<ICopyTradingEvent, Task> onCopyTradeEvent, CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    var events = eventBus.Events.Take(cancellationToken);
+                    foreach (var e in events)
+                    {
+                        if (e is IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> opened)
+                        {
+                            onCopyTradeEvent.Invoke(new CopyTradeOpened(opened.AggregateIdentity.Value, opened.AggregateEvent.DistributionGroupId.Value, opened.AggregateEvent.Symbol.Value, opened.AggregateEvent.OrderType.Value, opened.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
+                        }
+                        if (e is IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> closed)
+                        {
+                            onCopyTradeEvent.Invoke(new CopyTradeClosed(closed.AggregateIdentity.Value, closed.AggregateEvent.DistributionGroupId.Value, closed.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
+                        }
+                    }
+                }
+            });
         }
     }
 }

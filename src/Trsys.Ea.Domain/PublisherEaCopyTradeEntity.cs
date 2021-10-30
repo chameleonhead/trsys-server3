@@ -1,5 +1,5 @@
 ﻿using EventFlow.Entities;
-using Trsys.CopyTrading.Domain;
+using Trsys.CopyTrading.Abstractions;
 
 namespace Trsys.Ea.Domain
 {

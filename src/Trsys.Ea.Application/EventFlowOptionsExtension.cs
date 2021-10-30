@@ -2,7 +2,6 @@
 using EventFlow.Extensions;
 using Trsys.Ea.Application.Read.Models;
 using Trsys.Ea.Application.Write.Commands;
-using Trsys.Ea.Application.Write.Sagas.Ea;
 using Trsys.Ea.Application.Write.Subscribers;
 using Trsys.Ea.Domain;
 
@@ -47,14 +46,8 @@ namespace Trsys.Ea.Application
                     typeof(SubscriberEaDistributedOrderTextChangedEvent)
                 )
                 .AddSubscribers(
-                    typeof(CopyTradeOrderEventSubscriber),
-                    typeof(PublisherEaOrderEventSubscriber)
-                )
-                .AddSagaLocators(
-                    typeof(SubscriberEaRegistrationSagaLocator)
-                )
-                .AddSagas(
-                    typeof(SubscriberEaRegistrationSaga)
+                    typeof(PublisherEaOrderEventSubscriber),
+                    typeof(SubscriberEaRegistrationEventSubscriber)
                 );
             options
                 .RegisterServices(sr => {

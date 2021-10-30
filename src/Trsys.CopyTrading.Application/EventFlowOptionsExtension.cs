@@ -5,6 +5,7 @@ using Trsys.CopyTrading.Application.Read.Models;
 using Trsys.CopyTrading.Application.Read.Queries;
 using Trsys.CopyTrading.Application.Write.Commands;
 using Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution;
+using Trsys.CopyTrading.Application.Write.Subscribers;
 using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application
@@ -47,6 +48,13 @@ namespace Trsys.CopyTrading.Application
                 .AddEvents(
                     typeof(TradeDistributionSagaStartedEvent),
                     typeof(TradeDistributionSagaFinishedEvent)
+                )
+                .RegisterServices(sr =>
+                {
+                    sr.RegisterType(typeof(AllEventBus));
+                })
+                .AddSubscribers(
+                    typeof(AllEventSubscriber)
                 );
             options
                 .UseInMemoryReadStoreFor<DistributionGroupReadModel>()

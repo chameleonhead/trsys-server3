@@ -1,8 +1,8 @@
 ﻿using EventFlow.Aggregates;
 using EventFlow.ReadStores;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trsys.CopyTrading.Abstractions;
 using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application.Read.Models

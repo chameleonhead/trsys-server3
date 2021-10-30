@@ -1,12 +1,9 @@
 using EventFlow;
 using EventFlow.Configuration;
-using EventFlow.Queries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 using System.Threading.Tasks;
-using Trsys.CopyTrading.Application;
-using Trsys.CopyTrading.Application.Read.Models;
-using Trsys.CopyTrading.Domain;
+using Trsys.CopyTrading.Abstractions;
 using Trsys.Ea.Application.Write.Commands;
 using Trsys.Ea.Domain;
 
@@ -33,7 +30,6 @@ namespace Trsys.Ea.Application.Tests
         {
             return EventFlowOptions
                 .New
-                .UseCopyTradeApplication()
                 .UseEaApplication()
                 .CreateResolver();
         }

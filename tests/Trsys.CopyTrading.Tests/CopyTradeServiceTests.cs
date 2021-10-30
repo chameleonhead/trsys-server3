@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Trsys.CopyTrading.Domain;
+using Trsys.CopyTrading.Abstractions;
 
 namespace Trsys.CopyTrading.Tests
 {
@@ -17,9 +16,10 @@ namespace Trsys.CopyTrading.Tests
             using var services = new ServiceCollection().AddCopyTrading().BuildServiceProvider();
             var service = services.GetRequiredService<ICopyTradingService>();
             var distributionGroupId = DistributionGroupId.New.ToString();
-            var subscriptionId = await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None);
+            var subscriberId = SubscriberId.New.ToString();
+            await service.AddSubscriberAsync(distributionGroupId, subscriberId, CancellationToken.None);
             var distributionGroup = await service.FindDistributionGroupByIdAsync(distributionGroupId, CancellationToken.None);
-            CollectionAssert.AreEquivalent(distributionGroup.Subscribers, new[] { subscriptionId });
+            CollectionAssert.AreEquivalent(distributionGroup.Subscribers, new[] { subscriberId });
         }
 
         [TestMethod]
@@ -28,8 +28,9 @@ namespace Trsys.CopyTrading.Tests
             using var services = new ServiceCollection().AddCopyTrading().BuildServiceProvider();
             var service = services.GetRequiredService<ICopyTradingService>();
             var distributionGroupId = DistributionGroupId.New.ToString();
-            var subscriptionId = await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None);
-            await service.RemoveSubscriberAsync(distributionGroupId, subscriptionId, CancellationToken.None);
+            var subscriberId = SubscriberId.New.ToString();
+            await service.AddSubscriberAsync(distributionGroupId, subscriberId, CancellationToken.None);
+            await service.RemoveSubscriberAsync(distributionGroupId, subscriberId, CancellationToken.None);
             var distributionGroup = await service.FindDistributionGroupByIdAsync(distributionGroupId, CancellationToken.None);
             Assert.IsNull(distributionGroup);
         }
@@ -40,11 +41,13 @@ namespace Trsys.CopyTrading.Tests
             using var services = new ServiceCollection().AddCopyTrading().BuildServiceProvider();
             var service = services.GetRequiredService<ICopyTradingService>();
             var distributionGroupId = DistributionGroupId.New.ToString();
-            var subscriptionId1 = await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None);
-            var subscriptionId2 = await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None);
-            await service.RemoveSubscriberAsync(distributionGroupId, subscriptionId1, CancellationToken.None);
+            var subscriberId1 = SubscriberId.New.ToString();
+            var subscriberId2 = SubscriberId.New.ToString();
+            await service.AddSubscriberAsync(distributionGroupId, subscriberId1, CancellationToken.None);
+            await service.AddSubscriberAsync(distributionGroupId, subscriberId2, CancellationToken.None);
+            await service.RemoveSubscriberAsync(distributionGroupId, subscriberId1, CancellationToken.None);
             var distributionGroup = await service.FindDistributionGroupByIdAsync(distributionGroupId, CancellationToken.None);
-            CollectionAssert.AreEquivalent(distributionGroup.Subscribers, new[] { subscriptionId2 });
+            CollectionAssert.AreEquivalent(distributionGroup.Subscribers, new[] { subscriberId2 });
         }
 
         [TestMethod]
@@ -53,8 +56,10 @@ namespace Trsys.CopyTrading.Tests
             using var services = new ServiceCollection().AddCopyTrading().BuildServiceProvider();
             var service = services.GetRequiredService<ICopyTradingService>();
             var distributionGroupId = DistributionGroupId.New.ToString();
-            var subscriptionId = await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None);
-            var copyTradeId = await service.PublishOpenTradeAsync(distributionGroupId, "USDJPY", "BUY", CancellationToken.None);
+            var subscriberId = SubscriberId.New.ToString();
+            var copyTradeId = CopyTradeId.New.ToString();
+            await service.AddSubscriberAsync(distributionGroupId, subscriberId, CancellationToken.None);
+            await service.PublishOpenTradeAsync(distributionGroupId, copyTradeId, "USDJPY", "BUY", CancellationToken.None);
             var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
             Assert.AreEqual("USDJPY", copyTrade.Symbol);
             Assert.AreEqual("BUY", copyTrade.OrderType);
@@ -69,9 +74,12 @@ namespace Trsys.CopyTrading.Tests
             var subscribers = new List<string>();
             for (var i = 0; i < 100; i++)
             {
-                subscribers.Add(await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None));
+                var subscriberId = SubscriberId.New.ToString();
+                subscribers.Add(subscriberId);
+                await service.AddSubscriberAsync(distributionGroupId, subscriberId, CancellationToken.None);
             }
-            var copyTradeId = await service.PublishOpenTradeAsync(distributionGroupId, "USDJPY", "BUY", CancellationToken.None);
+            var copyTradeId = CopyTradeId.New.ToString();
+            await service.PublishOpenTradeAsync(distributionGroupId, copyTradeId, "USDJPY", "BUY", CancellationToken.None);
             var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
             Assert.AreEqual("USDJPY", copyTrade.Symbol);
             Assert.AreEqual("BUY", copyTrade.OrderType);
@@ -85,8 +93,10 @@ namespace Trsys.CopyTrading.Tests
             using var services = new ServiceCollection().AddCopyTrading().BuildServiceProvider();
             var service = services.GetRequiredService<ICopyTradingService>();
             var distributionGroupId = DistributionGroupId.New.ToString();
-            var subscriptionId = await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None);
-            var copyTradeId = await service.PublishOpenTradeAsync(distributionGroupId, "USDJPY", "BUY", CancellationToken.None);
+            var subscriberId = SubscriberId.New.ToString();
+            var copyTradeId = CopyTradeId.New.ToString();
+            await service.AddSubscriberAsync(distributionGroupId, subscriberId, CancellationToken.None);
+            await service.PublishOpenTradeAsync(distributionGroupId, copyTradeId, "USDJPY", "BUY", CancellationToken.None);
             await service.PublishCloseTradeAsync(distributionGroupId, copyTradeId, CancellationToken.None);
             var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
             Assert.IsFalse(copyTrade.IsOpen);
@@ -101,9 +111,12 @@ namespace Trsys.CopyTrading.Tests
             var subscribers = new List<string>();
             for (var i = 0; i < 100; i++)
             {
-                subscribers.Add(await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None));
+                var subscriberId = SubscriberId.New.ToString();
+                subscribers.Add(subscriberId);
+                await service.AddSubscriberAsync(distributionGroupId, subscriberId, CancellationToken.None);
             }
-            var copyTradeId = await service.PublishOpenTradeAsync(distributionGroupId, "USDJPY", "BUY", CancellationToken.None);
+            var copyTradeId = CopyTradeId.New.ToString();
+            await service.PublishOpenTradeAsync(distributionGroupId, copyTradeId, "USDJPY", "BUY", CancellationToken.None);
             await service.PublishCloseTradeAsync(distributionGroupId, copyTradeId, CancellationToken.None);
             var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
             Assert.IsFalse(copyTrade.IsOpen);

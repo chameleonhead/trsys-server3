@@ -2,12 +2,12 @@
 using EventFlow.ValueObjects;
 using Newtonsoft.Json;
 
-namespace Trsys.CopyTrading.Domain
+namespace Trsys.CopyTrading.Abstractions
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
-    public class DistributionGroupId : Identity<DistributionGroupId>
+    public class CopyTradeId : Identity<CopyTradeId>
     {
-        public DistributionGroupId(string value) : base(value)
+        public CopyTradeId(string value) : base(value)
         {
         }
     }

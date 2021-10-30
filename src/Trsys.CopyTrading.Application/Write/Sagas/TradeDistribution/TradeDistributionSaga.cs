@@ -3,6 +3,7 @@ using EventFlow.Sagas;
 using EventFlow.Sagas.AggregateSagas;
 using System.Threading;
 using System.Threading.Tasks;
+using Trsys.CopyTrading.Abstractions;
 using Trsys.CopyTrading.Application.Write.Commands;
 using Trsys.CopyTrading.Domain;
 

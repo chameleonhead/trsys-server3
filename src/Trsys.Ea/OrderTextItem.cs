@@ -4,7 +4,7 @@ namespace Trsys.Ea
 {
     public class OrderTextItem
     {
-        public OrderTextItem(int ticketNo, string symbol, OrderType orderType)
+        public OrderTextItem(int ticketNo, string symbol, EaOrderType orderType)
         {
             TicketNo = ticketNo;
             Symbol = symbol;
@@ -13,7 +13,7 @@ namespace Trsys.Ea
 
         public int TicketNo { get; }
         public string Symbol { get; }
-        public OrderType OrderType { get; }
+        public EaOrderType OrderType { get; }
 
         public static OrderTextItem Parse(string text)
         {
@@ -24,7 +24,7 @@ namespace Trsys.Ea
             var splitted = text.Split(":");
             var ticketNo = splitted[0];
             var symbol = splitted[1];
-            var orderType = (OrderType)int.Parse(splitted[2]);
+            var orderType = (EaOrderType)int.Parse(splitted[2]);
 
             return new OrderTextItem(int.Parse(ticketNo), symbol, orderType);
         }

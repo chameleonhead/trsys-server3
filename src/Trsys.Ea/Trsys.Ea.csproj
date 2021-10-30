@@ -12,6 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Trsys.CopyTrading\Trsys.CopyTrading.csproj" />
 	  <ProjectReference Include="..\Trsys.Ea.Application\Trsys.Ea.Application.csproj" />
 	</ItemGroup>
 

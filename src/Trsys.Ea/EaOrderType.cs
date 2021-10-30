@@ -1,6 +1,6 @@
 ﻿namespace Trsys.Ea
 {
-    public enum OrderType
+    public enum EaOrderType
     {
         Buy,
         Sell,

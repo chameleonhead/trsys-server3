@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.BackOffice.Tests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.CopyTrading.Tests", "tests\Trsys.CopyTrading.Tests\Trsys.CopyTrading.Tests.csproj", "{4F2CCC36-7B96-485F-81F7-3D10085F0F2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.CopyTrading.Abstractions", "src\Trsys.CopyTrading.Abstractions\Trsys.CopyTrading.Abstractions.csproj", "{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -227,6 +229,18 @@ Global
 		{4F2CCC36-7B96-485F-81F7-3D10085F0F2A}.Release|x64.Build.0 = Release|Any CPU
 		{4F2CCC36-7B96-485F-81F7-3D10085F0F2A}.Release|x86.ActiveCfg = Release|Any CPU
 		{4F2CCC36-7B96-485F-81F7-3D10085F0F2A}.Release|x86.Build.0 = Release|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Debug|x64.Build.0 = Debug|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Debug|x86.Build.0 = Debug|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Release|x64.ActiveCfg = Release|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Release|x64.Build.0 = Release|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Release|x86.ActiveCfg = Release|Any CPU
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,6 +261,7 @@ Global
 		{E78FDC97-FC24-4A0D-B5CD-16A9A6835C10} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 		{EF3157C2-9AAD-4B28-9234-77F279DE137C} = {C9DD5F9B-264B-4777-8320-82E30769FEC2}
 		{4F2CCC36-7B96-485F-81F7-3D10085F0F2A} = {C9DD5F9B-264B-4777-8320-82E30769FEC2}
+		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {080E749E-E248-4B95-B548-61854474AB22}

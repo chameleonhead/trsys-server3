@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Trsys.Ea.Application;
 
 namespace Trsys.Ea
 {
@@ -6,6 +7,8 @@ namespace Trsys.Ea
     {
         public static IServiceCollection AddEa(this IServiceCollection services)
         {
+            services.AddHostedService<CopyTradingEventHandler>();
+            services.AddSingleton<ICopyTradingService, EaCopyTradingService>();
             services.AddSingleton<IEaService, EaService>();
             services.AddSingleton<IEaSessionTokenProvider, EaSessionTokenProvider>();
             services.AddSingleton<IEaSessionTokenParser, EaSessionTokenParser>();

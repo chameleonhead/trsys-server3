@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Trsys.Ea.Domain\Trsys.Ea.Domain.csproj" />
+    <PackageReference Include="EventFlow" Version="0.83.4713" />
   </ItemGroup>
 
 </Project>
