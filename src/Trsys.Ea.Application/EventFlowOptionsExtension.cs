@@ -50,12 +50,10 @@ namespace Trsys.Ea.Application
                     typeof(AccountTradeOrderRequestEventSubscriber)
                 )
                 .AddSagaLocators(
-                    typeof(PublisherEaRegistrationSagaLocator),
                     typeof(SubscriberEaRegistrationSagaLocator),
                     typeof(OrderPublishingSagaLocator)
                 )
                 .AddSagas(
-                    typeof(PublisherEaRegistrationSaga),
                     typeof(SubscriberEaRegistrationSaga),
                     typeof(OrderPublishingSaga)
                 );

@@ -28,10 +28,6 @@ namespace Trsys.Ea.Application.Tests
 
             var result = await commandBus.PublishAsync(new PublisherEaRegisterCommand(publisherEaId, new SecretKey("PublisherKey"), distributionGroupId, publisherId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
-
-            var queryProcessor = resolver.Resolve<IQueryProcessor>();
-            var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<DistributionGroupReadModel>(distributionGroupId.Value), CancellationToken.None);
-            Assert.IsTrue(queryResult.Publishers.Contains(publisherId.Value));
         }
 
         private static IRootResolver CreateResolver()

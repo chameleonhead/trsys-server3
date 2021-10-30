@@ -75,7 +75,6 @@ namespace Trsys.CopyTrading.Application
                 .RegisterServices(sr => {
                     sr.RegisterType(typeof(CopyTradeReadModelLocator));
                 })
-                .UseInMemoryReadStoreFor<AccountReadModel>()
                 .UseInMemoryReadStoreFor<DistributionGroupReadModel>()
                 .UseInMemoryReadStoreFor<CopyTradeReadModel, CopyTradeReadModelLocator>()
                 .AddQueryHandler<CopyTradeReadModelAllQueryHandler, CopyTradeReadModelAllQuery, IReadOnlyCollection<CopyTradeReadModel>>();

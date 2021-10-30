@@ -6,12 +6,12 @@ using Trsys.CopyTrading.Application;
 
 namespace Trsys.CopyTrading
 {
-    public class CopyTradeEventFlowResolver : IDisposable
+    public class CopyTradingEventFlowRootResolver : IDisposable
     {
         private readonly IRootResolver resolver;
         private bool disposedValue;
 
-        public CopyTradeEventFlowResolver()
+        public CopyTradingEventFlowRootResolver()
         {
             resolver = EventFlowOptions
                 .New
