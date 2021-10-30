@@ -1,4 +1,4 @@
-using EventFlow;
+﻿using EventFlow;
 using EventFlow.Configuration;
 using EventFlow.Queries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

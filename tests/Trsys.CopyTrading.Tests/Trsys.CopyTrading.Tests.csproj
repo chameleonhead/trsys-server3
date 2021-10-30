@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Trsys.CopyTrading.Application\Trsys.CopyTrading.Application.csproj" />
+    <ProjectReference Include="..\..\src\Trsys.CopyTrading\Trsys.CopyTrading.csproj" />
   </ItemGroup>
 
 </Project>
