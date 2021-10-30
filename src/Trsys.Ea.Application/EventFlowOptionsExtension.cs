@@ -61,11 +61,11 @@ namespace Trsys.Ea.Application
                 .RegisterServices(sr => {
                     sr.RegisterType(typeof(PublisherEaReadModelLocator));
                     sr.RegisterType(typeof(SubscriberEaReadModelLocator));
-                    sr.RegisterType(typeof(AccountIdToSubscriberEaIdReadModelLocator));
+                    sr.RegisterType(typeof(SubscriberIdToSubscriberEaIdReadModelLocator));
                 })
                 .UseInMemoryReadStoreFor<PublisherEaReadModel, PublisherEaReadModelLocator>()
                 .UseInMemoryReadStoreFor<SubscriberEaReadModel, SubscriberEaReadModelLocator>()
-                .UseInMemoryReadStoreFor<AccountIdToSubscriberEaIdReadModel, AccountIdToSubscriberEaIdReadModelLocator>();
+                .UseInMemoryReadStoreFor<SubscriberIdToSubscriberEaIdReadModel, SubscriberIdToSubscriberEaIdReadModelLocator>();
             return options;
         }
     }

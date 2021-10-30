@@ -23,14 +23,14 @@ namespace Trsys.Ea.Domain
         {
         }
 
-        public void Register(SecretKey key, DistributionGroupId distributionGroupId, SubscriberId accountId)
+        public void Register(SecretKey key, DistributionGroupId distributionGroupId, SubscriberId subscriberId)
         {
-            Emit(new SubscriberEaRegisteredEvent(key, distributionGroupId, accountId));
+            Emit(new SubscriberEaRegisteredEvent(key, distributionGroupId, subscriberId));
         }
 
-        public void Unregister(DistributionGroupId distributionGroupId, SubscriberId accountId)
+        public void Unregister(DistributionGroupId distributionGroupId, SubscriberId subscriberId)
         {
-            Emit(new SubscriberEaUnregisteredEvent(Key, distributionGroupId, accountId));
+            Emit(new SubscriberEaUnregisteredEvent(Key, distributionGroupId, subscriberId));
         }
 
         public void Open(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)

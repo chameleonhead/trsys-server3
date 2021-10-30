@@ -38,17 +38,17 @@ namespace Trsys.CopyTrading.Domain
             Emit(new CopyTradeOpenedEvent(distributionGroupId, publisherId, symbol, orderType, subscribers), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
         }
 
-        public void AddApplicant(SubscriberId accountId)
+        public void AddApplicant(SubscriberId subscriberId)
         {
             EnsureNotFinished();
-            Emit(new CopyTradeApplicantAddedEvent(accountId), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
+            Emit(new CopyTradeApplicantAddedEvent(subscriberId), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
         }
 
-        public void RemoveApplicant(SubscriberId accountId)
+        public void RemoveApplicant(SubscriberId subscriberId)
         {
-            if (TradeApplicants.Contains(accountId))
+            if (TradeApplicants.Contains(subscriberId))
             {
-                Emit(new CopyTradeApplicantRemovedEvent(accountId), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
+                Emit(new CopyTradeApplicantRemovedEvent(subscriberId), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
                 if (!TradeApplicants.Any())
                 {
                     Emit(new CopyTradeFinishedEvent(), new Metadata(KeyValuePair.Create("copy-trade-id", Id.Value)));
@@ -77,7 +77,7 @@ namespace Trsys.CopyTrading.Domain
 
         public void Apply(CopyTradeApplicantAddedEvent aggregateEvent)
         {
-            TradeApplicants.Add(aggregateEvent.AccountId);
+            TradeApplicants.Add(aggregateEvent.SubscriberId);
         }
 
         public void Apply(CopyTradeClosedEvent aggregateEvent)
@@ -87,7 +87,7 @@ namespace Trsys.CopyTrading.Domain
 
         public void Apply(CopyTradeApplicantRemovedEvent aggregateEvent)
         {
-            TradeApplicants.Remove(aggregateEvent.AccountId);
+            TradeApplicants.Remove(aggregateEvent.SubscriberId);
         }
 
         public void Apply(CopyTradeFinishedEvent aggregateEvent)

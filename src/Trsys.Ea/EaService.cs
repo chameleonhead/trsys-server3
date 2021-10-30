@@ -73,12 +73,12 @@ namespace Trsys.Ea
                     {
                         return;
                     }
-                    var accountId = subscriber.GetAccountId(DISTRIBUTION_GROUP_ID);
-                    if (accountId == null)
+                    var subscriberId = subscriber.GetSubscriberId(DISTRIBUTION_GROUP_ID);
+                    if (subscriberId == null)
                     {
                         return;
                     }
-                    await commandBus.PublishAsync(new SubscriberEaUnregisterCommand(SubscriberEaId.With(subscriber.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), SubscriberId.With(accountId)), CancellationToken.None);
+                    await commandBus.PublishAsync(new SubscriberEaUnregisterCommand(SubscriberEaId.With(subscriber.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), SubscriberId.With(subscriberId)), CancellationToken.None);
                     await sessionManager.DestroySessionAsync(subscriber.Id);
                     return;
                 default:

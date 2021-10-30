@@ -4,7 +4,7 @@ using Trsys.Ea.Domain;
 
 namespace Trsys.Ea.Application.Read.Models
 {
-    public class AccountIdToSubscriberEaIdReadModel : IReadModel,
+    public class SubscriberIdToSubscriberEaIdReadModel : IReadModel,
         IAmReadModelFor<SubscriberEaAggregate, SubscriberEaId, SubscriberEaRegisteredEvent>,
         IAmReadModelFor<SubscriberEaAggregate, SubscriberEaId, SubscriberEaUnregisteredEvent>
     {

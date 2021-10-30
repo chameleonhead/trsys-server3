@@ -8,21 +8,21 @@ namespace Trsys.Ea.Application.Write.Commands
 {
     public class SubscriberEaUnregisterCommand : Command<SubscriberEaAggregate, SubscriberEaId>
     {
-        public SubscriberEaUnregisterCommand(SubscriberEaId aggregateId, DistributionGroupId distributionGroupId, SubscriberId accountId) : base(aggregateId)
+        public SubscriberEaUnregisterCommand(SubscriberEaId aggregateId, DistributionGroupId distributionGroupId, SubscriberId subscriberId) : base(aggregateId)
         {
             DistributionGroupId = distributionGroupId;
-            AccountId = accountId;
+            SubscriberId = subscriberId;
         }
 
         public DistributionGroupId DistributionGroupId { get; }
-        public SubscriberId AccountId { get; }
+        public SubscriberId SubscriberId { get; }
     }
 
     public class SubscriberEaUnregisterCommandHandler : CommandHandler<SubscriberEaAggregate, SubscriberEaId, SubscriberEaUnregisterCommand>
     {
         public override Task ExecuteAsync(SubscriberEaAggregate aggregate, SubscriberEaUnregisterCommand command, CancellationToken cancellationToken)
         {
-            aggregate.Unregister(command.DistributionGroupId, command.AccountId);
+            aggregate.Unregister(command.DistributionGroupId, command.SubscriberId);
             return Task.CompletedTask;
         }
     }

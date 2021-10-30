@@ -13,7 +13,7 @@ namespace Trsys.Ea.Application.Write.Sagas.Ea
         {
             if (domainEvent is IDomainEvent<SubscriberEaAggregate, SubscriberEaId, SubscriberEaRegisteredEvent> registeredEvent)
             {
-                return Task.FromResult<ISagaId>(new SubscriberEaRegistrationSagaId("subscriberregistration-" + registeredEvent.AggregateEvent.AccountId.Value));
+                return Task.FromResult<ISagaId>(new SubscriberEaRegistrationSagaId("subscriberregistration-" + registeredEvent.AggregateEvent.SubscriberId.Value));
             }
             throw new InvalidOperationException();
         }

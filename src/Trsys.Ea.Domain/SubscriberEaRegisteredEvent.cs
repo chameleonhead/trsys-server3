@@ -5,15 +5,15 @@ namespace Trsys.Ea.Domain
 {
     public class SubscriberEaRegisteredEvent : AggregateEvent<SubscriberEaAggregate, SubscriberEaId>
     {
-        public SubscriberEaRegisteredEvent(SecretKey key, DistributionGroupId distributionGroupId, SubscriberId accountId)
+        public SubscriberEaRegisteredEvent(SecretKey key, DistributionGroupId distributionGroupId, SubscriberId subscriberId)
         {
             Key = key;
             DistributionGroupId = distributionGroupId;
-            AccountId = accountId;
+            SubscriberId = subscriberId;
         }
 
         public SecretKey Key { get; }
         public DistributionGroupId DistributionGroupId { get; }
-        public SubscriberId AccountId { get; }
+        public SubscriberId SubscriberId { get; }
     }
 }

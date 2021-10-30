@@ -17,19 +17,19 @@ namespace Trsys.CopyTrading.Domain
 
         public HashSet<SubscriberId> Subscribers { get; } = new();
 
-        public void AddSubscriber(SubscriberId accountId)
+        public void AddSubscriber(SubscriberId subscriberId)
         {
-            if (!Subscribers.Contains(accountId))
+            if (!Subscribers.Contains(subscriberId))
             {
-                Emit(new DistributionGroupSubscriberAddedEvent(accountId));
+                Emit(new DistributionGroupSubscriberAddedEvent(subscriberId));
             }
         }
 
-        public void RemvoeSubscriber(SubscriberId accountId)
+        public void RemvoeSubscriber(SubscriberId subscriberId)
         {
-            if (Subscribers.Contains(accountId))
+            if (Subscribers.Contains(subscriberId))
             {
-                Emit(new DistributionGroupSubscriberRemovedEvent(accountId));
+                Emit(new DistributionGroupSubscriberRemovedEvent(subscriberId));
             }
         }
 
@@ -45,12 +45,12 @@ namespace Trsys.CopyTrading.Domain
 
         public void Apply(DistributionGroupSubscriberAddedEvent aggregateEvent)
         {
-            Subscribers.Add(aggregateEvent.AccountId);
+            Subscribers.Add(aggregateEvent.SubscriberId);
         }
 
         public void Apply(DistributionGroupSubscriberRemovedEvent aggregateEvent)
         {
-            Subscribers.Remove(aggregateEvent.AccountId);
+            Subscribers.Remove(aggregateEvent.SubscriberId);
         }
 
         public void Apply(DistributionGroupOpenPublishedEvent aggregateEvent)

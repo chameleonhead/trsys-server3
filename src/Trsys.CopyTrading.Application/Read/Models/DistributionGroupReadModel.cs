@@ -16,13 +16,13 @@ namespace Trsys.CopyTrading.Application.Read.Models
         public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupSubscriberAddedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
-            Subscribers.Add(domainEvent.AggregateEvent.AccountId.Value);
+            Subscribers.Add(domainEvent.AggregateEvent.SubscriberId.Value);
         }
 
         public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupSubscriberRemovedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
-            Subscribers.Remove(domainEvent.AggregateEvent.AccountId.Value);
+            Subscribers.Remove(domainEvent.AggregateEvent.SubscriberId.Value);
             if (!Subscribers.Any())
             {
                 context.MarkForDeletion();

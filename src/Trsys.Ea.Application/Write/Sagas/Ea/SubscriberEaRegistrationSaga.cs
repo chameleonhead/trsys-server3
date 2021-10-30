@@ -20,7 +20,7 @@ namespace Trsys.Ea.Application.Write.Sagas.Ea
         public Task HandleAsync(IDomainEvent<SubscriberEaAggregate, SubscriberEaId, SubscriberEaRegisteredEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
         {
             var aggregateEvent = domainEvent.AggregateEvent;
-            Publish(new DistributionGroupAddSubscriberCommand(aggregateEvent.DistributionGroupId, aggregateEvent.AccountId));
+            Publish(new DistributionGroupAddSubscriberCommand(aggregateEvent.DistributionGroupId, aggregateEvent.SubscriberId));
             return Task.CompletedTask;
         }
 

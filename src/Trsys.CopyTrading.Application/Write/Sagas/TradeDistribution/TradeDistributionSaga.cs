@@ -38,7 +38,7 @@ namespace Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution
 
         public Task HandleAsync(IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantAddedEvent> domainEvent, ISagaContext sagaContext, CancellationToken cancellationToken)
         {
-            Publish(new CopyTradeAddDistributedAccountCommand(domainEvent.AggregateIdentity, domainEvent.AggregateEvent.AccountId));
+            Publish(new CopyTradeAddDistributedAccountCommand(domainEvent.AggregateIdentity, domainEvent.AggregateEvent.SubscriberId));
             return Task.CompletedTask;
         }
 

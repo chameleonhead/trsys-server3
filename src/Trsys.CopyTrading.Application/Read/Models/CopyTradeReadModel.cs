@@ -50,12 +50,12 @@ namespace Trsys.CopyTrading.Application.Read.Models
         public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantAddedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
-            var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.AccountId.Value);
+            var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.SubscriberId.Value);
             if (tradeOrder == null)
             {
                 TradeOrders.Add(new TradeOrderDto()
                 {
-                    Id = domainEvent.AggregateEvent.AccountId.Value,
+                    Id = domainEvent.AggregateEvent.SubscriberId.Value,
                     OpenDistributedTimestamp = domainEvent.Timestamp,
                     IsOpen = true,
                 });
@@ -65,7 +65,7 @@ namespace Trsys.CopyTrading.Application.Read.Models
         public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeApplicantRemovedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
-            var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.AccountId.Value);
+            var tradeOrder = TradeOrders.FirstOrDefault(e => e.Id == domainEvent.AggregateEvent.SubscriberId.Value);
             if (tradeOrder != null)
             {
                 tradeOrder.CloseDistributedTimestamp = domainEvent.Timestamp;

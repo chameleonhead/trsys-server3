@@ -28,7 +28,7 @@ namespace Trsys.Ea.Application.Write.Subscribers
         {
             foreach (var subscriberId in domainEvent.AggregateEvent.Subscribers)
             {
-                var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<AccountIdToSubscriberEaIdReadModel>(subscriberId.Value), cancellationToken);
+                var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberIdToSubscriberEaIdReadModel>(subscriberId.Value), cancellationToken);
                 if (subscriber == null)
                 {
                     return;
@@ -41,7 +41,7 @@ namespace Trsys.Ea.Application.Write.Subscribers
         {
             foreach (var subscriberId in domainEvent.AggregateEvent.Subscribers)
             {
-                var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<AccountIdToSubscriberEaIdReadModel>(subscriberId.Value), cancellationToken);
+                var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberIdToSubscriberEaIdReadModel>(subscriberId.Value), cancellationToken);
                 if (subscriber == null)
                 {
                     return;

@@ -9,17 +9,17 @@ namespace Trsys.CopyTrading.Application.Write.Commands
     {
         public DistributionGroupRemoveSubscriberCommand(DistributionGroupId aggregateId, SubscriberId subscriberId) : base(aggregateId)
         {
-            AccountId = subscriberId;
+            SubscriberId = subscriberId;
         }
 
-        public SubscriberId AccountId { get; }
+        public SubscriberId SubscriberId { get; }
     }
 
     public class DistributionGroupRemoveSubscriberCommandHandler : CommandHandler<DistributionGroupAggregate, DistributionGroupId, DistributionGroupRemoveSubscriberCommand>
     {
         public override Task ExecuteAsync(DistributionGroupAggregate aggregate, DistributionGroupRemoveSubscriberCommand command, CancellationToken cancellationToken)
         {
-            aggregate.RemvoeSubscriber(command.AccountId);
+            aggregate.RemvoeSubscriber(command.SubscriberId);
             return Task.CompletedTask;
         }
     }
