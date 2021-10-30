@@ -74,9 +74,10 @@ namespace Trsys.CopyTrading
             return copyTradeId.Value;
         }
 
-        public Task PublishCloseTradeAsync(string distributionGroupId, string copyTradeId, CancellationToken cancellationToken)
+        public async Task PublishCloseTradeAsync(string distributionGroupId, string copyTradeId, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new DistributionGroupPublishCloseCommand(DistributionGroupId.With(distributionGroupId), CopyTradeId.With(copyTradeId)), cancellationToken);
         }
     }
 }

@@ -75,7 +75,38 @@ namespace Trsys.CopyTrading.Tests
             var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
             Assert.AreEqual("USDJPY", copyTrade.Symbol);
             Assert.AreEqual("BUY", copyTrade.OrderType);
+            Assert.IsTrue(copyTrade.IsOpen);
             CollectionAssert.AreEquivalent(subscribers, copyTrade.Subscribers);
+        }
+
+        [TestMethod]
+        public async Task PublishCloseTradeAsync_Success_SingleSubscriber()
+        {
+            using var services = new ServiceCollection().AddCopyTrading().BuildServiceProvider();
+            var service = services.GetRequiredService<ICopyTradingService>();
+            var distributionGroupId = DistributionGroupId.New.ToString();
+            var subscriptionId = await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None);
+            var copyTradeId = await service.PublishOpenTradeAsync(distributionGroupId, "USDJPY", "BUY", CancellationToken.None);
+            await service.PublishCloseTradeAsync(distributionGroupId, copyTradeId, CancellationToken.None);
+            var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
+            Assert.IsFalse(copyTrade.IsOpen);
+        }
+
+        [TestMethod]
+        public async Task PublishCloseTradeAsync_Success_MultipleSubscribers()
+        {
+            using var services = new ServiceCollection().AddCopyTrading().BuildServiceProvider();
+            var service = services.GetRequiredService<ICopyTradingService>();
+            var distributionGroupId = DistributionGroupId.New.ToString();
+            var subscribers = new List<string>();
+            for (var i = 0; i < 100; i++)
+            {
+                subscribers.Add(await service.AddSubscriberAsync(distributionGroupId, CancellationToken.None));
+            }
+            var copyTradeId = await service.PublishOpenTradeAsync(distributionGroupId, "USDJPY", "BUY", CancellationToken.None);
+            await service.PublishCloseTradeAsync(distributionGroupId, copyTradeId, CancellationToken.None);
+            var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
+            Assert.IsFalse(copyTrade.IsOpen);
         }
     }
 }
