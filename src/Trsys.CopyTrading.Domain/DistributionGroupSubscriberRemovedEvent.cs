@@ -1,5 +1,5 @@
 ﻿using EventFlow.Aggregates;
-using Trsys.CopyTrading.Abstractions;
+using Trsys.Core;
 
 namespace Trsys.CopyTrading.Domain
 {

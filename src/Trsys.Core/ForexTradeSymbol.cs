@@ -1,7 +1,7 @@
 ﻿using EventFlow.ValueObjects;
 using Newtonsoft.Json;
 
-namespace Trsys.CopyTrading.Abstractions
+namespace Trsys.Core
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
     public class ForexTradeSymbol : SingleValueObject<string>

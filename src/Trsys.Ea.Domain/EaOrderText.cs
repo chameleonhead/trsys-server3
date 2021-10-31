@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Trsys.CopyTrading.Abstractions;
+using Trsys.Core;
 
 namespace Trsys.Ea.Domain
 {

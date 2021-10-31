@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Trsys.CopyTrading.Abstractions;
+using Trsys.Core;
 using Trsys.Ea.Application.Read.Models;
 using Trsys.Ea.Application.Write.Commands;
 using Trsys.Ea.Domain;

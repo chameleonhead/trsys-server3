@@ -2,7 +2,7 @@
 using EventFlow.ValueObjects;
 using System.Text.Json.Serialization;
 
-namespace Trsys.CopyTrading.Abstractions
+namespace Trsys.Core
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
     public class SubscriberId : Identity<SubscriberId>

@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using Trsys.CopyTrading;
-using Trsys.CopyTrading.Abstractions;
+using Trsys.Core;
 
 namespace Trsys.Ea.Tests
 {

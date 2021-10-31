@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Trsys.Core\Trsys.Core.csproj" />
+    <PackageReference Include="EventFlow" Version="0.83.4713" />
   </ItemGroup>
 
 </Project>

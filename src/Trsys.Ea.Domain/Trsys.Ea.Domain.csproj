@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Trsys.CopyTrading.Abstractions\Trsys.CopyTrading.Abstractions.csproj" />
+    <ProjectReference Include="..\Trsys.Core\Trsys.Core.csproj" />
   </ItemGroup>
 
 </Project>

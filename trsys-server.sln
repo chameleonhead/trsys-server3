@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.BackOffice.Infrastruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.BackOffice.Abstractions", "src\Trsys.BackOffice.Abstractions\Trsys.BackOffice.Abstractions.csproj", "{69A6CE2C-91D1-4B95-B209-6620BAF40FC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Core", "src\Trsys.Core\Trsys.Core.csproj", "{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -269,6 +271,18 @@ Global
 		{69A6CE2C-91D1-4B95-B209-6620BAF40FC2}.Release|x64.Build.0 = Release|Any CPU
 		{69A6CE2C-91D1-4B95-B209-6620BAF40FC2}.Release|x86.ActiveCfg = Release|Any CPU
 		{69A6CE2C-91D1-4B95-B209-6620BAF40FC2}.Release|x86.Build.0 = Release|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Debug|x64.Build.0 = Debug|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Debug|x86.Build.0 = Debug|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Release|x64.ActiveCfg = Release|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Release|x64.Build.0 = Release|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Release|x86.ActiveCfg = Release|Any CPU
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -292,6 +306,7 @@ Global
 		{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 		{FE0001A8-EF22-48DE-918E-F14D9E2CCFE1} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 		{69A6CE2C-91D1-4B95-B209-6620BAF40FC2} = {BE62412F-403C-4A84-9398-1F7C297115EA}
+		{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23} = {BE62412F-403C-4A84-9398-1F7C297115EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {080E749E-E248-4B95-B548-61854474AB22}

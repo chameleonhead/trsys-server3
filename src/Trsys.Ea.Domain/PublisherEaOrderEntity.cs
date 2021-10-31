@@ -1,6 +1,6 @@
 ﻿using EventFlow.Entities;
 using System.Collections.Generic;
-using Trsys.CopyTrading.Abstractions;
+using Trsys.Core;
 
 namespace Trsys.Ea.Domain
 {

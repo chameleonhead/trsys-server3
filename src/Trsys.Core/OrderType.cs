@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Trsys.CopyTrading.Abstractions
+namespace Trsys.Core
 {
     [JsonConverter(typeof(OrderTypeConverter))]
     public class OrderType : SingleValueObject<string>

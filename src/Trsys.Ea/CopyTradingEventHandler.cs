@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading;
-using Trsys.CopyTrading.Abstractions;
+using Trsys.Core;
 using Trsys.Ea.Application.Read.Models;
 using Trsys.Ea.Application.Write.Commands;
 using Trsys.Ea.Domain;
