@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
-using Trsys.Ea;
+using Trsys.Ea.Abstractions;
 
 namespace Trsys.BackOffice.Infrastructure
 {

@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using Trsys.CopyTrading;
 using Trsys.Core;
+using Trsys.Ea.Abstractions;
 
 namespace Trsys.Ea.Tests
 {
