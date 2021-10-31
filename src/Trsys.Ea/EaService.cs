@@ -15,19 +15,19 @@ namespace Trsys.Ea
     public class EaService : IEaService
     {
         private readonly string DISTRIBUTION_GROUP_ID = DistributionGroupId.New.Value;
-        private readonly ICommandBus commandBus;
-        private readonly IQueryProcessor queryProcessor;
+        private readonly EaEventFlowRootResolver resolver;
         private readonly IEaSessionManager sessionManager;
 
-        public EaService(ICommandBus commandBus, IQueryProcessor queryProcessor, IEaSessionManager sessionManager)
+        public EaService(EaEventFlowRootResolver resolver, IEaSessionManager sessionManager)
         {
-            this.commandBus = commandBus;
-            this.queryProcessor = queryProcessor;
+            this.resolver = resolver;
             this.sessionManager = sessionManager;
         }
 
         public async Task AddSecretKeyAsync(string key, string keyType)
         {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var commandBus = resolver.Resolve<ICommandBus>();
             switch (keyType)
             {
                 case "Publisher":
@@ -51,6 +51,8 @@ namespace Trsys.Ea
 
         public async Task RemvoeSecretKeyAsync(string key, string keyType)
         {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var commandBus = resolver.Resolve<ICommandBus>();
             switch (keyType)
             {
                 case "Publisher":
@@ -83,6 +85,8 @@ namespace Trsys.Ea
 
         public async Task<EaSession> GenerateSessionTokenAsync(string key, string keyType)
         {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var commandBus = resolver.Resolve<ICommandBus>();
             switch (keyType)
             {
                 case "Publisher":
@@ -120,16 +124,19 @@ namespace Trsys.Ea
 
         public async Task PublishOrderTextAsync(DateTimeOffset timestamp, string key, string text)
         {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
             if (publisher == null)
             {
                 throw new InvalidOperationException();
             }
+            var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new PublisherEaUpdateOrderTextCommand(PublisherEaId.With(publisher.Id), new EaOrderText(text)), CancellationToken.None);
         }
 
         public async Task<OrderText> GetCurrentOrderTextAsync(string key)
         {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
             if (subscriber == null)
             {
@@ -141,11 +148,13 @@ namespace Trsys.Ea
 
         public async Task SubscribeOrderTextAsync(DateTimeOffset timestamp, string key, string text)
         {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
             if (subscriber == null)
             {
                 throw new InvalidOperationException();
             }
+            var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new SubscriberEaDistributeOrderTextCommand(SubscriberEaId.With(subscriber.Id), new EaOrderText(text)), CancellationToken.None);
         }
 

@@ -1,5 +1,3 @@
-using EventFlow.AspNetCore.Extensions;
-using EventFlow.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,9 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System.Threading;
 using Trsys.BackOffice;
 using Trsys.CopyTrading;
-using Trsys.CopyTrading.Application;
 using Trsys.Ea;
-using Trsys.Ea.Application;
 using Trsys.Frontend.Web.Formatters;
 
 namespace Trsys.Frontend.Web
@@ -40,12 +36,6 @@ namespace Trsys.Frontend.Web
                     config.LogoutPath = "/logout";
                 });
 
-            services.AddEventFlow(ef =>
-            {
-                ef.UseCopyTradeApplication();
-                ef.UseEaApplication();
-                ef.AddAspNetCore();
-            });
             services.AddCopyTrading();
             services.AddEa();
             services.AddBackOffice();

@@ -8,6 +8,7 @@ namespace Trsys.Ea
         public static IServiceCollection AddEa(this IServiceCollection services)
         {
             services.AddHostedService<CopyTradingEventHandler>();
+            services.AddSingleton<EaEventFlowRootResolver>();
             services.AddSingleton<ICopyTradingService, EaCopyTradingService>();
             services.AddSingleton<IEaService, EaService>();
             services.AddSingleton<IEaSessionTokenProvider, EaSessionTokenProvider>();
