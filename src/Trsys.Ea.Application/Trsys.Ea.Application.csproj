@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Trsys.CopyTrading.Abstractions\Trsys.CopyTrading.Abstractions.csproj" />
     <ProjectReference Include="..\Trsys.Ea.Domain\Trsys.Ea.Domain.csproj" />
   </ItemGroup>
 

@@ -3,6 +3,7 @@ using EventFlow.AspNetCore.Extensions;
 using EventFlow.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Trsys.CopyTrading.Abstractions;
 using Trsys.Ea.Application;
 
 namespace Trsys.Ea.Infrastructure
@@ -19,8 +20,7 @@ namespace Trsys.Ea.Infrastructure
                 .UseEaApplication()
                 .RegisterServices(sr =>
                 {
-                    sr.Register<CopyTrading.Abstractions.ICopyTradingService>(context => sp.GetRequiredService<CopyTrading.Abstractions.ICopyTradingService>());
-                    sr.Register<ICopyTradingService, EaCopyTradingService>();
+                    sr.Register(context => sp.GetRequiredService<ICopyTradingService>());
                 })
                 .AddAspNetCore()
                 .CreateResolver();

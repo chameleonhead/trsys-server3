@@ -2,6 +2,7 @@
 using EventFlow.Subscribers;
 using System.Threading;
 using System.Threading.Tasks;
+using Trsys.CopyTrading.Abstractions;
 using Trsys.Ea.Domain;
 
 namespace Trsys.Ea.Application.Write.Subscribers
