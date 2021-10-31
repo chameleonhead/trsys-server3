@@ -1,6 +1,7 @@
 using EventFlow.Aggregates;
 using EventFlow.ReadStores;
 using Trsys.BackOffice.Domain;
+using Trsys.Core;
 
 namespace Trsys.BackOffice.Application.Read.Models
 {

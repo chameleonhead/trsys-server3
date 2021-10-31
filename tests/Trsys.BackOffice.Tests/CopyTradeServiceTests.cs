@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.BackOffice.Abstractions;
-using Trsys.BackOffice.Domain;
+using Trsys.Core;
 
 namespace Trsys.BackOffice.Tests
 {

@@ -2,12 +2,13 @@ using EventFlow.Commands;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.BackOffice.Domain;
+using Trsys.Core;
 
 namespace Trsys.BackOffice.Application.Write.Commands
 {
     public class CopyTradeOpenCommand : Command<CopyTradeAggregate, CopyTradeId>
     {
-        public CopyTradeOpenCommand(CopyTradeId aggregateId, DistributionGroupId distributionGroupId, CopyTradeSymbol symbol, CopyTradeOrderType orderType) : base(aggregateId)
+        public CopyTradeOpenCommand(CopyTradeId aggregateId, DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType) : base(aggregateId)
         {
             DistributionGroupId = distributionGroupId;
             Symbol = symbol;
@@ -15,8 +16,8 @@ namespace Trsys.BackOffice.Application.Write.Commands
         }
 
         public DistributionGroupId DistributionGroupId { get; }
-        public CopyTradeSymbol Symbol { get; }
-        public CopyTradeOrderType OrderType { get; }
+        public ForexTradeSymbol Symbol { get; }
+        public OrderType OrderType { get; }
     }
 
     public class CopyTradeOpenCommandHandler : CommandHandler<CopyTradeAggregate, CopyTradeId, CopyTradeOpenCommand>

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.BackOffice.Domain;
+using Trsys.Core;
 
 namespace Trsys.BackOffice.Application.Write.Commands
 {

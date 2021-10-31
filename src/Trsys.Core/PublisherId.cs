@@ -1,12 +1,13 @@
+using EventFlow.Core;
 using EventFlow.ValueObjects;
 using System.Text.Json.Serialization;
 
-namespace Trsys.BackOffice.Domain
+namespace Trsys.Core
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
-    public class CopyTradeOrderType : SingleValueObject<string>
+    public class PublisherId : Identity<PublisherId>
     {
-        public CopyTradeOrderType(string value) : base(value)
+        public PublisherId(string value) : base(value)
         {
         }
     }

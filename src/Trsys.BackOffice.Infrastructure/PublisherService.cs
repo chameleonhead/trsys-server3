@@ -8,6 +8,7 @@ using Trsys.BackOffice.Application.Read.Models;
 using Trsys.BackOffice.Application.Read.Queries;
 using Trsys.BackOffice.Application.Write.Commands;
 using Trsys.BackOffice.Domain;
+using Trsys.Core;
 
 namespace Trsys.BackOffice.Infrastructure
 {

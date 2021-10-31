@@ -7,7 +7,7 @@ using Trsys.BackOffice.Abstractions;
 using Trsys.BackOffice.Application.Read.Models;
 using Trsys.BackOffice.Application.Read.Queries;
 using Trsys.BackOffice.Application.Write.Commands;
-using Trsys.BackOffice.Domain;
+using Trsys.Core;
 
 namespace Trsys.BackOffice.Infrastructure
 {
@@ -61,7 +61,7 @@ namespace Trsys.BackOffice.Infrastructure
         {
             var commandBus = resolver.Resolve<ICommandBus>();
             var copyTradeId = CopyTradeId.New;
-            await commandBus.PublishAsync(new CopyTradeOpenCommand(copyTradeId, DistributionGroupId.With(distributionGroupId), new CopyTradeSymbol(symbol), new CopyTradeOrderType(orderType)), cancellationToken);
+            await commandBus.PublishAsync(new CopyTradeOpenCommand(copyTradeId, DistributionGroupId.With(distributionGroupId), new ForexTradeSymbol(symbol), OrderType.Of(orderType)), cancellationToken);
             return copyTradeId.Value;
         }
 

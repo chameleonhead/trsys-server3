@@ -1,5 +1,6 @@
 using EventFlow.Aggregates;
 using System;
+using Trsys.Core;
 
 namespace Trsys.BackOffice.Domain
 {

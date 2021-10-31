@@ -1,10 +1,11 @@
 using EventFlow.Aggregates;
+using Trsys.Core;
 
 namespace Trsys.BackOffice.Domain
 {
     public class CopyTradeOpenedEvent : AggregateEvent<CopyTradeAggregate, CopyTradeId>
     {
-        public CopyTradeOpenedEvent(DistributionGroupId distributionGroupId, CopyTradeSymbol symbol, CopyTradeOrderType orderType)
+        public CopyTradeOpenedEvent(DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType)
         {
             DistributionGroupId = distributionGroupId;
             Symbol = symbol;
@@ -12,7 +13,7 @@ namespace Trsys.BackOffice.Domain
         }
 
         public DistributionGroupId DistributionGroupId { get; }
-        public CopyTradeSymbol Symbol { get; }
-        public CopyTradeOrderType OrderType { get; }
+        public ForexTradeSymbol Symbol { get; }
+        public OrderType OrderType { get; }
     }
 }

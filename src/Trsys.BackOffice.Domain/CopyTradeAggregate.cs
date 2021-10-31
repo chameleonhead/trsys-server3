@@ -1,5 +1,6 @@
 using EventFlow.Aggregates;
 using System;
+using Trsys.Core;
 
 namespace Trsys.BackOffice.Domain
 {
@@ -8,8 +9,8 @@ namespace Trsys.BackOffice.Domain
         IEmit<CopyTradeClosedEvent>
     {
         public DistributionGroupId DistributionGroupId { get; private set; }
-        public CopyTradeSymbol Symbol { get; private set; }
-        public CopyTradeOrderType OrderType { get; private set; }
+        public ForexTradeSymbol Symbol { get; private set; }
+        public OrderType OrderType { get; private set; }
         public bool IsClosed { get; private set; }
 
         public CopyTradeAggregate(CopyTradeId id) : base(id)
@@ -24,7 +25,7 @@ namespace Trsys.BackOffice.Domain
             }
         }
 
-        public void Open(DistributionGroupId distributionGroupId, CopyTradeSymbol symbol, CopyTradeOrderType orderType)
+        public void Open(DistributionGroupId distributionGroupId, ForexTradeSymbol symbol, OrderType orderType)
         {
             EnsureNotClosed();
             Emit(new CopyTradeOpenedEvent(distributionGroupId, symbol, orderType));
