@@ -7,12 +7,12 @@ namespace Trsys.BackOffice.Infrastructure
 {
     public class EaEventHandler : BackgroundService
     {
-        private readonly IEaService service;
+        private readonly IEaEventBus eventBus;
         private readonly BackOfficeEventFlowRootResolver resolver;
 
-        public EaEventHandler(IEaService service, BackOfficeEventFlowRootResolver resolver)
+        public EaEventHandler(IEaEventBus eventBus, BackOfficeEventFlowRootResolver resolver)
         {
-            this.service = service;
+            this.eventBus = eventBus;
             this.resolver = resolver;
         }
 
@@ -22,7 +22,7 @@ namespace Trsys.BackOffice.Infrastructure
             {
                 try
                 {
-                    // await service.SubscribeToEaEventsAsync(OnEaEvent, stoppingToken);
+                    await eventBus.Subscribe(OnEaEvent, stoppingToken);
                 }
                 catch
                 {
@@ -30,10 +30,8 @@ namespace Trsys.BackOffice.Infrastructure
             }
         }
 
-        //private Task OnEaEvent(IEaEvent eaEvent)
-        //{
-        //    return Task.CompletedTask;
-        //}
-
+        private async void OnEaEvent(IEaEvent eaEvent)
+        {
+        }
     }
 }

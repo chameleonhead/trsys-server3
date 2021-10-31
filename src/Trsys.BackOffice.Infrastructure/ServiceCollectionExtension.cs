@@ -13,6 +13,9 @@ namespace Trsys.BackOffice.Infrastructure
             services.AddSingleton<IPublisherService, PublisherService>();
             services.AddSingleton<ISubscriberService, SubscriberService>();
             services.AddSingleton<ICopyTradeService, CopyTradeService>();
+
+            services.AddHostedService<CopyTradingEventHandler>();
+            services.AddHostedService<EaEventHandler>();
             return services;
         }
     }
