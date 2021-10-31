@@ -14,6 +14,7 @@ namespace Trsys.Frontend.Web.Controllers
     [ApiController]
     public class EaApiController : ControllerBase
     {
+        private readonly string DEFAULT_DISTRIBUTION_GROUP_ID = "distributiongroup-7326485d-b2b8-41a6-9e40-34d4445569d5";
         private readonly IEaService service;
 
         public EaApiController(IEaService service)
@@ -27,7 +28,7 @@ namespace Trsys.Frontend.Web.Controllers
         public async Task<IActionResult> PostKey([FromHeader(Name = "X-Ea-Id")] string key, [FromHeader(Name = "X-Ea-Type")] string keyType)
         {
             Activity.Current.AddEvent(new ActivityEvent("PostKeyStart"));
-            await service.AddSecretKeyAsync(key, keyType);
+            await service.AddSecretKeyAsync(DEFAULT_DISTRIBUTION_GROUP_ID, key, keyType);
             Activity.Current.AddEvent(new ActivityEvent("PostKeySuccess"));
             return Ok();
         }
@@ -38,7 +39,7 @@ namespace Trsys.Frontend.Web.Controllers
         public async Task<IActionResult> PostDeleteKey([FromHeader(Name = "X-Ea-Id")] string key, [FromHeader(Name = "X-Ea-Type")] string keyType)
         {
             Activity.Current.AddEvent(new ActivityEvent("DeleteKeyStart"));
-            await service.RemvoeSecretKeyAsync(key, keyType);
+            await service.RemvoeSecretKeyAsync(DEFAULT_DISTRIBUTION_GROUP_ID, key, keyType);
             Activity.Current.AddEvent(new ActivityEvent("DeleteKeySuccess"));
             return Ok();
         }

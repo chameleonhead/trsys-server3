@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Trsys.Ea.Domain;
 
 namespace Trsys.Ea
 {
     public interface IEaService
     {
-        Task AddSecretKeyAsync(string key, string keyType);
-        Task RemvoeSecretKeyAsync(string key, string keyType);
+        Task<SecretKeyDto> FindByKeyAsync(string key, string keyType);
+        Task AddSecretKeyAsync(string distributionGroupId, string key, string keyType);
+        Task RemvoeSecretKeyAsync(string distributionGroupId, string key, string keyType);
         Task<EaSession> GenerateSessionTokenAsync(string key, string keyType);
         Task DiscardSessionTokenAsync(string token, string key, string keyType);
         Task ValidateSessionTokenAsync(string token, string key, string keyType);

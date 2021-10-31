@@ -1,14 +1,8 @@
-using EventFlow;
-using EventFlow.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading;
 using Trsys.CopyTrading.Abstractions;
-using Trsys.Ea.Application;
-using Trsys.Ea.Application.Write.Commands;
-using Trsys.Ea.Domain;
 
 namespace Trsys.Ea.Tests
 {
@@ -23,7 +17,26 @@ namespace Trsys.Ea.Tests
                 .AddEa()
                 .BuildServiceProvider();
             var service = services.GetRequiredService<IEaService>();
-            await service.AddSecretKeyAsync("PublisherKey", "Publisher");
+            var distributionGroupId = DistributionGroupId.New.ToString();
+            await service.AddSecretKeyAsync(distributionGroupId, "PublisherKey", "Publisher");
+            var secretKey = await service.FindByKeyAsync("PublisherKey", "Publisher");
+            Assert.AreEqual("PublisherKey", secretKey.Key);
+            Assert.AreEqual("Publisher", secretKey.KeyType);
+        }
+
+        [TestMethod]
+        public async Task AddSecretKeyAsync_Success_Subscriber()
+        {
+            using var services = new ServiceCollection()
+                .AddCopyTrading()
+                .AddEa()
+                .BuildServiceProvider();
+            var service = services.GetRequiredService<IEaService>();
+            var distributionGroupId = DistributionGroupId.New.ToString();
+            await service.AddSecretKeyAsync(distributionGroupId, "SubscriberKey", "Subscriber");
+            var secretKey = await service.FindByKeyAsync("SubscriberKey", "Subscriber");
+            Assert.AreEqual("SubscriberKey", secretKey.Key);
+            Assert.AreEqual("Subscriber", secretKey.KeyType);
         }
     }
 }

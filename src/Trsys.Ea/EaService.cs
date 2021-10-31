@@ -14,7 +14,6 @@ namespace Trsys.Ea
 {
     public class EaService : IEaService
     {
-        private readonly string DISTRIBUTION_GROUP_ID = DistributionGroupId.New.Value;
         private readonly EaEventFlowRootResolver resolver;
         private readonly IEaSessionManager sessionManager;
 
@@ -24,7 +23,41 @@ namespace Trsys.Ea
             this.sessionManager = sessionManager;
         }
 
-        public async Task AddSecretKeyAsync(string key, string keyType)
+        public async Task<SecretKeyDto> FindByKeyAsync(string key, string keyType)
+        {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            switch (keyType)
+            {
+                case "Publisher":
+                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
+                    if (publisher == null)
+                    {
+                        return null;
+                    }
+                    return new SecretKeyDto()
+                    {
+                        Id = publisher.Id,
+                        Key = publisher.Key,
+                        KeyType = "Publisher",
+                    };
+                case "Subscriber":
+                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+                    if (subscriber == null)
+                    {
+                        return null;
+                    }
+                    return new SecretKeyDto()
+                    {
+                        Id = subscriber.Id,
+                        Key = subscriber.Key,
+                        KeyType = "Subscriber",
+                    };
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        public async Task AddSecretKeyAsync(string distributionGroupId, string key, string keyType)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var commandBus = resolver.Resolve<ICommandBus>();
@@ -34,14 +67,14 @@ namespace Trsys.Ea
                     var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
                     if (publisher == null)
                     {
-                        await commandBus.PublishAsync(new PublisherEaRegisterCommand(PublisherEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID)), CancellationToken.None);
+                        await commandBus.PublishAsync(new PublisherEaRegisterCommand(PublisherEaId.New, new SecretKey(key), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
                     }
                     break;
                 case "Subscriber":
                     var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
-                        await commandBus.PublishAsync(new SubscriberEaRegisterCommand(SubscriberEaId.New, new SecretKey(key), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), SubscriberId.New), CancellationToken.None);
+                        await commandBus.PublishAsync(new SubscriberEaRegisterCommand(SubscriberEaId.New, new SecretKey(key), DistributionGroupId.With(distributionGroupId), SubscriberId.New), CancellationToken.None);
                     }
                     break;
                 default:
@@ -49,7 +82,7 @@ namespace Trsys.Ea
             }
         }
 
-        public async Task RemvoeSecretKeyAsync(string key, string keyType)
+        public async Task RemvoeSecretKeyAsync(string distributionGroupId, string key, string keyType)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var commandBus = resolver.Resolve<ICommandBus>();
@@ -61,7 +94,7 @@ namespace Trsys.Ea
                     {
                         return;
                     }
-                    await commandBus.PublishAsync(new PublisherEaUnregisterCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID)), CancellationToken.None);
+                    await commandBus.PublishAsync(new PublisherEaUnregisterCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
                     await sessionManager.DestroySessionAsync(publisher.Id);
                     return;
                 case "Subscriber":
@@ -70,12 +103,12 @@ namespace Trsys.Ea
                     {
                         return;
                     }
-                    var subscriberId = subscriber.GetSubscriberId(DISTRIBUTION_GROUP_ID);
+                    var subscriberId = subscriber.GetSubscriberId(distributionGroupId);
                     if (subscriberId == null)
                     {
                         return;
                     }
-                    await commandBus.PublishAsync(new SubscriberEaUnregisterCommand(SubscriberEaId.With(subscriber.Id), DistributionGroupId.With(DISTRIBUTION_GROUP_ID), SubscriberId.With(subscriberId)), CancellationToken.None);
+                    await commandBus.PublishAsync(new SubscriberEaUnregisterCommand(SubscriberEaId.With(subscriber.Id), DistributionGroupId.With(distributionGroupId), SubscriberId.With(subscriberId)), CancellationToken.None);
                     await sessionManager.DestroySessionAsync(subscriber.Id);
                     return;
                 default:

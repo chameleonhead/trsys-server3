@@ -15,14 +15,12 @@ namespace Trsys.Ea
     public class CopyTradingEventHandler : BackgroundService
     {
         private readonly ICopyTradingService service;
-        private readonly ICommandBus commandBus;
-        private readonly IQueryProcessor queryProcessor;
+        private readonly EaEventFlowRootResolver resolver;
 
-        public CopyTradingEventHandler(ICopyTradingService service, ICommandBus commandBus, IQueryProcessor queryProcessor)
+        public CopyTradingEventHandler(ICopyTradingService service, EaEventFlowRootResolver resolver)
         {
             this.service = service;
-            this.commandBus = commandBus;
-            this.queryProcessor = queryProcessor;
+            this.resolver = resolver;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -54,6 +52,8 @@ namespace Trsys.Ea
 
         public async Task HandleAsync(CopyTradeOpened domainEvent, CancellationToken cancellationToken)
         {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var commandBus = resolver.Resolve<ICommandBus>();
             await Task.WhenAll(domainEvent.Subscribers.Select(async subscriberId =>
             {
                 var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberIdToSubscriberEaIdReadModel>(subscriberId), cancellationToken);
@@ -67,6 +67,8 @@ namespace Trsys.Ea
 
         public async Task HandleAsync(CopyTradeClosed domainEvent, CancellationToken cancellationToken)
         {
+            var queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var commandBus = resolver.Resolve<ICommandBus>();
             await Task.WhenAll(domainEvent.Subscribers.Select(async subscriberId =>
             {
                 var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberIdToSubscriberEaIdReadModel>(subscriberId), cancellationToken);
