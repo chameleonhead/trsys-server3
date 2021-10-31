@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Trsys.BackOffice;
+using Trsys.BackOffice.Abstractions;
 
 namespace Trsys.Frontend.Web.Models.Admin
 {

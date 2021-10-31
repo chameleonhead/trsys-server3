@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Trsys.BackOffice;
+using Trsys.BackOffice.Abstractions;
 using Trsys.Frontend.Web.Models;
 using Trsys.Frontend.Web.Models.Home;
 

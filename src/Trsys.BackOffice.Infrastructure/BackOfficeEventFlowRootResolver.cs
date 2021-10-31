@@ -4,7 +4,7 @@ using EventFlow.AspNetCore.Extensions;
 using EventFlow.Configuration;
 using Trsys.BackOffice.Application;
 
-namespace Trsys.BackOffice
+namespace Trsys.BackOffice.Infrastructure
 {
     public class BackOfficeEventFlowRootResolver : IDisposable
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Trsys.BackOffice
+namespace Trsys.BackOffice.Abstractions
 {
     public class PagedResult<T>
     {

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using Trsys.BackOffice;
+using Trsys.BackOffice.Abstractions;
 using Trsys.CopyTrading;
 using Trsys.Ea;
 using Trsys.Frontend.Web.Formatters;

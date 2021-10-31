@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EventFlow.AspNetCore" Version="0.83.4713" />
+    <PackageReference Include="EventFlow.DependencyInjection" Version="0.83.4713" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Trsys.BackOffice.Abstractions\Trsys.BackOffice.Abstractions.csproj" />
+    <ProjectReference Include="..\Trsys.BackOffice.Application\Trsys.BackOffice.Application.csproj" />
+    <ProjectReference Include="..\Trsys.CopyTrading\Trsys.CopyTrading.csproj" />
+    <ProjectReference Include="..\Trsys.Ea\Trsys.Ea.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-﻿namespace Trsys.BackOffice
+﻿namespace Trsys.BackOffice.Abstractions
 {
     public class PublisherDto
     {
