@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Trsys.CopyTrading;
+using Trsys.CopyTrading.Abstractions;
 
 namespace Trsys.Ea
 {

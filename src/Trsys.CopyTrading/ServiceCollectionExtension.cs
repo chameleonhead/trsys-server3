@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Trsys.CopyTrading.Infrastructure;
 
 namespace Trsys.CopyTrading
 {
@@ -6,8 +7,7 @@ namespace Trsys.CopyTrading
     {
         public static IServiceCollection AddCopyTrading(this IServiceCollection services)
         {
-            services.AddSingleton<CopyTradingEventFlowRootResolver>();
-            services.AddSingleton<ICopyTradingService, CopyTradingService>();
+            services.AddCopyTradingInfrastructure();
             return services;
         }
     }

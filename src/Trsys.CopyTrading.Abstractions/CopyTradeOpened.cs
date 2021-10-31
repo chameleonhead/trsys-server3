@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Trsys.CopyTrading
+namespace Trsys.CopyTrading.Abstractions
 {
     public class CopyTradeOpened : ICopyTradingEvent
     {

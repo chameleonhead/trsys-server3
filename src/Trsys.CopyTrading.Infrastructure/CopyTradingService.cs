@@ -5,13 +5,14 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Trsys.Core;
+using Trsys.CopyTrading.Abstractions;
 using Trsys.CopyTrading.Application.Read.Models;
 using Trsys.CopyTrading.Application.Write.Commands;
 using Trsys.CopyTrading.Application.Write.Subscribers;
 using Trsys.CopyTrading.Domain;
+using Trsys.Core;
 
-namespace Trsys.CopyTrading
+namespace Trsys.CopyTrading.Infrastructure
 {
     public class CopyTradingService : ICopyTradingService
     {

@@ -4,7 +4,7 @@ using EventFlow.AspNetCore.Extensions;
 using EventFlow.Configuration;
 using Trsys.CopyTrading.Application;
 
-namespace Trsys.CopyTrading
+namespace Trsys.CopyTrading.Infrastructure
 {
     public class CopyTradingEventFlowRootResolver : IDisposable
     {
