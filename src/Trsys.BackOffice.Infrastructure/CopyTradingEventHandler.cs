@@ -7,12 +7,12 @@ namespace Trsys.BackOffice.Infrastructure
 {
     public class CopyTradingEventHandler : BackgroundService
     {
-        private readonly ICopyTradingService service;
+        private readonly ICopyTradingEventBus eventBus;
         private readonly BackOfficeEventFlowRootResolver resolver;
 
-        public CopyTradingEventHandler(ICopyTradingService service, BackOfficeEventFlowRootResolver resolver)
+        public CopyTradingEventHandler(ICopyTradingEventBus eventBus, BackOfficeEventFlowRootResolver resolver)
         {
-            this.service = service;
+            this.eventBus = eventBus;
             this.resolver = resolver;
         }
 
@@ -22,7 +22,7 @@ namespace Trsys.BackOffice.Infrastructure
             {
                 try
                 {
-                    await service.SubscribeToCopyTradeEventsAsync(OnCopyTradeEvent, stoppingToken);
+                    await eventBus.Subscribe(OnCopyTradeEvent, stoppingToken);
                 }
                 catch
                 {
@@ -30,10 +30,8 @@ namespace Trsys.BackOffice.Infrastructure
             }
         }
 
-        private Task OnCopyTradeEvent(ICopyTradingEvent copyTradingEvent)
+        private async void OnCopyTradeEvent(ICopyTradingEvent copyTradingEvent)
         {
-            return Task.CompletedTask;
         }
-
     }
 }

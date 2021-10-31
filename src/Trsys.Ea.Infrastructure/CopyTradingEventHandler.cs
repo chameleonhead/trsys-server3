@@ -14,12 +14,12 @@ namespace Trsys.Ea.Infrastructure
 {
     public class CopyTradingEventHandler : BackgroundService
     {
-        private readonly ICopyTradingService service;
+        private readonly ICopyTradingEventBus eventBus;
         private readonly EaEventFlowRootResolver resolver;
 
-        public CopyTradingEventHandler(ICopyTradingService service, EaEventFlowRootResolver resolver)
+        public CopyTradingEventHandler(ICopyTradingEventBus eventBus, EaEventFlowRootResolver resolver)
         {
-            this.service = service;
+            this.eventBus = eventBus;
             this.resolver = resolver;
         }
 
@@ -29,7 +29,7 @@ namespace Trsys.Ea.Infrastructure
             {
                 try
                 {
-                    await service.SubscribeToCopyTradeEventsAsync(OnCopyTradeEvent, stoppingToken);
+                    await eventBus.Subscribe(OnCopyTradeEvent, stoppingToken);
                 }
                 catch
                 {
@@ -37,17 +37,16 @@ namespace Trsys.Ea.Infrastructure
             }
         }
 
-        private Task OnCopyTradeEvent(ICopyTradingEvent copyTradingEvent)
+        private async void OnCopyTradeEvent(ICopyTradingEvent copyTradingEvent)
         {
             if (copyTradingEvent is CopyTradeOpened opened)
             {
-                return HandleAsync(opened, CancellationToken.None);
+                await HandleAsync(opened, CancellationToken.None);
             }
             if (copyTradingEvent is CopyTradeClosed closed)
             {
-                return HandleAsync(closed, CancellationToken.None);
+                await HandleAsync(closed, CancellationToken.None);
             }
-            return Task.CompletedTask;
         }
 
         public async Task HandleAsync(CopyTradeOpened domainEvent, CancellationToken cancellationToken)

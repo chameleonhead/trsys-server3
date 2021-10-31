@@ -1,7 +1,10 @@
-using System;
 using EventFlow;
 using EventFlow.AspNetCore.Extensions;
 using EventFlow.Configuration;
+using EventFlow.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using Trsys.CopyTrading.Abstractions;
 using Trsys.CopyTrading.Application;
 
 namespace Trsys.CopyTrading.Infrastructure
@@ -11,11 +14,13 @@ namespace Trsys.CopyTrading.Infrastructure
         private readonly IRootResolver resolver;
         private bool disposedValue;
 
-        public CopyTradingEventFlowRootResolver()
+        public CopyTradingEventFlowRootResolver(IServiceProvider sp)
         {
             resolver = EventFlowOptions
                 .New
                 .UseCopyTradeApplication()
+                .RegisterServices(sr => sr.Register(context => sp.GetRequiredService<ICopyTradingEventBus>()))
+                .AddSubscribers(typeof(AllEventSubscriber))
                 .AddAspNetCore()
                 .CreateResolver();
         }

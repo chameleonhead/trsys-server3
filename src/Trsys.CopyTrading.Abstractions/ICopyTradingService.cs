@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace Trsys.CopyTrading.Abstractions
@@ -12,6 +11,5 @@ namespace Trsys.CopyTrading.Abstractions
         Task RemoveSubscriberAsync(string distributionGroupId, string subscriptionId, CancellationToken cancellationToken);
         Task PublishOpenTradeAsync(string distributionGroupId, string copyTradeId, string symbol, string orderType, CancellationToken cancellationToken);
         Task PublishCloseTradeAsync(string distributionGroupId, string copyTradeId, CancellationToken cancellationToken);
-        Task SubscribeToCopyTradeEventsAsync(Func<ICopyTradingEvent, Task> onCopyTradeEvent, CancellationToken stoppingToken);
     }
 }

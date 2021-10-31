@@ -1,15 +1,11 @@
 ﻿using EventFlow;
-using EventFlow.Aggregates;
 using EventFlow.Queries;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Abstractions;
 using Trsys.CopyTrading.Application.Read.Models;
 using Trsys.CopyTrading.Application.Write.Commands;
-using Trsys.CopyTrading.Application.Write.Subscribers;
-using Trsys.CopyTrading.Domain;
 using Trsys.Core;
 
 namespace Trsys.CopyTrading.Infrastructure
@@ -17,12 +13,10 @@ namespace Trsys.CopyTrading.Infrastructure
     public class CopyTradingService : ICopyTradingService
     {
         private readonly CopyTradingEventFlowRootResolver resolver;
-        private readonly AllEventBus eventBus;
 
         public CopyTradingService(CopyTradingEventFlowRootResolver resolver)
         {
             this.resolver = resolver;
-            eventBus = resolver.Resolve<AllEventBus>();
         }
 
         public async Task<DistributionGroupDto> FindDistributionGroupByIdAsync(string distributionGroupId, CancellationToken cancellationToken)
@@ -81,27 +75,6 @@ namespace Trsys.CopyTrading.Infrastructure
         {
             var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new DistributionGroupPublishCloseCommand(DistributionGroupId.With(distributionGroupId), CopyTradeId.With(copyTradeId)), cancellationToken);
-        }
-
-        public Task SubscribeToCopyTradeEventsAsync(Func<ICopyTradingEvent, Task> onCopyTradeEvent, CancellationToken cancellationToken)
-        {
-            return Task.Run(() =>
-            {
-                foreach (var events in eventBus.Events.GetConsumingEnumerable(cancellationToken))
-                {
-                    foreach (var e in events)
-                    {
-                        if (e is IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> opened)
-                        {
-                            onCopyTradeEvent.Invoke(new CopyTradeOpened(opened.AggregateIdentity.Value, opened.AggregateEvent.DistributionGroupId.Value, opened.AggregateEvent.Symbol.Value, opened.AggregateEvent.OrderType.Value, opened.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
-                        }
-                        if (e is IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> closed)
-                        {
-                            onCopyTradeEvent.Invoke(new CopyTradeClosed(closed.AggregateIdentity.Value, closed.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
-                        }
-                    }
-                }
-            });
         }
     }
 }

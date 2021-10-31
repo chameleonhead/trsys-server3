@@ -7,8 +7,9 @@ namespace Trsys.CopyTrading.Infrastructure
     {
         public static IServiceCollection AddCopyTradingInfrastructure(this IServiceCollection services)
         {
-            services.AddSingleton<CopyTradingEventFlowRootResolver>();
+            services.AddSingleton<ICopyTradingEventBus, AllEventBus>();
             services.AddSingleton<ICopyTradingService, CopyTradingService>();
+            services.AddSingleton<CopyTradingEventFlowRootResolver>();
             return services;
         }
     }
