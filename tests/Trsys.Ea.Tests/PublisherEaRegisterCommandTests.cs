@@ -1,17 +1,17 @@
 using EventFlow;
 using EventFlow.Configuration;
-using EventFlow.Queries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Abstractions;
+using Trsys.Ea.Application;
 using Trsys.Ea.Application.Write.Commands;
 using Trsys.Ea.Domain;
 
-namespace Trsys.Ea.Application.Tests
+namespace Trsys.Ea.Tests
 {
     [TestClass]
-    public class SubscriberEaRegisterCommandTests
+    public class PublisherEaRegisterCommandTests
     {
         [TestMethod]
         public async Task Success()
@@ -19,17 +19,12 @@ namespace Trsys.Ea.Application.Tests
             using var resolver = CreateResolver();
             var commandBus = resolver.Resolve<ICommandBus>();
 
-            var subscriberEaId = SubscriberEaId.New;
+            var publisherEaId = PublisherEaId.New;
 
             var distributionGroupId = DistributionGroupId.New;
-            var subscriberId = SubscriberId.New;
 
-            var result = await commandBus.PublishAsync(new SubscriberEaRegisterCommand(subscriberEaId, new SecretKey("SubscriberKey"), distributionGroupId, subscriberId), CancellationToken.None);
+            var result = await commandBus.PublishAsync(new PublisherEaRegisterCommand(publisherEaId, new SecretKey("PublisherKey"), distributionGroupId), CancellationToken.None);
             Assert.IsTrue(result.IsSuccess);
-
-            //var queryProcessor = resolver.Resolve<IQueryProcessor>();
-            //var queryResult = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<DistributionGroupReadModel>(distributionGroupId.Value), CancellationToken.None);
-            //Assert.IsTrue(queryResult.Subscribers.Contains(subscriberId.Value));
         }
 
         private static IRootResolver CreateResolver()

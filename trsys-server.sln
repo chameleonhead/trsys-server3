@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Application", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Domain", "src\Trsys.Ea.Domain\Trsys.Ea.Domain.csproj", "{1B4C277D-C999-4C01-A34D-5C38603BB693}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Application.Tests", "tests\Trsys.Ea.Application.Tests\Trsys.Ea.Application.Tests.csproj", "{2DAB77DE-8EB3-45E3-8CF7-22B520BBC9EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Tests", "tests\Trsys.Ea.Tests\Trsys.Ea.Tests.csproj", "{2DAB77DE-8EB3-45E3-8CF7-22B520BBC9EE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.BackOffice", "src\Trsys.BackOffice\Trsys.BackOffice.csproj", "{AC580410-321B-442C-B0D4-75EC45D28299}"
 EndProject

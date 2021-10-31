@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Trsys.Ea.Application\Trsys.Ea.Application.csproj" />
+    <ProjectReference Include="..\..\src\Trsys.Ea\Trsys.Ea.csproj" />
   </ItemGroup>
 
 </Project>
