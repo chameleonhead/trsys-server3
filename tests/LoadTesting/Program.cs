@@ -23,7 +23,7 @@ namespace LoadTesting
             Activity.DefaultIdFormat = ActivityIdFormat.W3C;
             Activity.ForceDefaultIdFormat = true;
 
-            // using var server = new ProcessRunner("dotnet", "run --project ..\\..\\..\\..\\..\\src\\Trsys.Frontend.Web\\Trsys.Frontend.Web.csproj");
+            using var server = new ProcessRunner("dotnet", "run --project ..\\..\\..\\..\\..\\src\\Trsys.Frontend.Web\\Trsys.Frontend.Web.csproj");
 
             var httpClientPool = new HttpClientPool(() => HttpClientFactory.Create(Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "https://localhost:5001", true), 2);
             var publisherKey = "MT4/OANDA Corporation/899999999/2";

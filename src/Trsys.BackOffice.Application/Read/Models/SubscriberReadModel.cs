@@ -23,7 +23,7 @@ namespace Trsys.BackOffice.Application.Read.Models
         public void Apply(IReadModelContext context, IDomainEvent<SubscriberAggregate, SubscriberId, SubscriberDescriptionChangedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
-            Description = domainEvent.AggregateEvent.Description.Value;
+            Description = domainEvent.AggregateEvent.Description?.Value;
         }
 
         public void Apply(IReadModelContext context, IDomainEvent<SubscriberAggregate, SubscriberId, SubscriberDeletedEvent> domainEvent)

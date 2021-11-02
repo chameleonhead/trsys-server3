@@ -58,7 +58,7 @@ namespace Trsys.BackOffice.Infrastructure
         {
             var commandBus = resolver.Resolve<ICommandBus>();
             var subscriberId = SubscriberId.New;
-            await commandBus.PublishAsync(new SubscriberCreateCommand(subscriberId, new SubscriberName(name), new SubscriberDescription(description)), cancellationToken);
+            await commandBus.PublishAsync(new SubscriberCreateCommand(subscriberId, new SubscriberName(name), description == null ? null : new SubscriberDescription(description)), cancellationToken);
             return subscriberId.Value;
         }
 

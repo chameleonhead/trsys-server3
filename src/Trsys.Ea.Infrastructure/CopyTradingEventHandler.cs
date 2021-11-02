@@ -1,6 +1,8 @@
 ﻿using EventFlow;
 using EventFlow.Queries;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,11 +16,13 @@ namespace Trsys.Ea.Infrastructure
 {
     public class CopyTradingEventHandler : BackgroundService
     {
+        private readonly ILogger<CopyTradingEventHandler> logger;
         private readonly ICopyTradingEventBus eventBus;
         private readonly EaEventFlowRootResolver resolver;
 
-        public CopyTradingEventHandler(ICopyTradingEventBus eventBus, EaEventFlowRootResolver resolver)
+        public CopyTradingEventHandler(ILogger<CopyTradingEventHandler> logger, ICopyTradingEventBus eventBus, EaEventFlowRootResolver resolver)
         {
+            this.logger = logger;
             this.eventBus = eventBus;
             this.resolver = resolver;
         }
@@ -31,25 +35,34 @@ namespace Trsys.Ea.Infrastructure
                 {
                     await eventBus.Subscribe(OnCopyTradeEvent, stoppingToken);
                 }
-                catch
+                catch (Exception e)
                 {
+                    logger.LogError(e, e.Message);
                 }
             }
         }
 
         private async void OnCopyTradeEvent(ICopyTradingEvent copyTradingEvent)
         {
-            if (copyTradingEvent is CopyTradeOpened opened)
+            try
             {
-                await HandleAsync(opened, CancellationToken.None);
+                switch (copyTradingEvent)
+                {
+                    case CopyTradingTradeOpenedEvent opened:
+                        await HandleAsync(opened, CancellationToken.None);
+                        break;
+                    case CopyTradingTradeClosedEvent closed:
+                        await HandleAsync(closed, CancellationToken.None);
+                        break;
+                }
             }
-            if (copyTradingEvent is CopyTradeClosed closed)
+            catch (Exception e)
             {
-                await HandleAsync(closed, CancellationToken.None);
+                logger.LogError(e, e.Message);
             }
         }
 
-        public async Task HandleAsync(CopyTradeOpened domainEvent, CancellationToken cancellationToken)
+        public async Task HandleAsync(CopyTradingTradeOpenedEvent domainEvent, CancellationToken cancellationToken)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var commandBus = resolver.Resolve<ICommandBus>();
@@ -64,7 +77,7 @@ namespace Trsys.Ea.Infrastructure
             }));
         }
 
-        public async Task HandleAsync(CopyTradeClosed domainEvent, CancellationToken cancellationToken)
+        public async Task HandleAsync(CopyTradingTradeClosedEvent domainEvent, CancellationToken cancellationToken)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var commandBus = resolver.Resolve<ICommandBus>();
@@ -78,6 +91,5 @@ namespace Trsys.Ea.Infrastructure
                 await commandBus.PublishAsync(new SubscriberEaCloseTradeOrderCommand(SubscriberEaId.With(subscriber.SubscriberEaId), CopyTradeId.With(domainEvent.CopyTradeId)), cancellationToken);
             }));
         }
-
     }
 }

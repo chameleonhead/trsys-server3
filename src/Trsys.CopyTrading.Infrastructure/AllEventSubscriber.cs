@@ -23,13 +23,28 @@ namespace Trsys.CopyTrading.Infrastructure
         {
             foreach (var e in domainEvents)
             {
-                if (e is IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> opened)
+                switch(e)
                 {
-                    eventBus.Publish(new CopyTradeOpened(opened.AggregateIdentity.Value, opened.AggregateEvent.DistributionGroupId.Value, opened.AggregateEvent.Symbol.Value, opened.AggregateEvent.OrderType.Value, opened.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
-                }
-                if (e is IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> closed)
-                {
-                    eventBus.Publish(new CopyTradeClosed(closed.AggregateIdentity.Value, closed.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
+                    case IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupSubscriberAddedEvent> subAdded:
+                        {
+                            eventBus.Publish(new CopyTradingSubscriberAddedEvent(subAdded.AggregateIdentity.Value, subAdded.AggregateEvent.SubscriberId.Value));
+                            break;
+                        }
+                    case IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupSubscriberRemovedEvent> subRemoved:
+                        {
+                            eventBus.Publish(new CopyTradingSubscriberRemovedEvent(subRemoved.AggregateIdentity.Value, subRemoved.AggregateEvent.SubscriberId.Value));
+                            break;
+                        }
+                    case IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> opened:
+                        {
+                            eventBus.Publish(new CopyTradingTradeOpenedEvent(opened.AggregateIdentity.Value, opened.AggregateEvent.DistributionGroupId.Value, opened.AggregateEvent.Symbol.Value, opened.AggregateEvent.OrderType.Value, opened.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
+                            break;
+                        }
+                    case IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> closed:
+                        {
+                            eventBus.Publish(new CopyTradingTradeClosedEvent(closed.AggregateIdentity.Value, closed.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
+                            break;
+                        }
                 }
             }
             return Task.CompletedTask;

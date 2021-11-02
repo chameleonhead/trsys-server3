@@ -2,9 +2,9 @@
 
 namespace Trsys.CopyTrading.Abstractions
 {
-    public class CopyTradeOpened : ICopyTradingEvent
+    public class CopyTradingTradeOpenedEvent : ICopyTradingEvent
     {
-        public CopyTradeOpened(string copyTradeId, string distributionGroupId, string symbol, string orderType, List<string> subscribers)
+        public CopyTradingTradeOpenedEvent(string copyTradeId, string distributionGroupId, string symbol, string orderType, List<string> subscribers)
         {
             CopyTradeId = copyTradeId;
             DistributionGroupId = distributionGroupId;
