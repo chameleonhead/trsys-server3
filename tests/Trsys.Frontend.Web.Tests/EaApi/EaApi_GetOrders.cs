@@ -155,26 +155,41 @@ namespace Trsys.Frontend.Web.Tests.EaApi
             // Arrange
             var client = _factory.CreateClient();
             // Publisher setup
-            await client.RegisterSecretKeyAsync("SingleOrderThenEmptyOrder_ReturnSuccessAndCorrectContent1", "Publisher");
-            var publisherToken = await client.GenerateTokenAsync("SingleOrderThenEmptyOrder_ReturnSuccessAndCorrectContent1", "Publisher");
+            await client.RegisterSecretKeyAsync("SingleOrder_MultipleSubscribers_ReturnSuccessAndCorrectContent_Publisher", "Publisher");
+            var publisherToken = await client.GenerateTokenAsync("SingleOrder_MultipleSubscribers_ReturnSuccessAndCorrectContent_Publisher", "Publisher");
             // Subscriber setup
-            var tokens = new List<string>();
+            var tokens = new List<Tuple<string, string>>();
             for (var i = 0; i < 100; i++)
             {
-                await client.RegisterSecretKeyAsync($"SingleOrder_MultipleSubscribers_ReturnSuccessAndCorrectContent{i + 1}", "Subscriber");
-                var token = await client.GenerateTokenAsync($"SingleOrder_MultipleSubscribers_ReturnSuccessAndCorrectContent{i + 1}", "Subscriber");
-                tokens.Add(token);
+                var key = $"SingleOrder_MultipleSubscribers_ReturnSuccessAndCorrectContent{i + 1}";
+                await client.RegisterSecretKeyAsync(key, "Subscriber");
+                var token = await client.GenerateTokenAsync(key, "Subscriber");
+                tokens.Add(Tuple.Create(key, token));
             }
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            // Act
-            await client.PublishOrderAsync("SingleOrderThenEmptyOrder_ReturnSuccessAndCorrectContent1", publisherToken, "1:USDJPY:0:1:2:1617271883");
+            await client.PublishOrderAsync("SingleOrder_MultipleSubscribers_ReturnSuccessAndCorrectContent_Publisher", publisherToken, "1:USDJPY:0:1:2:1617271883");
             stopwatch.Stop();
 
-            // Assert
             Assert.IsTrue(stopwatch.Elapsed < TimeSpan.FromMilliseconds(100));
-            // no error on success
+            await Task.Delay(30);
+
+            var tasks = new List<Task>();
+            foreach (var token in tokens)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    // Act
+                    var response = await client.GetAsync("/api/orders", token.Item1, "Subscriber", token: token.Item2);
+
+                    // Assert
+                    response.EnsureSuccessStatusCode();
+                    Assert.AreEqual("text/plain; charset=utf-8", response.Content.Headers.ContentType.ToString());
+                    Assert.AreEqual("1:USDJPY:0", await response.Content.ReadAsStringAsync());
+                }));
+            }
+            await Task.WhenAll(tasks);
         }
     }
 }
