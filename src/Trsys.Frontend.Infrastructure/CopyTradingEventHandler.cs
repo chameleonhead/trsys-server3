@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Trsys.CopyTrading.Abstractions;
 using Trsys.Core;
-using Trsys.Frontend.Application.Read.Models;
 using Trsys.Frontend.Application.Write.Commands;
 
 namespace Trsys.Frontend.Infrastructure
@@ -65,20 +64,20 @@ namespace Trsys.Frontend.Infrastructure
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var commandBus = resolver.Resolve<ICommandBus>();
-            await Task.WhenAll(domainEvent.Subscribers.Select(async subscriberId =>
+            await Task.WhenAll(domainEvent.Subscribers.Select(subscriberId => Task.Run(async () =>
             {
                 await commandBus.PublishAsync(new SubscriberOpenTradeOrderCommand(SubscriberId.With(subscriberId), CopyTradeId.With(domainEvent.CopyTradeId), new ForexTradeSymbol(domainEvent.Symbol), OrderType.Of(domainEvent.OrderType)), cancellationToken);
-            }));
+            })));
         }
 
         public async Task HandleAsync(CopyTradingTradeClosedEvent domainEvent, CancellationToken cancellationToken)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
             var commandBus = resolver.Resolve<ICommandBus>();
-            await Task.WhenAll(domainEvent.Subscribers.Select(async subscriberId =>
+            await Task.WhenAll(domainEvent.Subscribers.Select(subscriberId => Task.Run(async () =>
             {
                 await commandBus.PublishAsync(new SubscriberCloseTradeOrderCommand(SubscriberId.With(subscriberId), CopyTradeId.With(domainEvent.CopyTradeId)), cancellationToken);
-            }));
+            })));
         }
     }
 }
