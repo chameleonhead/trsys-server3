@@ -1,0 +1,46 @@
+﻿@{
+    var links = new[]
+    {
+        new
+        {
+            Name = "ユーザー",
+            Action = "Users"
+        },
+        new
+        {
+            Name = "配信グループ",
+            Action = "DistributionGroups"
+        },
+        new
+        {
+            Name = "配信者",
+            Action = "Publishers"
+        },
+        new
+        {
+            Name = "受信者",
+            Action = "Subscribers"
+        },
+        new
+        {
+            Name = "トレード",
+            Action = "CopyTrades"
+        },
+    };
+}
+
+<ul class="nav nav-pills flex-md-column flex-row">
+    @foreach (var link in links)
+    {
+        <li class="flex-fill text-center text-md-start nav-item">
+            @if (Context.Request.Path.StartsWithSegments(Url.Action(link.Action)))
+            {
+                <a asp-action="@link.Action" class="nav-link active">@link.Name</a>
+            }
+            else
+            {
+                <a asp-action="@link.Action" class="nav-link">@link.Name</a>
+            }
+        </li>
+    }
+</ul>

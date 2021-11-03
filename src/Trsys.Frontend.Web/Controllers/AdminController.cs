@@ -38,29 +38,19 @@ namespace Trsys.Frontend.Web.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            ViewData["SuccessMessage"] = TempData["SuccessMessage"];
-            ViewData["ErrorMessage"] = TempData["ErrorMessage"];
-
-            var vm = new IndexViewModel();
-            vm.Users = await GetUsersAsync();
-            vm.DistributionGroups = await GetDistributionGroupsAsync();
-            vm.Publishers = await GetPublishersAsync();
-            vm.Subscribers = await GetSubscribersAsync();
-            vm.CopyTrades = await GetCopyTradesAsync();
-
-            return View(vm);
+            return RedirectToAction("Users");
         }
 
         [HttpGet("users")]
         public async Task<IActionResult> Users()
         {
-            ViewData["UsersSuccessMessage"] = TempData["SuccessMessage"];
-            ViewData["UsersErrorMessage"] = TempData["ErrorMessage"];
+            ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["ErrorMessage"] = TempData["ErrorMessage"];
 
             var vm = await GetUsersAsync();
-            return PartialView("_Users", vm);
+            return View(vm);
         }
 
         [HttpPost("users/create")]
@@ -161,11 +151,11 @@ namespace Trsys.Frontend.Web.Controllers
         [HttpGet("groups")]
         public async Task<IActionResult> DistributionGroups()
         {
-            ViewData["DistributionGroupsSuccessMessage"] = TempData["SuccessMessage"];
-            ViewData["DistributionGroupsErrorMessage"] = TempData["ErrorMessage"];
+            ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["ErrorMessage"] = TempData["ErrorMessage"];
 
             var vm = await GetDistributionGroupsAsync();
-            return PartialView("_DistributionGroups", vm);
+            return View(vm);
         }
 
         [HttpPost("groups/create")]
@@ -231,11 +221,11 @@ namespace Trsys.Frontend.Web.Controllers
         [HttpGet("pubs")]
         public async Task<IActionResult> Publishers()
         {
-            ViewData["PublishersSuccessMessage"] = TempData["SuccessMessage"];
-            ViewData["PublishersErrorMessage"] = TempData["ErrorMessage"];
+            ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["ErrorMessage"] = TempData["ErrorMessage"];
 
             var vm = await GetPublishersAsync();
-            return PartialView("_Publishers", vm);
+            return View(vm);
         }
 
         [HttpPost("pubs/create")]
@@ -321,11 +311,11 @@ namespace Trsys.Frontend.Web.Controllers
         [HttpGet("subs")]
         public async Task<IActionResult> Subscribers()
         {
-            ViewData["SubscribersSuccessMessage"] = TempData["SuccessMessage"];
-            ViewData["SubscribersErrorMessage"] = TempData["ErrorMessage"];
+            ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["ErrorMessage"] = TempData["ErrorMessage"];
 
             var vm = await GetSubscribersAsync();
-            return PartialView("_Subscribers", vm);
+            return View(vm);
         }
 
         [HttpPost("subs/create")]
@@ -411,11 +401,11 @@ namespace Trsys.Frontend.Web.Controllers
         [HttpGet("trades")]
         public async Task<IActionResult> CopyTrades()
         {
-            ViewData["CopyTradesSuccessMessage"] = TempData["SuccessMessage"];
-            ViewData["CopyTradesErrorMessage"] = TempData["ErrorMessage"];
+            ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+            ViewData["ErrorMessage"] = TempData["ErrorMessage"];
 
             var vm = await GetCopyTradesAsync();
-            return PartialView("_CopyTrades", vm);
+            return View(vm);
         }
 
         [HttpPost("trades/open")]
