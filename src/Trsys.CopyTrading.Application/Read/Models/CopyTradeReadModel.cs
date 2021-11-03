@@ -2,14 +2,14 @@
 using EventFlow.ReadStores;
 using System.Collections.Generic;
 using System.Linq;
-using Trsys.Core;
 using Trsys.CopyTrading.Domain;
+using Trsys.Core;
 
 namespace Trsys.CopyTrading.Application.Read.Models
 {
     public class CopyTradeReadModel : IReadModel,
-        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent>,
-        IAmReadModelFor<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent>
+        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, DistributionGroupOpenPublishedEvent>,
+        IAmReadModelFor<DistributionGroupAggregate, DistributionGroupId, DistributionGroupClosePublishedEvent>
     {
         public string Id { get; set; }
         public string DistributionGroupId { get; set; }
@@ -18,17 +18,17 @@ namespace Trsys.CopyTrading.Application.Read.Models
         public List<string> Subscribers { get; set; }
         public bool IsOpen { get; set; }
 
-        public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupOpenPublishedEvent> domainEvent)
         {
-            Id = domainEvent.AggregateIdentity.Value;
-            DistributionGroupId = domainEvent.AggregateEvent.DistributionGroupId.Value;
+            Id = domainEvent.AggregateEvent.CopyTradeId.Value;
+            DistributionGroupId = domainEvent.AggregateIdentity.Value;
             Symbol = domainEvent.AggregateEvent.Symbol.Value;
             OrderType = domainEvent.AggregateEvent.OrderType.Value;
             IsOpen = true;
             Subscribers = domainEvent.AggregateEvent.Subscribers.Select(e => e.Value).ToList();
         }
 
-        public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupClosePublishedEvent> domainEvent)
         {
             Id = domainEvent.AggregateIdentity.Value;
             IsOpen = false;

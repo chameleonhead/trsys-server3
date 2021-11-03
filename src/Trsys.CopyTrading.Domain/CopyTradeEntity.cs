@@ -1,12 +1,12 @@
-﻿using EventFlow.Aggregates;
+﻿using EventFlow.Entities;
 using System.Collections.Generic;
 using Trsys.Core;
 
 namespace Trsys.CopyTrading.Domain
 {
-    public class CopyTradeClosedEvent : AggregateEvent<CopyTradeAggregate, CopyTradeId>
+    public class CopyTradeEntity : Entity<CopyTradeId>
     {
-        public CopyTradeClosedEvent(List<SubscriberId> subscribers)
+        public CopyTradeEntity(CopyTradeId id, List<SubscriberId> subscribers) : base(id)
         {
             Subscribers = subscribers;
         }

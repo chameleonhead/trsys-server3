@@ -35,14 +35,14 @@ namespace Trsys.CopyTrading.Infrastructure
                             eventBus.Publish(new CopyTradingSubscriberRemovedEvent(subRemoved.AggregateIdentity.Value, subRemoved.AggregateEvent.SubscriberId.Value));
                             break;
                         }
-                    case IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> opened:
+                    case IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupOpenPublishedEvent> opened:
                         {
-                            eventBus.Publish(new CopyTradingTradeOpenedEvent(opened.AggregateIdentity.Value, opened.AggregateEvent.DistributionGroupId.Value, opened.AggregateEvent.Symbol.Value, opened.AggregateEvent.OrderType.Value, opened.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
+                            eventBus.Publish(new CopyTradingTradeOpenedEvent(opened.AggregateEvent.CopyTradeId.Value,  opened.AggregateIdentity.Value, opened.AggregateEvent.Symbol.Value, opened.AggregateEvent.OrderType.Value, opened.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
                             break;
                         }
-                    case IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> closed:
+                    case IDomainEvent<DistributionGroupAggregate, DistributionGroupId, DistributionGroupClosePublishedEvent> closed:
                         {
-                            eventBus.Publish(new CopyTradingTradeClosedEvent(closed.AggregateIdentity.Value, closed.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
+                            eventBus.Publish(new CopyTradingTradeClosedEvent(closed.AggregateEvent.CopyTradeId.Value, closed.AggregateEvent.Subscribers.Select(subscriberId => subscriberId.Value).ToList()));
                             break;
                         }
                 }

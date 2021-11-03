@@ -16,6 +16,7 @@ namespace Trsys.CopyTrading.Domain
         }
 
         public HashSet<SubscriberId> Subscribers { get; } = new();
+        public Dictionary<CopyTradeId, CopyTradeEntity> ActiveCopyTrades { get; } = new();
 
         public void AddSubscriber(SubscriberId subscriberId)
         {
@@ -35,12 +36,18 @@ namespace Trsys.CopyTrading.Domain
 
         public void PublishOpen(CopyTradeId copyTradeId, ForexTradeSymbol symbol, OrderType orderType)
         {
-            Emit(new DistributionGroupOpenPublishedEvent(copyTradeId, symbol, orderType, Subscribers.ToList()), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            if (!ActiveCopyTrades.ContainsKey(copyTradeId))
+            {
+                Emit(new DistributionGroupOpenPublishedEvent(copyTradeId, symbol, orderType, Subscribers.ToList()));
+            }
         }
 
         public void PublishClose(CopyTradeId copyTradeId)
         {
-            Emit(new DistributionGroupClosePublishedEvent(copyTradeId), new Metadata(KeyValuePair.Create("copy-trade-id", copyTradeId.Value)));
+            if (ActiveCopyTrades.TryGetValue(copyTradeId, out var value))
+            {
+                Emit(new DistributionGroupClosePublishedEvent(copyTradeId, value.Subscribers));
+            }
         }
 
         public void Apply(DistributionGroupSubscriberAddedEvent aggregateEvent)
@@ -55,10 +62,12 @@ namespace Trsys.CopyTrading.Domain
 
         public void Apply(DistributionGroupOpenPublishedEvent aggregateEvent)
         {
+            ActiveCopyTrades.Add(aggregateEvent.CopyTradeId, new CopyTradeEntity(aggregateEvent.CopyTradeId, aggregateEvent.Subscribers));
         }
 
         public void Apply(DistributionGroupClosePublishedEvent aggregateEvent)
         {
+            ActiveCopyTrades.Remove(aggregateEvent.CopyTradeId);
         }
     }
 }

@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Trsys.Frontend.Web.Tests.EaApi
@@ -144,6 +147,34 @@ namespace Trsys.Frontend.Web.Tests.EaApi
             response.EnsureSuccessStatusCode();
             Assert.AreEqual("text/plain; charset=utf-8", response.Content.Headers.ContentType.ToString());
             Assert.AreEqual("", await response.Content.ReadAsStringAsync());
+        }
+
+        [TestMethod]
+        public async Task SingleOrder_MultipleSubscribers_ReturnSuccessAndCorrectContent()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            // Publisher setup
+            await client.RegisterSecretKeyAsync("SingleOrderThenEmptyOrder_ReturnSuccessAndCorrectContent1", "Publisher");
+            var publisherToken = await client.GenerateTokenAsync("SingleOrderThenEmptyOrder_ReturnSuccessAndCorrectContent1", "Publisher");
+            // Subscriber setup
+            var tokens = new List<string>();
+            for (var i = 0; i < 100; i++)
+            {
+                await client.RegisterSecretKeyAsync($"SingleOrder_MultipleSubscribers_ReturnSuccessAndCorrectContent{i + 1}", "Subscriber");
+                var token = await client.GenerateTokenAsync($"SingleOrder_MultipleSubscribers_ReturnSuccessAndCorrectContent{i + 1}", "Subscriber");
+                tokens.Add(token);
+            }
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            // Act
+            await client.PublishOrderAsync("SingleOrderThenEmptyOrder_ReturnSuccessAndCorrectContent1", publisherToken, "1:USDJPY:0:1:2:1617271883");
+            stopwatch.Stop();
+
+            // Assert
+            Assert.IsTrue(stopwatch.Elapsed < TimeSpan.FromMilliseconds(100));
+            // no error on success
         }
     }
 }

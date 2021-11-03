@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Trsys.CopyTrading.Application.Read.Models;
 using Trsys.CopyTrading.Application.Read.Queries;
 using Trsys.CopyTrading.Application.Write.Commands;
-using Trsys.CopyTrading.Application.Write.Sagas.TradeDistribution;
 using Trsys.CopyTrading.Domain;
 
 namespace Trsys.CopyTrading.Application
@@ -18,39 +17,27 @@ namespace Trsys.CopyTrading.Application
                     typeof(DistributionGroupAddSubscriberCommand),
                     typeof(DistributionGroupRemoveSubscriberCommand),
                     typeof(DistributionGroupPublishOpenCommand),
-                    typeof(DistributionGroupPublishCloseCommand),
-                    typeof(CopyTradeOpenCommand),
-                    typeof(CopyTradeCloseCommand)
+                    typeof(DistributionGroupPublishCloseCommand)
                 )
                 .AddCommandHandlers(
                     typeof(DistributionGroupAddSubscriberCommandHandler),
                     typeof(DistributionGroupRemoveSubscriberCommandHandler),
                     typeof(DistributionGroupPublishOpenCommandHandler),
-                    typeof(DistributionGroupPublishCloseCommandHandler),
-                    typeof(CopyTradeOpenCommandHandler),
-                    typeof(CopyTradeCloseCommandHandler)
+                    typeof(DistributionGroupPublishCloseCommandHandler)
                 )
                 .AddEvents(
                     typeof(DistributionGroupSubscriberAddedEvent),
                     typeof(DistributionGroupSubscriberRemovedEvent),
                     typeof(DistributionGroupOpenPublishedEvent),
-                    typeof(DistributionGroupClosePublishedEvent),
-                    typeof(CopyTradeOpenedEvent),
-                    typeof(CopyTradeClosedEvent)
-                )
-                .AddSagaLocators(
-                    typeof(TradeDistributionSagaLocator)
-                )
-                .AddSagas(
-                    typeof(TradeDistributionSaga)
-                )
-                .AddEvents(
-                    typeof(TradeDistributionSagaStartedEvent),
-                    typeof(TradeDistributionSagaFinishedEvent)
+                    typeof(DistributionGroupClosePublishedEvent)
                 );
             options
+                .RegisterServices(sr =>
+                {
+                    sr.RegisterType(typeof(CopyTradeReadModelLocator));
+                })
                 .UseInMemoryReadStoreFor<DistributionGroupReadModel>()
-                .UseInMemoryReadStoreFor<CopyTradeReadModel>()
+                .UseInMemoryReadStoreFor<CopyTradeReadModel, CopyTradeReadModelLocator>()
                 .AddQueryHandler<CopyTradeReadModelAllQueryHandler, CopyTradeReadModelAllQuery, IReadOnlyCollection<CopyTradeReadModel>>();
             return options;
         }

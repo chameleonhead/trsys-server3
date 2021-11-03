@@ -14,7 +14,7 @@ namespace Trsys.Frontend.Domain
         IEmit<PublisherClosedOrderEvent>
     {
         public SecretKey Key { get; private set; }
-        public List<PublisherDistributionTarget> Targets { get; } = new();
+        public HashSet<DistributionGroupId> DistributionGroups { get; } = new();
         public EaOrderText Text { get; private set; }
         public Dictionary<EaOrderId, PublisherOrderEntity> OrdersById { get; } = new();
         public Dictionary<EaTicketNumber, PublisherOrderEntity> OrdersByTicketNumber { get; } = new();
@@ -25,12 +25,18 @@ namespace Trsys.Frontend.Domain
 
         public void Register(SecretKey key, DistributionGroupId distributionGroupId)
         {
-            Emit(new PublisherRegisteredEvent(key, distributionGroupId));
+            if (!DistributionGroups.Contains(distributionGroupId))
+            {
+                Emit(new PublisherRegisteredEvent(key, distributionGroupId));
+            }
         }
 
         public void Unregister(DistributionGroupId distributionGroupId)
         {
-            Emit(new PublisherUnregisteredEvent(Key, distributionGroupId));
+            if (DistributionGroups.Contains(distributionGroupId))
+            {
+                Emit(new PublisherUnregisteredEvent(Key, distributionGroupId));
+            }
         }
 
         public void UpdateOrderText(EaOrderText text)
@@ -54,7 +60,7 @@ namespace Trsys.Frontend.Domain
                 {
                     if (!prevOrderTicketNos.Contains(order.TicketNo))
                     {
-                        Emit(new PublisherOpenedOrderEvent(new PublisherOrderEntity(EaOrderId.New, order.TicketNo, order.Symbol, order.OrderType, Targets.Select(t => new PublisherCopyTradeEntity(CopyTradeId.New, t.DistributionGroupId)).ToList())));
+                        Emit(new PublisherOpenedOrderEvent(new PublisherOrderEntity(EaOrderId.New, order.TicketNo, order.Symbol, order.OrderType, DistributionGroups.Select(distributionGroupId => new PublisherCopyTradeEntity(CopyTradeId.New, distributionGroupId)).ToList())));
                     }
                 }
             }
@@ -63,12 +69,12 @@ namespace Trsys.Frontend.Domain
         public void Apply(PublisherRegisteredEvent aggregateEvent)
         {
             Key = aggregateEvent.Key;
-            Targets.Add(new PublisherDistributionTarget(aggregateEvent.DistributionGroupId));
+            DistributionGroups.Add(aggregateEvent.DistributionGroupId);
         }
 
         public void Apply(PublisherUnregisteredEvent aggregateEvent)
         {
-            Targets.Remove(new PublisherDistributionTarget(aggregateEvent.DistributionGroupId));
+            DistributionGroups.Remove(aggregateEvent.DistributionGroupId);
         }
 
         public void Apply(PublisherOrderTextChangedEvent aggregateEvent)
