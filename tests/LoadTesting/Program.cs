@@ -25,7 +25,7 @@ namespace LoadTesting
 
             using var server = new ProcessRunner("dotnet", "run --project ..\\..\\..\\..\\..\\src\\Trsys.Frontend.Web\\Trsys.Frontend.Web.csproj");
 
-            var httpClientPool = new HttpClientPool(() => HttpClientFactory.Create(Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "https://localhost:5001", true), 2);
+            var httpClientPool = new HttpClientPool(() => HttpClientFactory.Create(Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "https://localhost:5001", true), 1);
             var publisherKey = "MT4/OANDA Corporation/899999999/2";
             var subscriberKeys = Enumerable.Range(1, COUNT_OF_CLIENTS).Select(i => $"MT4/OANDA Corporation/8{i:00000000}/2").ToList();
             WithRetry(() => RegisterKeys(httpClientPool, new[] { publisherKey }, "Publisher")).Wait();
