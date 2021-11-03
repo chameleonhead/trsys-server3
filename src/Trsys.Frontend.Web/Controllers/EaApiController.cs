@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Trsys.Ea.Abstractions;
+using Trsys.Frontend.Abstractions;
 using Trsys.Frontend.Web.Filters;
 
 namespace Trsys.Frontend.Web.Controllers

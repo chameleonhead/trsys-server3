@@ -19,13 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend.Web.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadTesting", "tests\LoadTesting\LoadTesting.csproj", "{DD678E6B-CEF1-478C-BFAC-0C66BC9014D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea", "src\Trsys.Ea\Trsys.Ea.csproj", "{0351FADA-0C2D-40DB-984E-A118F916AAC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend", "src\Trsys.Frontend\Trsys.Frontend.csproj", "{0351FADA-0C2D-40DB-984E-A118F916AAC3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Application", "src\Trsys.Ea.Application\Trsys.Ea.Application.csproj", "{7632D4CA-726A-4833-8061-4B7AD5879021}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend.Application", "src\Trsys.Frontend.Application\Trsys.Frontend.Application.csproj", "{7632D4CA-726A-4833-8061-4B7AD5879021}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Domain", "src\Trsys.Ea.Domain\Trsys.Ea.Domain.csproj", "{1B4C277D-C999-4C01-A34D-5C38603BB693}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend.Domain", "src\Trsys.Frontend.Domain\Trsys.Frontend.Domain.csproj", "{1B4C277D-C999-4C01-A34D-5C38603BB693}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Ea.Tests", "tests\Trsys.Ea.Tests\Trsys.Ea.Tests.csproj", "{2DAB77DE-8EB3-45E3-8CF7-22B520BBC9EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend.Tests", "tests\Trsys.Frontend.Tests\Trsys.Frontend.Tests.csproj", "{2DAB77DE-8EB3-45E3-8CF7-22B520BBC9EE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.BackOffice", "src\Trsys.BackOffice\Trsys.BackOffice.csproj", "{AC580410-321B-442C-B0D4-75EC45D28299}"
 EndProject
@@ -39,17 +39,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.CopyTrading.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.CopyTrading.Abstractions", "src\Trsys.CopyTrading.Abstractions\Trsys.CopyTrading.Abstractions.csproj", "{71108843-4170-4EE8-A2DE-CEAD8F2D8EFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.BackOffice.Infrastructure", "src\Trsys.BackOffice.Infrastructure\Trsys.BackOffice.Infrastructure.csproj", "{FE0001A8-EF22-48DE-918E-F14D9E2CCFE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.BackOffice.Infrastructure", "src\Trsys.BackOffice.Infrastructure\Trsys.BackOffice.Infrastructure.csproj", "{FE0001A8-EF22-48DE-918E-F14D9E2CCFE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.BackOffice.Abstractions", "src\Trsys.BackOffice.Abstractions\Trsys.BackOffice.Abstractions.csproj", "{69A6CE2C-91D1-4B95-B209-6620BAF40FC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.BackOffice.Abstractions", "src\Trsys.BackOffice.Abstractions\Trsys.BackOffice.Abstractions.csproj", "{69A6CE2C-91D1-4B95-B209-6620BAF40FC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Core", "src\Trsys.Core\Trsys.Core.csproj", "{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Core", "src\Trsys.Core\Trsys.Core.csproj", "{2F1AE826-9859-4CA1-935F-E7E6AFD9EC23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.CopyTrading.Infrastructure", "src\Trsys.CopyTrading.Infrastructure\Trsys.CopyTrading.Infrastructure.csproj", "{1CD2DB8F-C11A-4AF0-9218-2428D5C01FE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.CopyTrading.Infrastructure", "src\Trsys.CopyTrading.Infrastructure\Trsys.CopyTrading.Infrastructure.csproj", "{1CD2DB8F-C11A-4AF0-9218-2428D5C01FE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Ea.Abstractions", "src\Trsys.Ea.Abstractions\Trsys.Ea.Abstractions.csproj", "{CD77E697-7C10-4E36-B38C-080FE1AFA8A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend.Abstractions", "src\Trsys.Frontend.Abstractions\Trsys.Frontend.Abstractions.csproj", "{CD77E697-7C10-4E36-B38C-080FE1AFA8A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trsys.Ea.Infrastructure", "src\Trsys.Ea.Infrastructure\Trsys.Ea.Infrastructure.csproj", "{89023824-2227-4468-B2A4-425E0E36A197}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trsys.Frontend.Infrastructure", "src\Trsys.Frontend.Infrastructure\Trsys.Frontend.Infrastructure.csproj", "{89023824-2227-4468-B2A4-425E0E36A197}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

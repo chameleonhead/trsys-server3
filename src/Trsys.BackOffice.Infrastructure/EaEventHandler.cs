@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Trsys.Ea.Abstractions;
+using Trsys.Frontend.Abstractions;
 
 namespace Trsys.BackOffice.Infrastructure
 {
