@@ -30,7 +30,7 @@ namespace Trsys.Frontend.Infrastructure
             switch (keyType)
             {
                 case "Publisher":
-                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
+                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
                     if (publisher == null)
                     {
                         return null;
@@ -42,7 +42,7 @@ namespace Trsys.Frontend.Infrastructure
                         KeyType = "Publisher",
                     };
                 case "Subscriber":
-                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
                         return null;
@@ -65,17 +65,17 @@ namespace Trsys.Frontend.Infrastructure
             switch (keyType)
             {
                 case "Publisher":
-                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
+                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
                     if (publisher == null)
                     {
-                        await commandBus.PublishAsync(new PublisherEaRegisterCommand(PublisherEaId.New, new SecretKey(key), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
+                        await commandBus.PublishAsync(new PublisherRegisterCommand(PublisherId.New, new SecretKey(key), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
                     }
                     break;
                 case "Subscriber":
-                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
-                        await commandBus.PublishAsync(new SubscriberEaRegisterCommand(SubscriberEaId.New, new SecretKey(key), DistributionGroupId.With(distributionGroupId), SubscriberId.New), CancellationToken.None);
+                        await commandBus.PublishAsync(new SubscriberRegisterCommand(SubscriberId.New, new SecretKey(key), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
                     }
                     break;
                 default:
@@ -90,26 +90,21 @@ namespace Trsys.Frontend.Infrastructure
             switch (keyType)
             {
                 case "Publisher":
-                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
+                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
                     if (publisher == null)
                     {
                         return;
                     }
-                    await commandBus.PublishAsync(new PublisherEaUnregisterCommand(PublisherEaId.With(publisher.Id), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
+                    await commandBus.PublishAsync(new PublisherUnregisterCommand(PublisherId.With(publisher.Id), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
                     await sessionManager.DestroySessionAsync(publisher.Id);
                     return;
                 case "Subscriber":
-                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
                         return;
                     }
-                    var subscriberId = subscriber.GetSubscriberId(distributionGroupId);
-                    if (subscriberId == null)
-                    {
-                        return;
-                    }
-                    await commandBus.PublishAsync(new SubscriberEaUnregisterCommand(SubscriberEaId.With(subscriber.Id), DistributionGroupId.With(distributionGroupId), SubscriberId.With(subscriberId)), CancellationToken.None);
+                    await commandBus.PublishAsync(new SubscriberUnregisterCommand(SubscriberId.With(subscriber.Id), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
                     await sessionManager.DestroySessionAsync(subscriber.Id);
                     return;
                 default:
@@ -124,14 +119,14 @@ namespace Trsys.Frontend.Infrastructure
             switch (keyType)
             {
                 case "Publisher":
-                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
+                    var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
                     if (publisher == null)
                     {
                         return null;
                     }
                     return await sessionManager.CreateSessionAsync(publisher.Id, key, keyType);
                 case "Subscriber":
-                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+                    var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
                         return null;
@@ -159,19 +154,19 @@ namespace Trsys.Frontend.Infrastructure
         public async Task PublishOrderTextAsync(DateTimeOffset timestamp, string key, string text)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
-            var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherEaReadModel>(key), CancellationToken.None);
+            var publisher = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<PublisherReadModel>(key), CancellationToken.None);
             if (publisher == null)
             {
                 throw new InvalidOperationException();
             }
             var commandBus = resolver.Resolve<ICommandBus>();
-            await commandBus.PublishAsync(new PublisherEaUpdateOrderTextCommand(PublisherEaId.With(publisher.Id), new EaOrderText(text)), CancellationToken.None);
+            await commandBus.PublishAsync(new PublisherUpdateOrderTextCommand(PublisherId.With(publisher.Id), new EaOrderText(text)), CancellationToken.None);
         }
 
         public async Task<OrderText> GetCurrentOrderTextAsync(string key)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
-            var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+            var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
             if (subscriber == null)
             {
                 return OrderText.Empty;
@@ -183,13 +178,13 @@ namespace Trsys.Frontend.Infrastructure
         public async Task SubscribeOrderTextAsync(DateTimeOffset timestamp, string key, string text)
         {
             var queryProcessor = resolver.Resolve<IQueryProcessor>();
-            var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberEaReadModel>(key), CancellationToken.None);
+            var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
             if (subscriber == null)
             {
                 throw new InvalidOperationException();
             }
             var commandBus = resolver.Resolve<ICommandBus>();
-            await commandBus.PublishAsync(new SubscriberEaDistributeOrderTextCommand(SubscriberEaId.With(subscriber.Id), new EaOrderText(text)), CancellationToken.None);
+            await commandBus.PublishAsync(new SubscriberDistributeOrderTextCommand(SubscriberId.With(subscriber.Id), new EaOrderText(text)), CancellationToken.None);
         }
 
         public Task ReceiveLogAsync(DateTimeOffset serverTimestamp, string key, string keyType, string version, string token, string text)

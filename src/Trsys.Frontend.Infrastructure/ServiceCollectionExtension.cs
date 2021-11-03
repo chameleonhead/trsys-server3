@@ -14,7 +14,7 @@ namespace Trsys.Frontend.Infrastructure
             services.AddSingleton<IEaSessionManager, EaSessionManager>();
             services.AddSingleton<IEaSessionStore, EaSessionStore>();
             
-            services.AddSingleton<IEaEventBus, AllEventBus>();
+            services.AddSingleton<IFrontendEventBus, AllEventBus>();
 
             services.AddHostedService<CopyTradingEventHandler>();
             return services;

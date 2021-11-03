@@ -13,51 +13,50 @@ namespace Trsys.Frontend.Application
         {
             options
                 .AddCommands(
-                    typeof(PublisherEaRegisterCommand),
-                    typeof(PublisherEaUnregisterCommand),
-                    typeof(PublisherEaUpdateOrderTextCommand),
-                    typeof(SubscriberEaRegisterCommand),
-                    typeof(SubscriberEaUnregisterCommand),
-                    typeof(SubscriberEaOpenTradeOrderCommand),
-                    typeof(SubscriberEaCloseTradeOrderCommand),
-                    typeof(SubscriberEaDistributeOrderTextCommand)
+                    typeof(PublisherRegisterCommand),
+                    typeof(PublisherUnregisterCommand),
+                    typeof(PublisherUpdateOrderTextCommand),
+                    typeof(SubscriberRegisterCommand),
+                    typeof(SubscriberUnregisterCommand),
+                    typeof(SubscriberOpenTradeOrderCommand),
+                    typeof(SubscriberCloseTradeOrderCommand),
+                    typeof(SubscriberDistributeOrderTextCommand)
                 )
                 .AddCommandHandlers(
-                    typeof(PublisherEaRegisterCommandHandler),
-                    typeof(PublisherEaUnregisterCommandHandler),
-                    typeof(PublisherEaUpdateOrderTextCommandHandler),
-                    typeof(SubscriberEaRegisterCommandHandler),
+                    typeof(PublisherRegisterCommandHandler),
+                    typeof(PublisherUnregisterCommandHandler),
+                    typeof(PublisherUpdateOrderTextCommandHandler),
+                    typeof(SubscriberRegisterCommandHandler),
                     typeof(SubscriberEaUnregisterCommandHandler),
-                    typeof(SubscriberEaOpenTradeOrderCommandHandler),
-                    typeof(SubscriberEaCloseTradeOrderCommandHandler),
-                    typeof(SubscriberEaDistributeOrderTextCommandHandler)
+                    typeof(SubscriberOpenTradeOrderCommandHandler),
+                    typeof(SubscriberCloseTradeOrderCommandHandler),
+                    typeof(SubscriberDistributeOrderTextCommandHandler)
                 )
                 .AddEvents(
-                    typeof(PublisherEaRegisteredEvent),
-                    typeof(PublisherEaUnregisteredEvent),
-                    typeof(PublisherEaOrderTextChangedEvent),
-                    typeof(PublisherEaOpenedOrderEvent),
-                    typeof(PublisherEaClosedOrderEvent),
-                    typeof(SubscriberEaRegisteredEvent),
-                    typeof(SubscriberEaUnregisteredEvent),
-                    typeof(SubscriberEaTradeOrderOpenRequestAppliedEvent),
-                    typeof(SubscriberEaTradeOrderCloseRequestAppliedEvent),
-                    typeof(SubscriberEaOrderTextChangedEvent),
-                    typeof(SubscriberEaDistributedOrderTextChangedEvent)
+                    typeof(PublisherRegisteredEvent),
+                    typeof(PublisherUnregisteredEvent),
+                    typeof(PublisherOrderTextChangedEvent),
+                    typeof(PublisherOpenedOrderEvent),
+                    typeof(PublisherClosedOrderEvent),
+                    typeof(SubscriberRegisteredEvent),
+                    typeof(SubscriberUnregisteredEvent),
+                    typeof(SubscriberTradeOrderOpenRequestAppliedEvent),
+                    typeof(SubscriberTradeOrderCloseRequestAppliedEvent),
+                    typeof(SubscriberOrderTextChangedEvent),
+                    typeof(SubscriberDistributedOrderTextChangedEvent)
                 )
                 .AddSubscribers(
-                    typeof(PublisherEaOrderEventSubscriber),
-                    typeof(SubscriberEaRegistrationEventSubscriber)
+                    typeof(PublisherOrderEventSubscriber),
+                    typeof(SubscriberRegistrationEventSubscriber)
                 );
             options
-                .RegisterServices(sr => {
-                    sr.RegisterType(typeof(PublisherEaReadModelLocator));
-                    sr.RegisterType(typeof(SubscriberEaReadModelLocator));
-                    sr.RegisterType(typeof(SubscriberIdToSubscriberEaIdReadModelLocator));
+                .RegisterServices(sr =>
+                {
+                    sr.RegisterType(typeof(PublisherReadModelLocator));
+                    sr.RegisterType(typeof(SubscriberReadModelLocator));
                 })
-                .UseInMemoryReadStoreFor<PublisherEaReadModel, PublisherEaReadModelLocator>()
-                .UseInMemoryReadStoreFor<SubscriberEaReadModel, SubscriberEaReadModelLocator>()
-                .UseInMemoryReadStoreFor<SubscriberIdToSubscriberEaIdReadModel, SubscriberIdToSubscriberEaIdReadModelLocator>();
+                .UseInMemoryReadStoreFor<PublisherReadModel, PublisherReadModelLocator>()
+                .UseInMemoryReadStoreFor<SubscriberReadModel, SubscriberReadModelLocator>();
             return options;
         }
     }

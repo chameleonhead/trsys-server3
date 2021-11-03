@@ -23,7 +23,7 @@ namespace Trsys.Frontend.Infrastructure
                 .RegisterServices(sr =>
                 {
                     sr.Register(context => sp.GetRequiredService<ICopyTradingService>());
-                    sr.Register(context => sp.GetRequiredService<IEaEventBus>());
+                    sr.Register(context => sp.GetRequiredService<IFrontendEventBus>());
                 })
                 .AddSubscribers(typeof(AllEventSubscriber))
                 .AddAspNetCore()

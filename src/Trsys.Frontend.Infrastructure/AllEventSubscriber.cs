@@ -9,9 +9,9 @@ namespace Trsys.Frontend.Infrastructure
 {
     public class AllEventSubscriber : ISubscribeSynchronousToAll
     {
-        private readonly IEaEventBus eventBus;
+        private readonly IFrontendEventBus eventBus;
 
-        public AllEventSubscriber(IEaEventBus eventBus)
+        public AllEventSubscriber(IFrontendEventBus eventBus)
         {
             this.eventBus = eventBus;
         }

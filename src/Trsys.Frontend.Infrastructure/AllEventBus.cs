@@ -6,11 +6,11 @@ using Trsys.Frontend.Abstractions;
 
 namespace Trsys.Frontend.Infrastructure
 {
-    public class AllEventBus : IEaEventBus
+    public class AllEventBus : IFrontendEventBus
     {
-        private readonly List<Action<IEaEvent>> handlers = new();
+        private readonly List<Action<IFrontendEvent>> handlers = new();
 
-        public void Publish(IEaEvent e)
+        public void Publish(IFrontendEvent e)
         {
             foreach (var handler in handlers.ToArray())
             {
@@ -18,7 +18,7 @@ namespace Trsys.Frontend.Infrastructure
             }
         }
 
-        public Task Subscribe(Action<IEaEvent> handler, CancellationToken cancellationToken)
+        public Task Subscribe(Action<IFrontendEvent> handler, CancellationToken cancellationToken)
         {
             TaskCompletionSource tcs = new();
             handlers.Add(handler);
