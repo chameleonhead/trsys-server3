@@ -9,5 +9,7 @@ namespace Trsys.Frontend.Web.Models.Admin
         public int PerPage { get; set; }
         public int TotalCount { get; set; }
         public List<CopyTradeDto> Items { get; set; }
+
+        public List<DistributionGroupDto> DistributionGroups { get; set; }
     }
 }

@@ -163,7 +163,7 @@ namespace Trsys.Frontend.Web.Controllers
         {
             ViewData["DistributionGroupsSuccessMessage"] = TempData["SuccessMessage"];
             ViewData["DistributionGroupsErrorMessage"] = TempData["ErrorMessage"];
-            
+
             var vm = await GetDistributionGroupsAsync();
             return PartialView("_DistributionGroups", vm);
         }
@@ -418,6 +418,46 @@ namespace Trsys.Frontend.Web.Controllers
             return PartialView("_CopyTrades", vm);
         }
 
+        [HttpPost("trades/open")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CopyTradeOpenConfirm([FromForm] CopyTradeOpenViewModel vm, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await copyTradeService.OpenAsync(vm.DistributionGroupId, vm.Symbol, vm.OrderType, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
+        [HttpPost("trades/{id}/close")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CopyTradeCloseConfirm(string id, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationError(ModelState);
+            }
+
+            try
+            {
+                await copyTradeService.CloseAsync(id, cancellationToken);
+                return Success("正常に登録されました。");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Fail(ex.Message);
+            }
+        }
+
         private async Task<UsersViewModel> GetUsersAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
             var result = await userService.SearchAsync(page, perPage, cancellationToken);
@@ -468,6 +508,7 @@ namespace Trsys.Frontend.Web.Controllers
 
         private async Task<CopyTradesViewModel> GetCopyTradesAsync(int page = 1, int perPage = 10, CancellationToken cancellationToken = default)
         {
+            var distributionGroups = await distributionGroupService.SearchAsync(page, 0, cancellationToken);
             var result = await copyTradeService.SearchAsync(false, page, perPage, cancellationToken);
             return new CopyTradesViewModel()
             {
@@ -475,6 +516,7 @@ namespace Trsys.Frontend.Web.Controllers
                 PerPage = result.PerPage,
                 TotalCount = result.TotalCount,
                 Items = result.Items,
+                DistributionGroups = distributionGroups.Items,
             };
         }
 
