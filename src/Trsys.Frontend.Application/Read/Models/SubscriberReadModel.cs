@@ -1,6 +1,7 @@
 ﻿using EventFlow.Aggregates;
 using EventFlow.ReadStores;
 using System.Collections.Generic;
+using System.Linq;
 using Trsys.Core;
 using Trsys.Frontend.Domain;
 
@@ -25,7 +26,13 @@ namespace Trsys.Frontend.Application.Read.Models
 
         public void Apply(IReadModelContext context, IDomainEvent<SubscriberAggregate, SubscriberId, SubscriberUnregisteredEvent> domainEvent)
         {
+            Id = domainEvent.AggregateIdentity.Value;
+            Key = domainEvent.AggregateEvent.Key.Value;
             DistributionGroups.Remove(domainEvent.AggregateEvent.DistributionGroupId.Value);
+            if (!DistributionGroups.Any())
+            {
+                context.MarkForDeletion();
+            }
         }
 
         public void Apply(IReadModelContext context, IDomainEvent<SubscriberAggregate, SubscriberId, SubscriberOrderTextChangedEvent> domainEvent)

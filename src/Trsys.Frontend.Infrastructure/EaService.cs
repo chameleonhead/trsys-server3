@@ -70,12 +70,20 @@ namespace Trsys.Frontend.Infrastructure
                     {
                         await commandBus.PublishAsync(new PublisherRegisterCommand(PublisherId.New, new SecretKey(key), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
                     }
+                    else if (!publisher.DistributionGroups.Contains(distributionGroupId))
+                    {
+                        await commandBus.PublishAsync(new SubscriberRegisterCommand(SubscriberId.With(publisher.Id), new SecretKey(key), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
+                    }
                     break;
                 case "Subscriber":
                     var subscriber = await queryProcessor.ProcessAsync(new ReadModelByIdQuery<SubscriberReadModel>(key), CancellationToken.None);
                     if (subscriber == null)
                     {
                         await commandBus.PublishAsync(new SubscriberRegisterCommand(SubscriberId.New, new SecretKey(key), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
+                    }
+                    else if (!subscriber.DistributionGroups.Contains(distributionGroupId))
+                    {
+                        await commandBus.PublishAsync(new SubscriberRegisterCommand(SubscriberId.With(subscriber.Id), new SecretKey(key), DistributionGroupId.With(distributionGroupId)), CancellationToken.None);
                     }
                     break;
                 default:
