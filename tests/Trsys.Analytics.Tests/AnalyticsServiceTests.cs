@@ -24,5 +24,17 @@ namespace Trsys.Analytics.Tests
             Assert.AreEqual("USDJPY", copyTrade.Symbol);
             Assert.AreEqual("BUY", copyTrade.OrderType);
         }
+
+        [TestMethod]
+        public async Task CloseCopyTradeAsync_Success()
+        {
+            using var services = new ServiceCollection().AddAnalytics().BuildServiceProvider();
+            var service = services.GetRequiredService<IAnalyticsService>();
+            var copyTradeId = CopyTradeId.New.Value;
+            await service.CloseCopyTradeAsync(copyTradeId, DateTimeOffset.Parse("2021-11-05T01:58:00.000Z"), CancellationToken.None);
+            var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
+            Assert.AreEqual(copyTradeId, copyTrade.Id);
+            Assert.AreEqual(DateTimeOffset.Parse("2021-11-05T01:58:00.000Z"), copyTrade.Duration.ClosedAt);
+        }
     }
 }

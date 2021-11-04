@@ -45,5 +45,11 @@ namespace Trsys.Analytics.Infrastructure
             var commandBus = resolver.Resolve<ICommandBus>();
             await commandBus.PublishAsync(new CopyTradeOpenCommand(CopyTradeId.With(copyTradeId), timestamp, new ForexTradeSymbol(symbol), OrderType.Of(orderType)), cancellationToken);
         }
+
+        public async Task CloseCopyTradeAsync(string copyTradeId, DateTimeOffset timestamp, CancellationToken cancellationToken)
+        {
+            var commandBus = resolver.Resolve<ICommandBus>();
+            await commandBus.PublishAsync(new CopyTradeCloseCommand(CopyTradeId.With(copyTradeId), timestamp), cancellationToken);
+        }
     }
 }

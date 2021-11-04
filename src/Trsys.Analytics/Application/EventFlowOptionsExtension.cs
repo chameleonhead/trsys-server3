@@ -12,10 +12,12 @@ namespace Trsys.Analytics.Application
         {
             options
                 .AddCommands(
-                    typeof(CopyTradeOpenCommand)
+                    typeof(CopyTradeOpenCommand),
+                    typeof(CopyTradeCloseCommand)
                 )
                 .AddCommandHandlers(
-                    typeof(CopyTradeOpenCommandHandler)
+                    typeof(CopyTradeOpenCommandHandler),
+                    typeof(CopyTradeCloseCommandHandler)
                 )
                 .AddEvents(
                     typeof(CopyTradeOpenedEvent),
