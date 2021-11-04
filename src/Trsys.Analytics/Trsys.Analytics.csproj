@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Trsys.Analytics.Abstractions\Trsys.Analytics.Abstractions.csproj" />
+    <ProjectReference Include="..\Trsys.Core\Trsys.Core.csproj" />
   </ItemGroup>
 
 </Project>

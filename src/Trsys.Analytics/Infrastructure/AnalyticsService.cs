@@ -11,5 +11,10 @@ namespace Trsys.Analytics.Infrastructure
         {
             throw new NotImplementedException();
         }
+
+        public Task OpenCopyTradeAsync(string copyTradeId, DateTimeOffset dateTimeOffset, string symbol, string orderType)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
