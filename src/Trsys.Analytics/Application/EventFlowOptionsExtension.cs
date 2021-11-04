@@ -1,7 +1,8 @@
 ﻿using EventFlow;
 using EventFlow.Extensions;
-using System.Collections.Generic;
 using Trsys.Analytics.Application.Read.Models;
+using Trsys.Analytics.Application.Write.Commands;
+using Trsys.Analytics.Domain;
 
 namespace Trsys.Analytics.Application
 {
@@ -11,10 +12,14 @@ namespace Trsys.Analytics.Application
         {
             options
                 .AddCommands(
+                    typeof(CopyTradeOpenCommand)
                 )
                 .AddCommandHandlers(
+                    typeof(CopyTradeOpenCommandHandler)
                 )
                 .AddEvents(
+                    typeof(CopyTradeOpenedEvent),
+                    typeof(CopyTradeClosedEvent)
                 );
             options
                 .RegisterServices(sr =>

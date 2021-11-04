@@ -32,7 +32,10 @@ namespace Trsys.Analytics.Application.Read.Models
 
         public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeOpenedEvent> domainEvent)
         {
-            throw new System.NotImplementedException();
+            Id = domainEvent.AggregateIdentity.Value;
+            Symbol = domainEvent.AggregateEvent.Symbol.Value;
+            OrderType = domainEvent.AggregateEvent.OrderType.Value;
+            OpenedAt = domainEvent.AggregateEvent.Timestamp;
         }
 
         public void Apply(IReadModelContext context, IDomainEvent<CopyTradeAggregate, CopyTradeId, CopyTradeClosedEvent> domainEvent)

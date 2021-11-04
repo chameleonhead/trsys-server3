@@ -2,7 +2,7 @@
 {
     public class TradeScoreDto
     {
-        public string OrderType { get; set; }
+        public string? OrderType { get; set; }
         public decimal? PriceOpened { get; set; }
         public decimal? PriceClosed { get; set; }
         public decimal? PriceChanged => PriceClosed - PriceOpened;
