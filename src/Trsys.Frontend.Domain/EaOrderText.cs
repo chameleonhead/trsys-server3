@@ -33,7 +33,7 @@ namespace Trsys.Frontend.Domain
                     }
                     var splitted = item.Split(":");
                     var ticketNo = new EaTicketNumber(int.Parse(splitted[0]));
-                    var symbol = new ForexTradeSymbol(splitted[1]);
+                    var symbol = ForexTradeSymbol.ValueOf(splitted[1]);
                     var orderType = splitted[2] == "0" ? OrderType.Buy : OrderType.Sell;
 
                     orders.Add(new EaOrder(ticketNo, symbol, orderType));

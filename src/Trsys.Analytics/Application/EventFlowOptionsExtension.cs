@@ -13,15 +13,21 @@ namespace Trsys.Analytics.Application
             options
                 .AddCommands(
                     typeof(CopyTradeOpenCommand),
-                    typeof(CopyTradeCloseCommand)
+                    typeof(CopyTradeCloseCommand),
+                    typeof(PublisherOpenCopyTradeCommand),
+                    typeof(PublisherCloseCopyTradeCommand)
                 )
                 .AddCommandHandlers(
                     typeof(CopyTradeOpenCommandHandler),
-                    typeof(CopyTradeCloseCommandHandler)
+                    typeof(CopyTradeCloseCommandHandler),
+                    typeof(PublisherOpenCopyTradeCommandHandler),
+                    typeof(PublisherCloseCopyTradeCommandHandler)
                 )
                 .AddEvents(
                     typeof(CopyTradeOpenedEvent),
-                    typeof(CopyTradeClosedEvent)
+                    typeof(CopyTradeClosedEvent),
+                    typeof(PublisherOpenedCopyTradeEvent),
+                    typeof(PublisherClosedCopyTradeEvent)
                 );
             options
                 .RegisterServices(sr =>

@@ -36,5 +36,21 @@ namespace Trsys.Analytics.Tests
             Assert.AreEqual(copyTradeId, copyTrade.Id);
             Assert.AreEqual(DateTimeOffset.Parse("2021-11-05T01:58:00.000Z"), copyTrade.Duration.ClosedAt);
         }
+
+        [TestMethod]
+        public async Task PublisherOpenedCopyTradeAsync_Success()
+        {
+            using var services = new ServiceCollection().AddAnalytics().BuildServiceProvider();
+            var service = services.GetRequiredService<IAnalyticsService>();
+            var publisherId = PublisherId.New.Value;
+            var copyTradeId = CopyTradeId.New.Value;
+            await service.PublisherOpenCopyTradeAsync(publisherId, copyTradeId, DateTimeOffset.Parse("2021-11-05T01:58:00.000Z"), "USDJPY", "BUY", 101, 102, CancellationToken.None);
+            var copyTrade = await service.FindCopyTradeByIdAsync(copyTradeId, CancellationToken.None);
+            Assert.AreEqual(copyTradeId, copyTrade.Id);
+            Assert.AreEqual(publisherId, copyTrade.PublisherTradeResult.Id);
+            Assert.AreEqual(DateTimeOffset.Parse("2021-11-05T01:58:00.000Z"), copyTrade.PublisherTradeResult.Duration.OpenedAt);
+            Assert.AreEqual("BUY", copyTrade.PublisherTradeResult.Score.OrderType);
+            Assert.AreEqual(101, copyTrade.PublisherTradeResult.Score.PriceOpened);
+        }
     }
 }

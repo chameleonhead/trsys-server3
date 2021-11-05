@@ -12,7 +12,7 @@ namespace Trsys.Analytics.Abstractions
         public decimal? TotalTradeLots { get; set; }
         public List<TradeProfitDto> TotalProfits { get; set; } = new();
 
-        public PublisherTradeResultDto? PublisherTradeResult { get; set; }
+        public PublisherTradeResultDto PublisherTradeResult { get; set; } = new();
         public List<SubscriberTradeResultDto> SubscriberTradeResult { get; } = new();
     }
 }

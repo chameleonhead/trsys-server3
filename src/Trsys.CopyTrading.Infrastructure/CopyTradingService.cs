@@ -68,7 +68,7 @@ namespace Trsys.CopyTrading.Infrastructure
         public async Task PublishOpenTradeAsync(string distributionGroupId, string copyTradeId, string symbol, string orderType, CancellationToken cancellationToken)
         {
             var commandBus = resolver.Resolve<ICommandBus>();
-            await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(DistributionGroupId.With(distributionGroupId), CopyTradeId.With(copyTradeId), new ForexTradeSymbol(symbol), OrderType.Of(orderType)), cancellationToken);
+            await commandBus.PublishAsync(new DistributionGroupPublishOpenCommand(DistributionGroupId.With(distributionGroupId), CopyTradeId.With(copyTradeId), ForexTradeSymbol.ValueOf(symbol), OrderType.ValueOf(orderType)), cancellationToken);
         }
 
         public async Task PublishCloseTradeAsync(string distributionGroupId, string copyTradeId, CancellationToken cancellationToken)

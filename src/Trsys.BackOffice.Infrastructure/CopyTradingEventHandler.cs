@@ -109,7 +109,7 @@ namespace Trsys.BackOffice.Infrastructure
                 await commandBus.PublishAsync(new DistributionGroupCreateCommand(distributionGroupId, new DistributionGroupName(distributionGroupId.Value)), cancellationToken);
             }
 
-            await commandBus.PublishAsync(new CopyTradeOpenCommand(copyTradeId, distributionGroupId, new ForexTradeSymbol(domainEvent.Symbol), OrderType.Of(domainEvent.OrderType)), cancellationToken);
+            await commandBus.PublishAsync(new CopyTradeOpenCommand(copyTradeId, distributionGroupId, ForexTradeSymbol.ValueOf(domainEvent.Symbol), OrderType.ValueOf(domainEvent.OrderType)), cancellationToken);
         }
 
         private async Task HandleAsync(CopyTradingTradeClosedEvent domainEvent, CancellationToken cancellationToken)

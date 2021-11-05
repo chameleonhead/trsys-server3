@@ -61,7 +61,7 @@ namespace Trsys.BackOffice.Infrastructure
         {
             var commandBus = resolver.Resolve<ICommandBus>();
             var copyTradeId = CopyTradeId.New;
-            await commandBus.PublishAsync(new CopyTradeOpenCommand(copyTradeId, DistributionGroupId.With(distributionGroupId), new ForexTradeSymbol(symbol), OrderType.Of(orderType)), cancellationToken);
+            await commandBus.PublishAsync(new CopyTradeOpenCommand(copyTradeId, DistributionGroupId.With(distributionGroupId), ForexTradeSymbol.ValueOf(symbol), OrderType.ValueOf(orderType)), cancellationToken);
             return copyTradeId.Value;
         }
 

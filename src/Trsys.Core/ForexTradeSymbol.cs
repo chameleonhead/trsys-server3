@@ -8,7 +8,12 @@ namespace Trsys.Core
     {
         public ForexTradeSymbol(string value) : base(value)
         {
+            Base = Currency.ValueOf(value.Substring(0, 3));
+            Quote = Currency.ValueOf(value.Substring(3));
         }
+
+        public Currency Base { get; }
+        public Currency Quote { get; }
 
         public static ForexTradeSymbol ValueOf(string symbol)
         {

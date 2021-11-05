@@ -14,7 +14,7 @@ namespace Trsys.Core
         public static readonly OrderType Buy = new("BUY");
         public static readonly OrderType Sell = new("SELL");
 
-        public static OrderType Of(string orderType)
+        public static OrderType ValueOf(string orderType)
         {
             switch (orderType)
             {
@@ -39,7 +39,7 @@ namespace Trsys.Core
         {
             if (reader.Value is string value)
             {
-                return OrderType.Of(value);
+                return OrderType.ValueOf(value);
             }
             return null;
         }

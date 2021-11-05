@@ -66,7 +66,7 @@ namespace Trsys.Frontend.Infrastructure
             var commandBus = resolver.Resolve<ICommandBus>();
             await Task.WhenAll(domainEvent.Subscribers.Select(subscriberId => Task.Run(async () =>
             {
-                await commandBus.PublishAsync(new SubscriberOpenTradeOrderCommand(SubscriberId.With(subscriberId), CopyTradeId.With(domainEvent.CopyTradeId), new ForexTradeSymbol(domainEvent.Symbol), OrderType.Of(domainEvent.OrderType)), cancellationToken);
+                await commandBus.PublishAsync(new SubscriberOpenTradeOrderCommand(SubscriberId.With(subscriberId), CopyTradeId.With(domainEvent.CopyTradeId), ForexTradeSymbol.ValueOf(domainEvent.Symbol), OrderType.ValueOf(domainEvent.OrderType)), cancellationToken);
             })));
         }
 
