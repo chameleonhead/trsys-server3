@@ -8,7 +8,6 @@ using System.Threading;
 using Trsys.BackOffice;
 using Trsys.BackOffice.Abstractions;
 using Trsys.CopyTrading;
-using Trsys.Frontend;
 using Trsys.Frontend.Web.Formatters;
 
 namespace Trsys.Frontend.Web

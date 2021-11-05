@@ -1,12 +1,12 @@
 ﻿@model Trsys.Frontend.Web.Models.Home.LoginViewModel
 
 @{
-    ViewBag.Title = "ログイン";
+    ViewData["Title"] = "ログイン";
 }
 
 <partial name="_Message" />
 
-<h1 class="h2 mb-3">@ViewBag.Title</h1>
+<h1 class="h2 mb-3">@ViewData["Title"]</h1>
 
 <form asp-action="LoginConfirm" asp-route-returnUrl="@Context.Request.Query["returnUrl"]">
     <div style="max-width: 40rem">

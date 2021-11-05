@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header class="bg-primary py-3 px-3">
-        <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark">
+    <header class="bg-primary">
+        <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark py-4 px-3">
             <div class="container-fluid">
                 <a href="/" class="navbar-nav text-white text-decoration-none fw-bold h1">Trsys</a>
                 @if (User.Identity.IsAuthenticated)
@@ -29,7 +29,9 @@
         </nav>
     </header>
     <main class="py-3 px-3">
-        @RenderBody()
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
     </main>
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
